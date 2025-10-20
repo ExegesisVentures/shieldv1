@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "buildCommand": "cd shuieldnestorg && npm install && npm run build",
+    "devCommand": "cd shuieldnestorg && npm run dev",
+    "installCommand": "cd shuieldnestorg && npm install",
+    "framework": "nextjs",
+    "outputDirectory": "shuieldnestorg/.next",
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
