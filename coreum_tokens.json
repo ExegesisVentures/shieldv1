@@ -1,0 +1,2518 @@
+{
+    "metadata": {
+      "generatedAt": "2025-10-09T07:52:07.566Z",
+      "source": "Coreum Token Pairs Analysis",
+      "totalPairs": 111,
+      "totalTokens": 39,
+      "sources": {
+        "pulsara": 64,
+        "cruiseControl": 47,
+        "cosm": 0,
+        "coreumSupply": 100
+      }
+    },
+    "tokens": [
+      {
+        "denom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "name": "CW20 Token (drop-core1zhs909jp9y...)",
+        "type": "cw20",
+        "contractAddress": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "decimals": 6
+      },
+      {
+        "denom": "ucore",
+        "symbol": "COREUM",
+        "name": "Coreum",
+        "type": "native",
+        "decimals": 6
+      },
+      {
+        "denom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "name": "CW20 Token (usara-core1r9gc0rnxn...)",
+        "type": "cw20",
+        "contractAddress": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "decimals": 6
+      },
+      {
+        "denom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "SOLO",
+        "name": "Sologenic (SOLO)",
+        "type": "xrpl",
+        "decimals": 15
+      },
+      {
+        "denom": "xrpl11f82115a5-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "ROLL",
+        "name": "ROLL Token",
+        "type": "xrpl",
+        "decimals": 15
+      },
+      {
+        "denom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "XRP-570c00a6...",
+        "name": "XRP Ledger Token (xrpl570c00a604-core1...)",
+        "type": "xrpl",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "symbol": "IBC-13B2C536...",
+        "name": "IBC Token (13B2C536...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "symbol": "IBC-3E350087...",
+        "name": "IBC Token (3E350087...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "symbol": "IBC-45C001A5...",
+        "name": "IBC Token (45C001A5...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "symbol": "IBC-E1E3674A...",
+        "name": "IBC Token (E1E3674A...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/F8CA5236869F819BC006EEF088E67889A26E4140339757878F0F4E229CDDA858",
+        "symbol": "IBC-F8CA5236...",
+        "name": "IBC Token (F8CA5236...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "symbol": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "name": "CW20 Token (ubukec-core1sj0phdvu...)",
+        "type": "cw20",
+        "contractAddress": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "decimals": 6
+      },
+      {
+        "denom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "symbol": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "name": "CW20 Token (ulicore-core13gza3ms...)",
+        "type": "cw20",
+        "contractAddress": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "decimals": 6
+      },
+      {
+        "denom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "symbol": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "name": "CW20 Token (usbc-core1rfxrg75fzu...)",
+        "type": "cw20",
+        "contractAddress": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "decimals": 6
+      },
+      {
+        "denom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "XRP-2661e5b5...",
+        "name": "XRP Ledger Token (xrpl2661e5b556-core1...)",
+        "type": "xrpl",
+        "decimals": 6
+      },
+      {
+        "denom": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "symbol": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "name": "CW20 Token (badgers-core1dmzhlaq...)",
+        "type": "cw20",
+        "contractAddress": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "decimals": 6
+      },
+      {
+        "denom": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "symbol": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "name": "CW20 Token (uccd-core1hnwd78wapp...)",
+        "type": "cw20",
+        "contractAddress": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "decimals": 6
+      },
+      {
+        "denom": "ibc/078EAF11288A47609FD894070CA8A1BFCEBD9E08745EA7030F95D7ADEE2E22CA",
+        "symbol": "IBC-078EAF11...",
+        "name": "IBC Token (078EAF11...)",
+        "type": "ibc",
+        "decimals": 6
+      },
+      {
+        "denom": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "symbol": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "name": "CW20 Token (ucozy-core19w7yasdsc...)",
+        "type": "cw20",
+        "contractAddress": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "decimals": 6
+      },
+      {
+        "denom": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk",
+        "symbol": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk",
+        "name": "CW20 Token (ubage-core18d3y66558...)",
+        "type": "cw20",
+        "contractAddress": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk",
+        "decimals": 6
+      },
+      {
+        "denom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "name": "CW20 Token (ucct-core1362hrnvgrc...)",
+        "type": "cw20",
+        "contractAddress": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "decimals": 6
+      },
+      {
+        "denom": "uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "symbol": "uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "name": "CW20 Token (uc4c-core1ugjg8s8npk...)",
+        "type": "cw20",
+        "contractAddress": "uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "decimals": 6
+      },
+      {
+        "denom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "name": "CW20 Token (ucat-core129pfw890e2...)",
+        "type": "cw20",
+        "contractAddress": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "decimals": 6
+      },
+      {
+        "denom": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "symbol": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "name": "CW20 Token (uclan-core12gjuvu3ev...)",
+        "type": "cw20",
+        "contractAddress": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "decimals": 6
+      },
+      {
+        "denom": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "symbol": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "name": "CW20 Token (ucorep-core1sa6z4503...)",
+        "type": "cw20",
+        "contractAddress": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "decimals": 6
+      },
+      {
+        "denom": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "symbol": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "name": "CW20 Token (umart-core1e5zxd9z4m...)",
+        "type": "cw20",
+        "contractAddress": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "decimals": 6
+      },
+      {
+        "denom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "symbol": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "name": "CW20 Token (umbs-core166wgcj0kwh...)",
+        "type": "cw20",
+        "contractAddress": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "decimals": 6
+      },
+      {
+        "denom": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "symbol": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "name": "CW20 Token (ucbull-core1n9759vev...)",
+        "type": "cw20",
+        "contractAddress": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "decimals": 6
+      },
+      {
+        "denom": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "symbol": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "name": "CW20 Token (upunks-core1zceldt0z...)",
+        "type": "cw20",
+        "contractAddress": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "decimals": 6
+      },
+      {
+        "denom": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "symbol": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "name": "CW20 Token (ucorez-core1astd8pqh...)",
+        "type": "cw20",
+        "contractAddress": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "decimals": 6
+      },
+      {
+        "denom": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0",
+        "symbol": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0",
+        "name": "CW20 Token (uclvr-core1gkh4gatv2...)",
+        "type": "cw20",
+        "contractAddress": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0",
+        "decimals": 6
+      },
+      {
+        "denom": "ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "symbol": "ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "name": "CW20 Token (ucqr-core1x3yv8d4dza...)",
+        "type": "cw20",
+        "contractAddress": "ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "decimals": 6
+      },
+      {
+        "denom": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje",
+        "symbol": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje",
+        "name": "CW20 Token (ucult-core175xd8x9vs...)",
+        "type": "cw20",
+        "contractAddress": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje",
+        "decimals": 6
+      },
+      {
+        "denom": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5",
+        "symbol": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5",
+        "name": "CW20 Token (ugrok-core1hc44pu2e9...)",
+        "type": "cw20",
+        "contractAddress": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5",
+        "decimals": 6
+      },
+      {
+        "denom": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "symbol": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "name": "CW20 Token (ujak-core1zj57l0g983...)",
+        "type": "cw20",
+        "contractAddress": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "decimals": 6
+      },
+      {
+        "denom": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7",
+        "symbol": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7",
+        "name": "CW20 Token (umdog-core1vqrt4jmhm...)",
+        "type": "cw20",
+        "contractAddress": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7",
+        "decimals": 6
+      },
+      {
+        "denom": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl",
+        "symbol": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl",
+        "name": "CW20 Token (umoon-core14uwpqxhcm...)",
+        "type": "cw20",
+        "contractAddress": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl",
+        "decimals": 6
+      },
+      {
+        "denom": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a",
+        "symbol": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a",
+        "name": "CW20 Token (upepe-core10jzlfmka5...)",
+        "type": "cw20",
+        "contractAddress": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a",
+        "decimals": 6
+      },
+      {
+        "denom": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh",
+        "symbol": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh",
+        "name": "CW20 Token (utss-core1dqdytsrl9a...)",
+        "type": "cw20",
+        "contractAddress": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh",
+        "decimals": 6
+      },
+      {
+        "denom": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "symbol": "XRP-573a95c3...",
+        "name": "XRP Ledger Token (xrpl573a95c3ab-core1...)",
+        "type": "xrpl",
+        "decimals": 6
+      }
+    ],
+    "pairs": [
+      {
+        "id": "pulsara-core1uk4z0aq4lcpg8pp4t2da2fmzu0lrmz4s4pad8fd8rz0zejnqs3hqd05973",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/COREUM",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "COREUM",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ucore",
+        "poolContract": "core1uk4z0aq4lcpg8pp4t2da2fmzu0lrmz4s4pad8fd8rz0zejnqs3hqd05973",
+        "liquidityToken": "core1q5ttr0qcsnxd4jkv3tvgw8l3fcuktgt4nj93ydfpwvkgjtrjwv5s0pkk7z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1xh9u2cxjaq0lvkgcvuknd3vt3fz66l2z7vvwpyd23029n2dqpgtsttgktn",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1xh9u2cxjaq0lvkgcvuknd3vt3fz66l2z7vvwpyd23029n2dqpgtsttgktn",
+        "liquidityToken": "core17a476q7drlf3cf74zxthv3egx4yyu5scs5mmwcmqpzly2yjlglhs8rrre4",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core17rwh4qj9f48hs797ss8snqjefu5wqtvkjyjr923ytne46yv43wyqvj5t7r",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core17rwh4qj9f48hs797ss8snqjefu5wqtvkjyjr923ytne46yv43wyqvj5t7r",
+        "liquidityToken": "core1supl6w4ghyeep7ntm2dv2cfgjxgsjh6t3npm03nw0l8snaq0dy8qzyzv5z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1nsnuyh7mmf552ydtmqcmccqkx8w5y40xt4qtf993c9wkt2ujae0qfxaq2s",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1nsnuyh7mmf552ydtmqcmccqkx8w5y40xt4qtf993c9wkt2ujae0qfxaq2s",
+        "liquidityToken": "core1uq8stwcjsn63pshsf8gw9vql2smcsmvhl4kaxzvkpeelz0ne0r6sxy28hc",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1kt3u2z8evelxae7unk7kvcarfahy0dgd5q7f6j4z7sultdsh7wfsxev206",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../COREUM",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "ucore",
+        "poolContract": "core1kt3u2z8evelxae7unk7kvcarfahy0dgd5q7f6j4z7sultdsh7wfsxev206",
+        "liquidityToken": "core1lxane500vcvrc0cjj0rak2h2emepm9lhv9rgrxarkwqqttyurznqjxw25s",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core146pd6jejusvqk49l4mjuwpn3nhu48ppgnjs5z6mj00ddsk9n5t8qjsga2w",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core146pd6jejusvqk49l4mjuwpn3nhu48ppgnjs5z6mj00ddsk9n5t8qjsga2w",
+        "liquidityToken": "core19fkntnvua2dllxtlqg5p9ce5nyg6nfwrla3px24rt9xcf33qjvksm0suyj",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core18ay3z6yxnyt4zz6dkgste9r57l3kysu44mxdl2e5x4j8vehr0apq9gfvpj",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core18ay3z6yxnyt4zz6dkgste9r57l3kysu44mxdl2e5x4j8vehr0apq9gfvpj",
+        "liquidityToken": "core1zgasl5s4dc5xts9rv30u4wwahxjhhjfc9pevhwd3levy6e022rlsltnvwq",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1fqumt2fytv2wqcnja3a2fvcgc007ehtnk4ju3pxpmur0qdcgyc6shjrpds",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-3E350087.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-3E350087...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1fqumt2fytv2wqcnja3a2fvcgc007ehtnk4ju3pxpmur0qdcgyc6shjrpds",
+        "liquidityToken": "core1n6q6rffccluys79sm7g7dh9739j7ddxpk66nf5gsr0fgffr857jsdqtnff",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1w8cgpgtphpdgzapdahpsuh7rkyxyf45dh4kwpqjz6lqhx3hfrmpsffhxhu",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-3E350087.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-3E350087...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1w8cgpgtphpdgzapdahpsuh7rkyxyf45dh4kwpqjz6lqhx3hfrmpsffhxhu",
+        "liquidityToken": "core1s6ekfja5z5uwpzjclnecc2uzm044s496qtwaxzc730lg93004h4qhwyyxd",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core19zwetcjpt84vnwpl06styn5f0qz34260ewm5xwxr6k0395vyr2fszqyv9h",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../COREUM",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "ucore",
+        "poolContract": "core19zwetcjpt84vnwpl06styn5f0qz34260ewm5xwxr6k0395vyr2fszqyv9h",
+        "liquidityToken": "core15znqsswksq3kttm3pa0rpxysdx2cyrxfg0k0j7yg6u2ya24g6ymqq4fcn2",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1f5aw0jq2cps98ramr7nzpmzvqvdf22nt8h8yn96n5sz4eawkzf6qglhga8",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1f5aw0jq2cps98ramr7nzpmzvqvdf22nt8h8yn96n5sz4eawkzf6qglhga8",
+        "liquidityToken": "core12gdczsewrxr36a5y29044v2e2s2cs3pjnjgtv9r5k6zk2pr7w0xqs83qgg",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core10rhnya8wjz7ngpjncxqhrz0l4zl7fr40rmccfhrl45ce9avatttqm3k39x",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core10rhnya8wjz7ngpjncxqhrz0l4zl7fr40rmccfhrl45ce9avatttqm3k39x",
+        "liquidityToken": "core1kc2ar7hkwpecex3h3qf7gzk5juq38ayw8dct6hsp2j8alghp5p7q8a0huh",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12mnf796j0kgvckedkydf3l4etpcw3as9tfx6857y0vcl54g8ld3s9lwczs",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/IBC-E1E3674A...",
+        "baseAsset": "COREUM",
+        "quoteAsset": "IBC-E1E3674A...",
+        "baseDenom": "ucore",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core12mnf796j0kgvckedkydf3l4etpcw3as9tfx6857y0vcl54g8ld3s9lwczs",
+        "liquidityToken": "core1nkmcu9g8v0hp8phplf6ess6a8m65x527ujc2yckek6h8xy92gcyq2alegq",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12xv357rlwkdqcfmysgu0ygthw8j2fc4za0ad5atyrggs66vks5lsyz2ncg",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/IBC-E1E3674A...",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "IBC-E1E3674A...",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core12xv357rlwkdqcfmysgu0ygthw8j2fc4za0ad5atyrggs66vks5lsyz2ncg",
+        "liquidityToken": "core1v9lc7jp0npzrra0wsghq5c3cmn2und735hujlpdend5szvfpsm3s5cmp5x",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1plx8w9msxx2g8wswk7f6pejggu7yfm3mh8cxcdjnshg8lnu4d4dscnct6h",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-E1E3674A.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-E1E3674A...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1plx8w9msxx2g8wswk7f6pejggu7yfm3mh8cxcdjnshg8lnu4d4dscnct6h",
+        "liquidityToken": "core175jvzwwjsy4gdwt334pru9ncszq8mkh6dn68m7kjwsjzx0mc24cqjfgtj9",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core134rxhzd2y09jg9lh9kgyxywt5338s965w2k4jq5csh3td900xcwshz0wfw",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-F8CA5236.../COREUM",
+        "baseAsset": "IBC-F8CA5236...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/F8CA5236869F819BC006EEF088E67889A26E4140339757878F0F4E229CDDA858",
+        "quoteDenom": "ucore",
+        "poolContract": "core134rxhzd2y09jg9lh9kgyxywt5338s965w2k4jq5csh3td900xcwshz0wfw",
+        "liquidityToken": "core1srvyfpuxs6a896zq5pqtmucj788l28vgh5zkarn53re4hyh2g4cqf4256u",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1j704eaqpa8tn22lzudua08g4fswumcw0qz0ly6cfu0z575dnzhws4xugf9",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-F8CA5236.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-F8CA5236...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/F8CA5236869F819BC006EEF088E67889A26E4140339757878F0F4E229CDDA858",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1j704eaqpa8tn22lzudua08g4fswumcw0qz0ly6cfu0z575dnzhws4xugf9",
+        "liquidityToken": "core13jfrjp5rge3a9m8vnqrqvpqdt4ljmcgapq5setc40r0efgrzuv8s3yleh9",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1lq5j7lflhyanamku03uzm3uyrw3dz5d7dnjg3ea03ht4r82r02hs8dqly4",
+        "source": "Pulsara DEX",
+        "symbol": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1lq5j7lflhyanamku03uzm3uyrw3dz5d7dnjg3ea03ht4r82r02hs8dqly4",
+        "liquidityToken": "core18nwkluhtmjg9wvm7htyju2usg7nfk5rszz9uk5ndm46k2rek0ffs7luk4l",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1cndtl0w0jasf5ayv6h5gcv69as2c2kre66dvvcn3vwclctekvgesds0g3x",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "baseAsset": "COREUM",
+        "quoteAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "baseDenom": "ucore",
+        "quoteDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "poolContract": "core1cndtl0w0jasf5ayv6h5gcv69as2c2kre66dvvcn3vwclctekvgesds0g3x",
+        "liquidityToken": "core1gj6js9xlq9veh985vdhaggynfx88wy99yum8epdacdwyaxhwgcyq97z03m",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1aszl9qu0pjcunp4ajseplfsue8la272nm3pula953q3d3rfnqrqs9dzt4q",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/COREUM",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "COREUM",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "ucore",
+        "poolContract": "core1aszl9qu0pjcunp4ajseplfsue8la272nm3pula953q3d3rfnqrqs9dzt4q",
+        "liquidityToken": "core1aq3403ysatsqu9yenhjwxmll2ltuw4gdqr60nl4r52zdhavyv88qxj3hc8",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1jq7qjy0czgtexqvwrj2p7f32cjcgutssvv46ffu5gg0ksvtqzc6q9waq5u",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "COREUM",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "ucore",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1jq7qjy0czgtexqvwrj2p7f32cjcgutssvv46ffu5gg0ksvtqzc6q9waq5u",
+        "liquidityToken": "core15ggp3d2s5ew6qkf6rwyxdd96hnpyw6u0eegjtg30gkqx7upc66sqhyu6n0",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1vxa7ytku5pd0mc58xlwnqx3397fzplu68rjvapwuf5ry0zdyddfs9ngp0x",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1vxa7ytku5pd0mc58xlwnqx3397fzplu68rjvapwuf5ry0zdyddfs9ngp0x",
+        "liquidityToken": "core12wcqsq9kux354qs606h7dk3k6dj2xec4lr089xgd9asqvaul8zasncsyg5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1rwpk3d628gqds2weem8cvm9dtqwjlfagmkg3qljqfqra3m7u4dtsq0yd7r",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1rwpk3d628gqds2weem8cvm9dtqwjlfagmkg3qljqfqra3m7u4dtsq0yd7r",
+        "liquidityToken": "core1kypk03ncx2gr0kn7frntrcgxkwj2dgll79kyv04zex8j3gx53fjs57s334",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core14q7v4vtv7mfknwh8cvlyjddsysqtn5f3wh9hmwcf0jwxxk69lkesrvx73h",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core14q7v4vtv7mfknwh8cvlyjddsysqtn5f3wh9hmwcf0jwxxk69lkesrvx73h",
+        "liquidityToken": "core193z6nk6d9spw35ppguy094c6turgfvkdy9pkhwhj87w8jhawksyq03ng3a",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1nh95cxa7gyg5harksmzywfhgp49pg7s0xrn26y6rdsdc5r86a4vsxjh55c",
+        "source": "Pulsara DEX",
+        "symbol": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1nh95cxa7gyg5harksmzywfhgp49pg7s0xrn26y6rdsdc5r86a4vsxjh55c",
+        "liquidityToken": "core129p4g770axjmsgtmctz6yvkwzsfueluv5eqppvplxsemuadj9qasc0677h",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1zwkavlsdamala62zm688zp3ecg7nrkdfhyx0nmcgjshy4k72s9lqnqku77",
+        "source": "Pulsara DEX",
+        "symbol": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1zwkavlsdamala62zm688zp3ecg7nrkdfhyx0nmcgjshy4k72s9lqnqku77",
+        "liquidityToken": "core1mdxvrhywkr4v3sn07htc73sj96rzv4l0td837ye5zeecqwffyyrsfgddpk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1gqz2wddqed0m9s4rst8zjzj22gheq7zaa837swllnvytscwyt56qhwyttf",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1gqz2wddqed0m9s4rst8zjzj22gheq7zaa837swllnvytscwyt56qhwyttf",
+        "liquidityToken": "core1k5my2nvmprf596j7d7uyhghljylczvwm6w0up9kvjsuprymszh9qswzat2",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1hepc6jsx3usxtgpjl63wskdgk5vwqkgrjyr8r77p8mc0pqcaknwqqwfvex",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1hepc6jsx3usxtgpjl63wskdgk5vwqkgrjyr8r77p8mc0pqcaknwqqwfvex",
+        "liquidityToken": "core12ndjypqtfpsekdyeekka5qpmzl6z3zfmwg5wxawsuuyrvur8wl5su57f52",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1dutw928juej6p5xt3mq45fkpvs00lrjukgl6dvrd3t87zc436r7qm0sqq8",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1dutw928juej6p5xt3mq45fkpvs00lrjukgl6dvrd3t87zc436r7qm0sqq8",
+        "liquidityToken": "core1mjqa6et7tcd592t6642ghf2nv2ajtyd3y6xvnm3gspw5kdp4wq2sv4rjv5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core166es6mxy80y7l6qyulvrjjuttrrwf33ms6zecuhutaxcnhrw8zyqp3vypp",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core166es6mxy80y7l6qyulvrjjuttrrwf33ms6zecuhutaxcnhrw8zyqp3vypp",
+        "liquidityToken": "core1nk39k9ywv4e8qhgk473qzcr42k4t09jx0xdlu2ntsrh6emcnmuwqahcjwt",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12z0wv2w3dv97h36jdag09edp2xwltmnw5xxr8ha49a82j0rk3yeskz02pk",
+        "source": "Pulsara DEX",
+        "symbol": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core12z0wv2w3dv97h36jdag09edp2xwltmnw5xxr8ha49a82j0rk3yeskz02pk",
+        "liquidityToken": "core1ne9072lu86p4dd2mcqu08hduuqd95wy39e83y049fcycyj6xhxcqxy92e5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1lmamu8tc6m90v8q98us3verxwhqxes38l548dxcu7xpuygfrmmfsnjwhlc",
+        "source": "Pulsara DEX",
+        "symbol": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1lmamu8tc6m90v8q98us3verxwhqxes38l548dxcu7xpuygfrmmfsnjwhlc",
+        "liquidityToken": "core1eygsjc0lw788x72mfz750agxtdsm9ewx6ldp5397tp2cckgeg32sr6yd9z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1uk4z0aq4lcpg8pp4t2da2fmzu0lrmz4s4pad8fd8rz0zejnqs3hqd05973",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/COREUM",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "COREUM",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ucore",
+        "poolContract": "core1uk4z0aq4lcpg8pp4t2da2fmzu0lrmz4s4pad8fd8rz0zejnqs3hqd05973",
+        "liquidityToken": "core1q5ttr0qcsnxd4jkv3tvgw8l3fcuktgt4nj93ydfpwvkgjtrjwv5s0pkk7z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1xh9u2cxjaq0lvkgcvuknd3vt3fz66l2z7vvwpyd23029n2dqpgtsttgktn",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1xh9u2cxjaq0lvkgcvuknd3vt3fz66l2z7vvwpyd23029n2dqpgtsttgktn",
+        "liquidityToken": "core17a476q7drlf3cf74zxthv3egx4yyu5scs5mmwcmqpzly2yjlglhs8rrre4",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core17rwh4qj9f48hs797ss8snqjefu5wqtvkjyjr923ytne46yv43wyqvj5t7r",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core17rwh4qj9f48hs797ss8snqjefu5wqtvkjyjr923ytne46yv43wyqvj5t7r",
+        "liquidityToken": "core1supl6w4ghyeep7ntm2dv2cfgjxgsjh6t3npm03nw0l8snaq0dy8qzyzv5z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1nsnuyh7mmf552ydtmqcmccqkx8w5y40xt4qtf993c9wkt2ujae0qfxaq2s",
+        "source": "Pulsara DEX",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1nsnuyh7mmf552ydtmqcmccqkx8w5y40xt4qtf993c9wkt2ujae0qfxaq2s",
+        "liquidityToken": "core1uq8stwcjsn63pshsf8gw9vql2smcsmvhl4kaxzvkpeelz0ne0r6sxy28hc",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1kt3u2z8evelxae7unk7kvcarfahy0dgd5q7f6j4z7sultdsh7wfsxev206",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../COREUM",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "ucore",
+        "poolContract": "core1kt3u2z8evelxae7unk7kvcarfahy0dgd5q7f6j4z7sultdsh7wfsxev206",
+        "liquidityToken": "core1lxane500vcvrc0cjj0rak2h2emepm9lhv9rgrxarkwqqttyurznqjxw25s",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core146pd6jejusvqk49l4mjuwpn3nhu48ppgnjs5z6mj00ddsk9n5t8qjsga2w",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core146pd6jejusvqk49l4mjuwpn3nhu48ppgnjs5z6mj00ddsk9n5t8qjsga2w",
+        "liquidityToken": "core19fkntnvua2dllxtlqg5p9ce5nyg6nfwrla3px24rt9xcf33qjvksm0suyj",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core18ay3z6yxnyt4zz6dkgste9r57l3kysu44mxdl2e5x4j8vehr0apq9gfvpj",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-13B2C536.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-13B2C536...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core18ay3z6yxnyt4zz6dkgste9r57l3kysu44mxdl2e5x4j8vehr0apq9gfvpj",
+        "liquidityToken": "core1zgasl5s4dc5xts9rv30u4wwahxjhhjfc9pevhwd3levy6e022rlsltnvwq",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1fqumt2fytv2wqcnja3a2fvcgc007ehtnk4ju3pxpmur0qdcgyc6shjrpds",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-3E350087.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-3E350087...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1fqumt2fytv2wqcnja3a2fvcgc007ehtnk4ju3pxpmur0qdcgyc6shjrpds",
+        "liquidityToken": "core1n6q6rffccluys79sm7g7dh9739j7ddxpk66nf5gsr0fgffr857jsdqtnff",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1w8cgpgtphpdgzapdahpsuh7rkyxyf45dh4kwpqjz6lqhx3hfrmpsffhxhu",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-3E350087.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-3E350087...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1w8cgpgtphpdgzapdahpsuh7rkyxyf45dh4kwpqjz6lqhx3hfrmpsffhxhu",
+        "liquidityToken": "core1s6ekfja5z5uwpzjclnecc2uzm044s496qtwaxzc730lg93004h4qhwyyxd",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core19zwetcjpt84vnwpl06styn5f0qz34260ewm5xwxr6k0395vyr2fszqyv9h",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../COREUM",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "ucore",
+        "poolContract": "core19zwetcjpt84vnwpl06styn5f0qz34260ewm5xwxr6k0395vyr2fszqyv9h",
+        "liquidityToken": "core15znqsswksq3kttm3pa0rpxysdx2cyrxfg0k0j7yg6u2ya24g6ymqq4fcn2",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1f5aw0jq2cps98ramr7nzpmzvqvdf22nt8h8yn96n5sz4eawkzf6qglhga8",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1f5aw0jq2cps98ramr7nzpmzvqvdf22nt8h8yn96n5sz4eawkzf6qglhga8",
+        "liquidityToken": "core12gdczsewrxr36a5y29044v2e2s2cs3pjnjgtv9r5k6zk2pr7w0xqs83qgg",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core10rhnya8wjz7ngpjncxqhrz0l4zl7fr40rmccfhrl45ce9avatttqm3k39x",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-45C001A5.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-45C001A5...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core10rhnya8wjz7ngpjncxqhrz0l4zl7fr40rmccfhrl45ce9avatttqm3k39x",
+        "liquidityToken": "core1kc2ar7hkwpecex3h3qf7gzk5juq38ayw8dct6hsp2j8alghp5p7q8a0huh",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12mnf796j0kgvckedkydf3l4etpcw3as9tfx6857y0vcl54g8ld3s9lwczs",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/IBC-E1E3674A...",
+        "baseAsset": "COREUM",
+        "quoteAsset": "IBC-E1E3674A...",
+        "baseDenom": "ucore",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core12mnf796j0kgvckedkydf3l4etpcw3as9tfx6857y0vcl54g8ld3s9lwczs",
+        "liquidityToken": "core1nkmcu9g8v0hp8phplf6ess6a8m65x527ujc2yckek6h8xy92gcyq2alegq",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12xv357rlwkdqcfmysgu0ygthw8j2fc4za0ad5atyrggs66vks5lsyz2ncg",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/IBC-E1E3674A...",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "IBC-E1E3674A...",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core12xv357rlwkdqcfmysgu0ygthw8j2fc4za0ad5atyrggs66vks5lsyz2ncg",
+        "liquidityToken": "core1v9lc7jp0npzrra0wsghq5c3cmn2und735hujlpdend5szvfpsm3s5cmp5x",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1plx8w9msxx2g8wswk7f6pejggu7yfm3mh8cxcdjnshg8lnu4d4dscnct6h",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-E1E3674A.../xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "IBC-E1E3674A...",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1plx8w9msxx2g8wswk7f6pejggu7yfm3mh8cxcdjnshg8lnu4d4dscnct6h",
+        "liquidityToken": "core175jvzwwjsy4gdwt334pru9ncszq8mkh6dn68m7kjwsjzx0mc24cqjfgtj9",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core134rxhzd2y09jg9lh9kgyxywt5338s965w2k4jq5csh3td900xcwshz0wfw",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-F8CA5236.../COREUM",
+        "baseAsset": "IBC-F8CA5236...",
+        "quoteAsset": "COREUM",
+        "baseDenom": "ibc/F8CA5236869F819BC006EEF088E67889A26E4140339757878F0F4E229CDDA858",
+        "quoteDenom": "ucore",
+        "poolContract": "core134rxhzd2y09jg9lh9kgyxywt5338s965w2k4jq5csh3td900xcwshz0wfw",
+        "liquidityToken": "core1srvyfpuxs6a896zq5pqtmucj788l28vgh5zkarn53re4hyh2g4cqf4256u",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1j704eaqpa8tn22lzudua08g4fswumcw0qz0ly6cfu0z575dnzhws4xugf9",
+        "source": "Pulsara DEX",
+        "symbol": "IBC-F8CA5236.../usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "IBC-F8CA5236...",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ibc/F8CA5236869F819BC006EEF088E67889A26E4140339757878F0F4E229CDDA858",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1j704eaqpa8tn22lzudua08g4fswumcw0qz0ly6cfu0z575dnzhws4xugf9",
+        "liquidityToken": "core13jfrjp5rge3a9m8vnqrqvpqdt4ljmcgapq5setc40r0efgrzuv8s3yleh9",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1lq5j7lflhyanamku03uzm3uyrw3dz5d7dnjg3ea03ht4r82r02hs8dqly4",
+        "source": "Pulsara DEX",
+        "symbol": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1lq5j7lflhyanamku03uzm3uyrw3dz5d7dnjg3ea03ht4r82r02hs8dqly4",
+        "liquidityToken": "core18nwkluhtmjg9wvm7htyju2usg7nfk5rszz9uk5ndm46k2rek0ffs7luk4l",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1cndtl0w0jasf5ayv6h5gcv69as2c2kre66dvvcn3vwclctekvgesds0g3x",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "baseAsset": "COREUM",
+        "quoteAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "baseDenom": "ucore",
+        "quoteDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "poolContract": "core1cndtl0w0jasf5ayv6h5gcv69as2c2kre66dvvcn3vwclctekvgesds0g3x",
+        "liquidityToken": "core1gj6js9xlq9veh985vdhaggynfx88wy99yum8epdacdwyaxhwgcyq97z03m",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1aszl9qu0pjcunp4ajseplfsue8la272nm3pula953q3d3rfnqrqs9dzt4q",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/COREUM",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "COREUM",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "ucore",
+        "poolContract": "core1aszl9qu0pjcunp4ajseplfsue8la272nm3pula953q3d3rfnqrqs9dzt4q",
+        "liquidityToken": "core1aq3403ysatsqu9yenhjwxmll2ltuw4gdqr60nl4r52zdhavyv88qxj3hc8",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1jq7qjy0czgtexqvwrj2p7f32cjcgutssvv46ffu5gg0ksvtqzc6q9waq5u",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "COREUM",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "ucore",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1jq7qjy0czgtexqvwrj2p7f32cjcgutssvv46ffu5gg0ksvtqzc6q9waq5u",
+        "liquidityToken": "core15ggp3d2s5ew6qkf6rwyxdd96hnpyw6u0eegjtg30gkqx7upc66sqhyu6n0",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1vxa7ytku5pd0mc58xlwnqx3397fzplu68rjvapwuf5ry0zdyddfs9ngp0x",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1vxa7ytku5pd0mc58xlwnqx3397fzplu68rjvapwuf5ry0zdyddfs9ngp0x",
+        "liquidityToken": "core12wcqsq9kux354qs606h7dk3k6dj2xec4lr089xgd9asqvaul8zasncsyg5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1rwpk3d628gqds2weem8cvm9dtqwjlfagmkg3qljqfqra3m7u4dtsq0yd7r",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1rwpk3d628gqds2weem8cvm9dtqwjlfagmkg3qljqfqra3m7u4dtsq0yd7r",
+        "liquidityToken": "core1kypk03ncx2gr0kn7frntrcgxkwj2dgll79kyv04zex8j3gx53fjs57s334",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core14q7v4vtv7mfknwh8cvlyjddsysqtn5f3wh9hmwcf0jwxxk69lkesrvx73h",
+        "source": "Pulsara DEX",
+        "symbol": "COREUM/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "COREUM",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core14q7v4vtv7mfknwh8cvlyjddsysqtn5f3wh9hmwcf0jwxxk69lkesrvx73h",
+        "liquidityToken": "core193z6nk6d9spw35ppguy094c6turgfvkdy9pkhwhj87w8jhawksyq03ng3a",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1nh95cxa7gyg5harksmzywfhgp49pg7s0xrn26y6rdsdc5r86a4vsxjh55c",
+        "source": "Pulsara DEX",
+        "symbol": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1nh95cxa7gyg5harksmzywfhgp49pg7s0xrn26y6rdsdc5r86a4vsxjh55c",
+        "liquidityToken": "core129p4g770axjmsgtmctz6yvkwzsfueluv5eqppvplxsemuadj9qasc0677h",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1zwkavlsdamala62zm688zp3ecg7nrkdfhyx0nmcgjshy4k72s9lqnqku77",
+        "source": "Pulsara DEX",
+        "symbol": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1zwkavlsdamala62zm688zp3ecg7nrkdfhyx0nmcgjshy4k72s9lqnqku77",
+        "liquidityToken": "core1mdxvrhywkr4v3sn07htc73sj96rzv4l0td837ye5zeecqwffyyrsfgddpk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1gqz2wddqed0m9s4rst8zjzj22gheq7zaa837swllnvytscwyt56qhwyttf",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "poolContract": "core1gqz2wddqed0m9s4rst8zjzj22gheq7zaa837swllnvytscwyt56qhwyttf",
+        "liquidityToken": "core1k5my2nvmprf596j7d7uyhghljylczvwm6w0up9kvjsuprymszh9qswzat2",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1hepc6jsx3usxtgpjl63wskdgk5vwqkgrjyr8r77p8mc0pqcaknwqqwfvex",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1hepc6jsx3usxtgpjl63wskdgk5vwqkgrjyr8r77p8mc0pqcaknwqqwfvex",
+        "liquidityToken": "core12ndjypqtfpsekdyeekka5qpmzl6z3zfmwg5wxawsuuyrvur8wl5su57f52",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1dutw928juej6p5xt3mq45fkpvs00lrjukgl6dvrd3t87zc436r7qm0sqq8",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1dutw928juej6p5xt3mq45fkpvs00lrjukgl6dvrd3t87zc436r7qm0sqq8",
+        "liquidityToken": "core1mjqa6et7tcd592t6642ghf2nv2ajtyd3y6xvnm3gspw5kdp4wq2sv4rjv5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core166es6mxy80y7l6qyulvrjjuttrrwf33ms6zecuhutaxcnhrw8zyqp3vypp",
+        "source": "Pulsara DEX",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core166es6mxy80y7l6qyulvrjjuttrrwf33ms6zecuhutaxcnhrw8zyqp3vypp",
+        "liquidityToken": "core1nk39k9ywv4e8qhgk473qzcr42k4t09jx0xdlu2ntsrh6emcnmuwqahcjwt",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core12z0wv2w3dv97h36jdag09edp2xwltmnw5xxr8ha49a82j0rk3yeskz02pk",
+        "source": "Pulsara DEX",
+        "symbol": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core12z0wv2w3dv97h36jdag09edp2xwltmnw5xxr8ha49a82j0rk3yeskz02pk",
+        "liquidityToken": "core1ne9072lu86p4dd2mcqu08hduuqd95wy39e83y049fcycyj6xhxcqxy92e5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "pulsara-core1lmamu8tc6m90v8q98us3verxwhqxes38l548dxcu7xpuygfrmmfsnjwhlc",
+        "source": "Pulsara DEX",
+        "symbol": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1lmamu8tc6m90v8q98us3verxwhqxes38l548dxcu7xpuygfrmmfsnjwhlc",
+        "liquidityToken": "core1eygsjc0lw788x72mfz750agxtdsm9ewx6ldp5397tp2cckgeg32sr6yd9z",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1namntwcel4k4qkw9ds0hzppad68pe4f0s7m2le7qs5tu3u9fu9mqh0fru3",
+        "source": "Cruise Control",
+        "symbol": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765/ucore",
+        "baseAsset": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "quoteAsset": "ucore",
+        "baseDenom": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "quoteDenom": "ucore",
+        "poolContract": "core1namntwcel4k4qkw9ds0hzppad68pe4f0s7m2le7qs5tu3u9fu9mqh0fru3",
+        "liquidityToken": "ulp-core1namntwcel4k4qkw9ds0hzppad68pe4f0s7m2le7qs5tu3u9fu9mqh0fru3",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1u5fw6th4udc6sd5r8uch9rhclnf6va69anvxqshs6wt96s26gzascq6e58",
+        "source": "Cruise Control",
+        "symbol": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv/drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1u5fw6th4udc6sd5r8uch9rhclnf6va69anvxqshs6wt96s26gzascq6e58",
+        "liquidityToken": "ulp-core1u5fw6th4udc6sd5r8uch9rhclnf6va69anvxqshs6wt96s26gzascq6e58",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core16uxhuf9mjkd7wtvzmzdsmsh7lh9twrtmwgttazfxuk88zn5j6l2qcdval5",
+        "source": "Cruise Control",
+        "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/ucore",
+        "baseAsset": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "ucore",
+        "baseDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ucore",
+        "poolContract": "core16uxhuf9mjkd7wtvzmzdsmsh7lh9twrtmwgttazfxuk88zn5j6l2qcdval5",
+        "liquidityToken": "ulp-core16uxhuf9mjkd7wtvzmzdsmsh7lh9twrtmwgttazfxuk88zn5j6l2qcdval5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1l2gg5kde0wqxz6je38p7lc4n9494swfrl98nwty2dyyu4grqag3syfxhvv",
+        "source": "Cruise Control",
+        "symbol": "ibc/078EAF11288A47609FD894070CA8A1BFCEBD9E08745EA7030F95D7ADEE2E22CA/xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "ibc/078EAF11288A47609FD894070CA8A1BFCEBD9E08745EA7030F95D7ADEE2E22CA",
+        "quoteAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ibc/078EAF11288A47609FD894070CA8A1BFCEBD9E08745EA7030F95D7ADEE2E22CA",
+        "quoteDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1l2gg5kde0wqxz6je38p7lc4n9494swfrl98nwty2dyyu4grqag3syfxhvv",
+        "liquidityToken": "ulp-core1l2gg5kde0wqxz6je38p7lc4n9494swfrl98nwty2dyyu4grqag3syfxhvv",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1weltv9ha2c9uwh5vcstrxdxv82jpdm8kk4ww8v2y76tk6tsvvedqj0wem6",
+        "source": "Cruise Control",
+        "symbol": "ucore/ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "baseAsset": "ucore",
+        "quoteAsset": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "baseDenom": "ucore",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core1weltv9ha2c9uwh5vcstrxdxv82jpdm8kk4ww8v2y76tk6tsvvedqj0wem6",
+        "liquidityToken": "ulp-core1weltv9ha2c9uwh5vcstrxdxv82jpdm8kk4ww8v2y76tk6tsvvedqj0wem6",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1apw7dre0x39nhqhh7d9z99nf0f74q8cxw4y0cmfdwa50pldlyw6qwm9ttx",
+        "source": "Cruise Control",
+        "symbol": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494/ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "baseAsset": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteAsset": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "baseDenom": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "poolContract": "core1apw7dre0x39nhqhh7d9z99nf0f74q8cxw4y0cmfdwa50pldlyw6qwm9ttx",
+        "liquidityToken": "ulp-core1apw7dre0x39nhqhh7d9z99nf0f74q8cxw4y0cmfdwa50pldlyw6qwm9ttx",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1nsmw8tj678n45amtx6q28jz95ptk0599w5pvuj8f5fr505772chsrxvp8a",
+        "source": "Cruise Control",
+        "symbol": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk/ucore",
+        "baseAsset": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk",
+        "quoteAsset": "ucore",
+        "baseDenom": "ubage-core18d3y66558zjj8xvu8y4kn2s0km029dnphl42hajf0dv2988kwg2skkgpwk",
+        "quoteDenom": "ucore",
+        "poolContract": "core1nsmw8tj678n45amtx6q28jz95ptk0599w5pvuj8f5fr505772chsrxvp8a",
+        "liquidityToken": "ulp-core1nsmw8tj678n45amtx6q28jz95ptk0599w5pvuj8f5fr505772chsrxvp8a",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1q2anudhavrwk96fuyfzxew0sn6r9yjkdltk3lplxd6ujqngvrh6q8csegw",
+        "source": "Cruise Control",
+        "symbol": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w/ucore",
+        "baseAsset": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteAsset": "ucore",
+        "baseDenom": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+        "quoteDenom": "ucore",
+        "poolContract": "core1q2anudhavrwk96fuyfzxew0sn6r9yjkdltk3lplxd6ujqngvrh6q8csegw",
+        "liquidityToken": "ulp-core1q2anudhavrwk96fuyfzxew0sn6r9yjkdltk3lplxd6ujqngvrh6q8csegw",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core17dj7dwwm0dnktcljpzr807ug62fhry9d39l0rlzz42r8pl9gjjzstz3xm5",
+        "source": "Cruise Control",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2/uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "baseAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteAsset": "uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "baseDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteDenom": "uc4c-core1ugjg8s8npku6u7720nxkh5026rfm9fm0k9wmlfhzmdrjxh85z7yqp5rdea",
+        "poolContract": "core17dj7dwwm0dnktcljpzr807ug62fhry9d39l0rlzz42r8pl9gjjzstz3xm5",
+        "liquidityToken": "ulp-core17dj7dwwm0dnktcljpzr807ug62fhry9d39l0rlzz42r8pl9gjjzstz3xm5",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1jady2sct3xagmcqt898rwrs7m90pn0svgnkt0xa7s00uu46tshmsrgyjza",
+        "source": "Cruise Control",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2/ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "poolContract": "core1jady2sct3xagmcqt898rwrs7m90pn0svgnkt0xa7s00uu46tshmsrgyjza",
+        "liquidityToken": "ulp-core1jady2sct3xagmcqt898rwrs7m90pn0svgnkt0xa7s00uu46tshmsrgyjza",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core15aeuts9kz3600ygsnz35pyzu7s5xvh2sn9hqllfhsmufm5rfpqpq9t9sgk",
+        "source": "Cruise Control",
+        "symbol": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes/ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseAsset": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseDenom": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "poolContract": "core15aeuts9kz3600ygsnz35pyzu7s5xvh2sn9hqllfhsmufm5rfpqpq9t9sgk",
+        "liquidityToken": "ulp-core15aeuts9kz3600ygsnz35pyzu7s5xvh2sn9hqllfhsmufm5rfpqpq9t9sgk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1acd06yqx4rq5jt65jd6emzu3vefp4t0rwl2n553fjutc2c2dc8zqefgja3",
+        "source": "Cruise Control",
+        "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6/ucore",
+        "baseAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteDenom": "ucore",
+        "poolContract": "core1acd06yqx4rq5jt65jd6emzu3vefp4t0rwl2n553fjutc2c2dc8zqefgja3",
+        "liquidityToken": "ulp-core1acd06yqx4rq5jt65jd6emzu3vefp4t0rwl2n553fjutc2c2dc8zqefgja3",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1ux4u566uw659wyz8k0eqtgn85mfj6rnzdeft5cm3z54x90w2fm3qx6z36w",
+        "source": "Cruise Control",
+        "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6/ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "baseAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteAsset": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "baseDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteDenom": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "poolContract": "core1ux4u566uw659wyz8k0eqtgn85mfj6rnzdeft5cm3z54x90w2fm3qx6z36w",
+        "liquidityToken": "ulp-core1ux4u566uw659wyz8k0eqtgn85mfj6rnzdeft5cm3z54x90w2fm3qx6z36w",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1fevzqxpmsxwgee7xjkyxm0kxt0lmherdjnmckqvpfz64tz30p6usmakwlw",
+        "source": "Cruise Control",
+        "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6/ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "baseAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteAsset": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "baseDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteDenom": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "poolContract": "core1fevzqxpmsxwgee7xjkyxm0kxt0lmherdjnmckqvpfz64tz30p6usmakwlw",
+        "liquidityToken": "ulp-core1fevzqxpmsxwgee7xjkyxm0kxt0lmherdjnmckqvpfz64tz30p6usmakwlw",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1tkvfxw4r4t9rh8hchwad75c8t58d7qm8qtcuqzzl90jckc4mqdhs7sfakj",
+        "source": "Cruise Control",
+        "symbol": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a/ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseAsset": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "baseDenom": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "poolContract": "core1tkvfxw4r4t9rh8hchwad75c8t58d7qm8qtcuqzzl90jckc4mqdhs7sfakj",
+        "liquidityToken": "ulp-core1tkvfxw4r4t9rh8hchwad75c8t58d7qm8qtcuqzzl90jckc4mqdhs7sfakj",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1ecurc68hy73u9vrzf553xdrz6vp39amkyl7sg40s802ccxqmypgqwsj2uu",
+        "source": "Cruise Control",
+        "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6/umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseAsset": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteAsset": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseDenom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+        "quoteDenom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "poolContract": "core1ecurc68hy73u9vrzf553xdrz6vp39amkyl7sg40s802ccxqmypgqwsj2uu",
+        "liquidityToken": "ulp-core1ecurc68hy73u9vrzf553xdrz6vp39amkyl7sg40s802ccxqmypgqwsj2uu",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1dmz4ssfu5f04lehvf0gs3ruf59vq8uffyct042nkwh0gha3pczqqsqtwsk",
+        "source": "Cruise Control",
+        "symbol": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2/ucore",
+        "baseAsset": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "quoteDenom": "ucore",
+        "poolContract": "core1dmz4ssfu5f04lehvf0gs3ruf59vq8uffyct042nkwh0gha3pczqqsqtwsk",
+        "liquidityToken": "ulp-core1dmz4ssfu5f04lehvf0gs3ruf59vq8uffyct042nkwh0gha3pczqqsqtwsk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1vv90wuv9ayuex2kfcpnrdyyd4f33ch2ugrlzdy7jjv0zgtu73m4q5w35tt",
+        "source": "Cruise Control",
+        "symbol": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2/umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseAsset": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "quoteAsset": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseDenom": "ucbull-core1n9759vev3kcdvfp70f9raunhwnkk0n3kcnens2tlsuvfwtycfj4qn0glz2",
+        "quoteDenom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "poolContract": "core1vv90wuv9ayuex2kfcpnrdyyd4f33ch2ugrlzdy7jjv0zgtu73m4q5w35tt",
+        "liquidityToken": "ulp-core1vv90wuv9ayuex2kfcpnrdyyd4f33ch2ugrlzdy7jjv0zgtu73m4q5w35tt",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core155lgcwytrhttd2va6s85uf98khn3prf6d7ctxfvfj2s9t2q9sqeqppmat6",
+        "source": "Cruise Control",
+        "symbol": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv/ucore",
+        "baseAsset": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteAsset": "ucore",
+        "baseDenom": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteDenom": "ucore",
+        "poolContract": "core155lgcwytrhttd2va6s85uf98khn3prf6d7ctxfvfj2s9t2q9sqeqppmat6",
+        "liquidityToken": "ulp-core155lgcwytrhttd2va6s85uf98khn3prf6d7ctxfvfj2s9t2q9sqeqppmat6",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1757gmt2ux8x8dqz6eatrm4j7kpmrsmd9ctqzvz6vnmu4v3jn9z5s2yy6nk",
+        "source": "Cruise Control",
+        "symbol": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv/upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "baseAsset": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteAsset": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "baseDenom": "uccd-core1hnwd78wappjmgygyzr9mwspm7uzytrkcp9pfvv",
+        "quoteDenom": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "poolContract": "core1757gmt2ux8x8dqz6eatrm4j7kpmrsmd9ctqzvz6vnmu4v3jn9z5s2yy6nk",
+        "liquidityToken": "ulp-core1757gmt2ux8x8dqz6eatrm4j7kpmrsmd9ctqzvz6vnmu4v3jn9z5s2yy6nk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1j6xm9umj6mau29wh8a3h85yr0wd30ze9qkg2k9w3wgvvxtj3sdyshel58k",
+        "source": "Cruise Control",
+        "symbol": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes/ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "baseAsset": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "baseDenom": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "poolContract": "core1j6xm9umj6mau29wh8a3h85yr0wd30ze9qkg2k9w3wgvvxtj3sdyshel58k",
+        "liquidityToken": "ulp-core1j6xm9umj6mau29wh8a3h85yr0wd30ze9qkg2k9w3wgvvxtj3sdyshel58k",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1z3fuuwfjz0t4z0zllssycef99ty2whtcl5qzk7z5m2rngry264cs65uvsd",
+        "source": "Cruise Control",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2/ucore",
+        "baseAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteDenom": "ucore",
+        "poolContract": "core1z3fuuwfjz0t4z0zllssycef99ty2whtcl5qzk7z5m2rngry264cs65uvsd",
+        "liquidityToken": "ulp-core1z3fuuwfjz0t4z0zllssycef99ty2whtcl5qzk7z5m2rngry264cs65uvsd",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1cm7h4pwsttps0lzjsmyfryjhke7xtj70kxnm3vlkfsm5tn3zppnquu7hf7",
+        "source": "Cruise Control",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2/ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "baseAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteAsset": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "baseDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteDenom": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "poolContract": "core1cm7h4pwsttps0lzjsmyfryjhke7xtj70kxnm3vlkfsm5tn3zppnquu7hf7",
+        "liquidityToken": "ulp-core1cm7h4pwsttps0lzjsmyfryjhke7xtj70kxnm3vlkfsm5tn3zppnquu7hf7",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1l6w47x83fq5aj066ugv5y0e2j9y2t0d90aw36m6gtu4jklk2372qmpa3tu",
+        "source": "Cruise Control",
+        "symbol": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2/usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseAsset": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "baseDenom": "ucct-core1362hrnvgrcmfkane5pfsvxwyesmgpz90wqu2u7mr79l9rar0554qzv30n2",
+        "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "poolContract": "core1l6w47x83fq5aj066ugv5y0e2j9y2t0d90aw36m6gtu4jklk2372qmpa3tu",
+        "liquidityToken": "ulp-core1l6w47x83fq5aj066ugv5y0e2j9y2t0d90aw36m6gtu4jklk2372qmpa3tu",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1fuqeja2wq8xa5sz76wql4yxcwsx7fv0fkha90sum26mrg4z846ystmgykk",
+        "source": "Cruise Control",
+        "symbol": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes/ucore",
+        "baseAsset": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteAsset": "ucore",
+        "baseDenom": "uclan-core12gjuvu3evjet6m5lrhl404ufy0vtf5hmftz7d0qyalc26k5m8j2q5aaaes",
+        "quoteDenom": "ucore",
+        "poolContract": "core1fuqeja2wq8xa5sz76wql4yxcwsx7fv0fkha90sum26mrg4z846ystmgykk",
+        "liquidityToken": "ulp-core1fuqeja2wq8xa5sz76wql4yxcwsx7fv0fkha90sum26mrg4z846ystmgykk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core147psnc00jduvag75ezw6xuemxwqaz4fxspcp7qy35jmdy8gpartqpqe94v",
+        "source": "Cruise Control",
+        "symbol": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0/ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "baseAsset": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0",
+        "quoteAsset": "ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "baseDenom": "uclvr-core1gkh4gatv2pgtv4yng6fktkxypw6trksxnrh64aswwdly3g7da99ssccyh0",
+        "quoteDenom": "ucqr-core1x3yv8d4dza4355kxy6y62ldffcs2ep6lrnwef3c3ls00f90md86seazmpe",
+        "poolContract": "core147psnc00jduvag75ezw6xuemxwqaz4fxspcp7qy35jmdy8gpartqpqe94v",
+        "liquidityToken": "ulp-core147psnc00jduvag75ezw6xuemxwqaz4fxspcp7qy35jmdy8gpartqpqe94v",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1pekne0hlcjxnzx25pzr2yrw2hkjcwfc94xxm4pgge2vwe0fp7w2qtd48fh",
+        "source": "Cruise Control",
+        "symbol": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d/ucore",
+        "baseAsset": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucorep-core1sa6z45037wg7gjlyanlaxxkzfe5a2vs7aack3h0c88e9fs0gaursvxc97d",
+        "quoteDenom": "ucore",
+        "poolContract": "core1pekne0hlcjxnzx25pzr2yrw2hkjcwfc94xxm4pgge2vwe0fp7w2qtd48fh",
+        "liquidityToken": "ulp-core1pekne0hlcjxnzx25pzr2yrw2hkjcwfc94xxm4pgge2vwe0fp7w2qtd48fh",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg",
+        "source": "Cruise Control",
+        "symbol": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23/ucore",
+        "baseAsset": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucorez-core1astd8pqhs7mslk9rnygy9kzc5s2cqnwftcvmquxr7z9z78szzvzqljlc23",
+        "quoteDenom": "ucore",
+        "poolContract": "core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg",
+        "liquidityToken": "ulp-core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core14fnh8xgg3wzsrvhfj6hfg5eu06q7xsywrp8ps3sp0quqlr65evxqd2gw6k",
+        "source": "Cruise Control",
+        "symbol": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494/ucore",
+        "baseAsset": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteDenom": "ucore",
+        "poolContract": "core14fnh8xgg3wzsrvhfj6hfg5eu06q7xsywrp8ps3sp0quqlr65evxqd2gw6k",
+        "liquidityToken": "ulp-core14fnh8xgg3wzsrvhfj6hfg5eu06q7xsywrp8ps3sp0quqlr65evxqd2gw6k",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1czfrveyr2qqkufhr8kgsrm9z4xq05l5d3v9myzt0sj2cnvfncf9qq985ef",
+        "source": "Cruise Control",
+        "symbol": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje/ucore",
+        "baseAsset": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje",
+        "quoteAsset": "ucore",
+        "baseDenom": "ucult-core175xd8x9vseqj3cmag6m6l2s0cuudpv6dlmu6ztk3vpnxt3kfscvsldlaje",
+        "quoteDenom": "ucore",
+        "poolContract": "core1czfrveyr2qqkufhr8kgsrm9z4xq05l5d3v9myzt0sj2cnvfncf9qq985ef",
+        "liquidityToken": "ulp-core1czfrveyr2qqkufhr8kgsrm9z4xq05l5d3v9myzt0sj2cnvfncf9qq985ef",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core148lnmqukty2tk0vfms6d9ss2zpjyk7w507jslt4jvkac0slsz0sq5apmz8",
+        "source": "Cruise Control",
+        "symbol": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5/ucore",
+        "baseAsset": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5",
+        "quoteAsset": "ucore",
+        "baseDenom": "ugrok-core1hc44pu2e9e6yqdqgfky9jseu8a95c4mknn47r7y5uv2wweyuh4rq4nfwt5",
+        "quoteDenom": "ucore",
+        "poolContract": "core148lnmqukty2tk0vfms6d9ss2zpjyk7w507jslt4jvkac0slsz0sq5apmz8",
+        "liquidityToken": "ulp-core148lnmqukty2tk0vfms6d9ss2zpjyk7w507jslt4jvkac0slsz0sq5apmz8",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core18q2ahywvswnhduvgxm6wtf6u3wvjzy9207e0pf5zelsyt00kf0ds47fjnk",
+        "source": "Cruise Control",
+        "symbol": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8/ucore",
+        "baseAsset": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "quoteAsset": "ucore",
+        "baseDenom": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "quoteDenom": "ucore",
+        "poolContract": "core18q2ahywvswnhduvgxm6wtf6u3wvjzy9207e0pf5zelsyt00kf0ds47fjnk",
+        "liquidityToken": "ulp-core18q2ahywvswnhduvgxm6wtf6u3wvjzy9207e0pf5zelsyt00kf0ds47fjnk",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core164ttx4uac33mk8hhks644xmjfsahwht4lm4cxetf26uutxwxpa9qvv33mt",
+        "source": "Cruise Control",
+        "symbol": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a/ucore",
+        "baseAsset": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteAsset": "ucore",
+        "baseDenom": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteDenom": "ucore",
+        "poolContract": "core164ttx4uac33mk8hhks644xmjfsahwht4lm4cxetf26uutxwxpa9qvv33mt",
+        "liquidityToken": "ulp-core164ttx4uac33mk8hhks644xmjfsahwht4lm4cxetf26uutxwxpa9qvv33mt",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core137lhpzkty3aq27wh3aydkttytfprlsemppfru08yn0pfkk67z5zqxn7hpx",
+        "source": "Cruise Control",
+        "symbol": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl/ucore",
+        "baseAsset": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "quoteAsset": "ucore",
+        "baseDenom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "quoteDenom": "ucore",
+        "poolContract": "core137lhpzkty3aq27wh3aydkttytfprlsemppfru08yn0pfkk67z5zqxn7hpx",
+        "liquidityToken": "ulp-core137lhpzkty3aq27wh3aydkttytfprlsemppfru08yn0pfkk67z5zqxn7hpx",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1g4urphl8tmgwqljvegrqfq9ckparft9sg4cdwzp22nyg3pyfyv7svr8uxy",
+        "source": "Cruise Control",
+        "symbol": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7/ucore",
+        "baseAsset": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7",
+        "quoteAsset": "ucore",
+        "baseDenom": "umdog-core1vqrt4jmhmx9f2cktg5aa69t8j52eyjckda667jwh6cp9nwsa6u4sttngu7",
+        "quoteDenom": "ucore",
+        "poolContract": "core1g4urphl8tmgwqljvegrqfq9ckparft9sg4cdwzp22nyg3pyfyv7svr8uxy",
+        "liquidityToken": "ulp-core1g4urphl8tmgwqljvegrqfq9ckparft9sg4cdwzp22nyg3pyfyv7svr8uxy",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1zgemrg8gql077ly70kds4t7cgj08psstv9puplw58l26yhzst6msp9g772",
+        "source": "Cruise Control",
+        "symbol": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl/ucore",
+        "baseAsset": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl",
+        "quoteAsset": "ucore",
+        "baseDenom": "umoon-core14uwpqxhcmmt4tycs7mtqqaenmm02se6d745wmzm8gp84qrs6cy8s0k3wwl",
+        "quoteDenom": "ucore",
+        "poolContract": "core1zgemrg8gql077ly70kds4t7cgj08psstv9puplw58l26yhzst6msp9g772",
+        "liquidityToken": "ulp-core1zgemrg8gql077ly70kds4t7cgj08psstv9puplw58l26yhzst6msp9g772",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core10ywewf9mcjwytqhllukj6jt324muee87afudwyts6rqnhpx6nass0dvhv4",
+        "source": "Cruise Control",
+        "symbol": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a/ucore",
+        "baseAsset": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a",
+        "quoteAsset": "ucore",
+        "baseDenom": "upepe-core10jzlfmka5vpx8awcvavj82v48u8p23z0qnk64a",
+        "quoteDenom": "ucore",
+        "poolContract": "core10ywewf9mcjwytqhllukj6jt324muee87afudwyts6rqnhpx6nass0dvhv4",
+        "liquidityToken": "ulp-core10ywewf9mcjwytqhllukj6jt324muee87afudwyts6rqnhpx6nass0dvhv4",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core175n04quu9smg8nx5rgu3mx0dlcqwjp4sukmj7jp5v7gjgjmvez6qwjsz87",
+        "source": "Cruise Control",
+        "symbol": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa/ucore",
+        "baseAsset": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "quoteAsset": "ucore",
+        "baseDenom": "upunks-core1zceldt0z76n3cje52fps53lh6ejlxqcnu4fgexl3vyj688nx3f0sgm7xaa",
+        "quoteDenom": "ucore",
+        "poolContract": "core175n04quu9smg8nx5rgu3mx0dlcqwjp4sukmj7jp5v7gjgjmvez6qwjsz87",
+        "liquidityToken": "ulp-core175n04quu9smg8nx5rgu3mx0dlcqwjp4sukmj7jp5v7gjgjmvez6qwjsz87",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1yw5ft8qavvsz4hcqw89hrafgjpv24teerdze5zwl8qym4q7uc4cskcsslu",
+        "source": "Cruise Control",
+        "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z/ucore",
+        "baseAsset": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteAsset": "ucore",
+        "baseDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+        "quoteDenom": "ucore",
+        "poolContract": "core1yw5ft8qavvsz4hcqw89hrafgjpv24teerdze5zwl8qym4q7uc4cskcsslu",
+        "liquidityToken": "ulp-core1yw5ft8qavvsz4hcqw89hrafgjpv24teerdze5zwl8qym4q7uc4cskcsslu",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1t6jud6qyn3gr38fyrfxjvklxlv9jlr3v48sdjxqzres7hcfp583qxk7998",
+        "source": "Cruise Control",
+        "symbol": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh/ucore",
+        "baseAsset": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh",
+        "quoteAsset": "ucore",
+        "baseDenom": "utss-core1dqdytsrl9a7ftjtd74wxnslwanfn4wdnys7ajwt9qxwcdu67y64q2upgrh",
+        "quoteDenom": "ucore",
+        "poolContract": "core1t6jud6qyn3gr38fyrfxjvklxlv9jlr3v48sdjxqzres7hcfp583qxk7998",
+        "liquidityToken": "ulp-core1t6jud6qyn3gr38fyrfxjvklxlv9jlr3v48sdjxqzres7hcfp583qxk7998",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1gxt4jgrqnhvx8006j9xy70qj9r4ylf2w63pmcl7x3paxtzzp69lqnwne48",
+        "source": "Cruise Control",
+        "symbol": "ucore/xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "ucore",
+        "quoteAsset": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "ucore",
+        "quoteDenom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1gxt4jgrqnhvx8006j9xy70qj9r4ylf2w63pmcl7x3paxtzzp69lqnwne48",
+        "liquidityToken": "ulp-core1gxt4jgrqnhvx8006j9xy70qj9r4ylf2w63pmcl7x3paxtzzp69lqnwne48",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1wuat3m6yngftx9w004dseh7dzxsc9xjpld58jvfnhy0n3g4xq0yqdulnua",
+        "source": "Cruise Control",
+        "symbol": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/ucore",
+        "baseAsset": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "ucore",
+        "baseDenom": "xrpl2661e5b556-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ucore",
+        "poolContract": "core1wuat3m6yngftx9w004dseh7dzxsc9xjpld58jvfnhy0n3g4xq0yqdulnua",
+        "liquidityToken": "ulp-core1wuat3m6yngftx9w004dseh7dzxsc9xjpld58jvfnhy0n3g4xq0yqdulnua",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1tust5g7c43rc9c83ds362yhpx2y0n9asqcm0msjyxu4ts4h80mdsnw53cs",
+        "source": "Cruise Control",
+        "symbol": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/ucore",
+        "baseAsset": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "ucore",
+        "baseDenom": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ucore",
+        "poolContract": "core1tust5g7c43rc9c83ds362yhpx2y0n9asqcm0msjyxu4ts4h80mdsnw53cs",
+        "liquidityToken": "ulp-core1tust5g7c43rc9c83ds362yhpx2y0n9asqcm0msjyxu4ts4h80mdsnw53cs",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1wh2v5datzf2e94v95yquf764qr3uxh7xl2ghjf796pxmyyfrkg3s0d85cn",
+        "source": "Cruise Control",
+        "symbol": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494/umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseAsset": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteAsset": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseDenom": "ucozy-core19w7yasdscfu09un47h8vf5rfjshwug2kgrplkwtfdrrgjzrld82sc7f494",
+        "quoteDenom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "poolContract": "core1wh2v5datzf2e94v95yquf764qr3uxh7xl2ghjf796pxmyyfrkg3s0d85cn",
+        "liquidityToken": "ulp-core1wh2v5datzf2e94v95yquf764qr3uxh7xl2ghjf796pxmyyfrkg3s0d85cn",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1evjlyy6djg6ktxlyc6zwm5hr695xwazt705f4d2lpqhe4ke8m2kqsys4pg",
+        "source": "Cruise Control",
+        "symbol": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8/umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseAsset": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "quoteAsset": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "baseDenom": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "quoteDenom": "umbs-core166wgcj0kwhgujm3ggv9x4q47dxp7c3g75qxelnpptjcd5fxq4m8ql4wgrl",
+        "poolContract": "core1evjlyy6djg6ktxlyc6zwm5hr695xwazt705f4d2lpqhe4ke8m2kqsys4pg",
+        "liquidityToken": "ulp-core1evjlyy6djg6ktxlyc6zwm5hr695xwazt705f4d2lpqhe4ke8m2kqsys4pg",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1an9f8vckmcrz2ntp9kv3lt3ku3mpga9flmffhefwxqzux8ywwy9srlryyv",
+        "source": "Cruise Control",
+        "symbol": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz/ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "baseAsset": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteAsset": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "baseDenom": "xrpl573a95c3ab-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "quoteDenom": "ujak-core1zj57l0g983wgf5s0ygjjphc3uu2t8hhlc0cr4yglc374gwwhc2csqctuu8",
+        "poolContract": "core1an9f8vckmcrz2ntp9kv3lt3ku3mpga9flmffhefwxqzux8ywwy9srlryyv",
+        "liquidityToken": "ulp-core1an9f8vckmcrz2ntp9kv3lt3ku3mpga9flmffhefwxqzux8ywwy9srlryyv",
+        "decimals": [
+          6,
+          6
+        ]
+      },
+      {
+        "id": "cruise-core1e84smfy43rvg7tntgtpvmqrh484f6dv8ua2g5gkl8neuraflecyqgeq0vf",
+        "source": "Cruise Control",
+        "symbol": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a/xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseAsset": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteAsset": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "baseDenom": "umart-core1e5zxd9z4mz0t60he3mdw3fc499nz9jgzk9xwfvmkf440gtmsrkaqwsh75a",
+        "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "poolContract": "core1e84smfy43rvg7tntgtpvmqrh484f6dv8ua2g5gkl8neuraflecyqgeq0vf",
+        "liquidityToken": "ulp-core1e84smfy43rvg7tntgtpvmqrh484f6dv8ua2g5gkl8neuraflecyqgeq0vf",
+        "decimals": [
+          6,
+          6
+        ]
+      }
+    ],
+    "cosmData": [],
+    "coreumSupply": [
+      {
+        "denom": "aloha22-core1hxmw2fe3unnsw8uq522l9t2cfwaqgddne8nlqq",
+        "amount": "888800000000"
+      },
+      {
+        "denom": "auri-core1f8u46xpl2nl6f68syqd7swj57c6l8m3s344w2t",
+        "amount": "999008800"
+      },
+      {
+        "denom": "badgers-core1dmzhlaqh2pw5h89n2yztgpwwctw9s2gurfp765",
+        "amount": "1100000000000000000"
+      },
+      {
+        "denom": "betz-core1e5m6t5uj4uv250m6q7fr2vvv6x8x2rqfwa42dp",
+        "amount": "9991342540"
+      },
+      {
+        "denom": "brucey-core1ay7k9pnp6mmsl6trnpkzm0jgl4v54dhqw00vch",
+        "amount": "1000000000000000"
+      },
+      {
+        "denom": "c-core1h4h6h2ff2h409ekmy00zww7gf4fan7wyrj8wvf",
+        "amount": "1000000000000000"
+      },
+      {
+        "denom": "celym-core1dhq7chjms2kmyyuw2y79kzjdl8z3px8zwkm24r",
+        "amount": "10000000000000000000"
+      },
+      {
+        "denom": "cheeeze-core1lym69yprfhjzyspl52kaffawlak20km7m0f3sk",
+        "amount": "4990000000000000000000000"
+      },
+      {
+        "denom": "cibc-core1vwgy2nv8dq9qvr3c5a2qcwqtkw4gmkcu94328v",
+        "amount": "4998"
+      },
+      {
+        "denom": "cmsgft-core1u5w0mzyjext7atp56e8vyhxmete54gfegvjyc8",
+        "amount": "100000"
+      },
+      {
+        "denom": "coref-core1vphy4faweszsjplnyvv3h2cdrxr83x8vd5wxfz",
+        "amount": "100000000"
+      },
+      {
+        "denom": "coreo-core1vphy4faweszsjplnyvv3h2cdrxr83x8vd5wxfz",
+        "amount": "4000000"
+      },
+      {
+        "denom": "ctoken-core1xkv90l09g3mmu3tt5ts2jydkh8t47ud35cuat4",
+        "amount": "10000015890"
+      },
+      {
+        "denom": "dragon42-core128hgt0nnt69a5wqtl3auryf37vg90c3k9rq7q6",
+        "amount": "7700000000"
+      },
+      {
+        "denom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+        "amount": "280324870000"
+      },
+      {
+        "denom": "drop17-core1q7vrzmp2da8ntg2fp64sgv7nkmr6fsalaxwk82",
+        "amount": "1742069696969900000"
+      },
+      {
+        "denom": "epiq17-core1q7vrzmp2da8ntg2fp64sgv7nkmr6fsalaxwk82",
+        "amount": "27198400"
+      },
+      {
+        "denom": "flip-core19dqxkhwenrhxph5wt56grk4cujk38cl06fkhd2",
+        "amount": "10000"
+      },
+      {
+        "denom": "hang10-core128hgt0nnt69a5wqtl3auryf37vg90c3k9rq7q6",
+        "amount": "800813800812241552000"
+      },
+      {
+        "denom": "he-core1earrf6f9uctwd5ahct8x7ladgf88zmfjyue9q9",
+        "amount": "123490"
+      },
+      {
+        "denom": "ibc/00C62D0CD9C4632CD004463908A72220DD2BE8944BFFD60F92F6EE9EE6FA60AF",
+        "amount": "97702843"
+      },
+      {
+        "denom": "ibc/078EAF11288A47609FD894070CA8A1BFCEBD9E08745EA7030F95D7ADEE2E22CA",
+        "amount": "234032236008370533"
+      },
+      {
+        "denom": "ibc/079D948CB946E091DA0F438BFE6099CFE026C3D8835B9AFD679DA08540344F4D",
+        "amount": "1713043"
+      },
+      {
+        "denom": "ibc/0AAF86C2EE65C0FE186599E7DFDF66A9409FD627B875A9ECF952AA2EA65F3E02",
+        "amount": "42846"
+      },
+      {
+        "denom": "ibc/0AB259D62CDF382F9CDA581478929A8190E0C62B119DED0F46F29F1B2B27C8C4",
+        "amount": "20000"
+      },
+      {
+        "denom": "ibc/0E8595C44285144325A131C9A451E63B8E7467914DA5BC194F191151ED27DF30",
+        "amount": "1559577764"
+      },
+      {
+        "denom": "ibc/10117EBA5A3BF76DA409E6AD5FC139D5505C2BE0754E1B5DF6454AF5711D091F",
+        "amount": "9010914"
+      },
+      {
+        "denom": "ibc/11F8C83C369C02E484A750DB3E10B03DF731037A23D18A2D5D4741DC8910A553",
+        "amount": "975676"
+      },
+      {
+        "denom": "ibc/12B178A885FC6891E0E09E1FB013973C5632B7093CE52D8F33B32E76E3BB6EA1",
+        "amount": "13428991"
+      },
+      {
+        "denom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+        "amount": "39703142033"
+      },
+      {
+        "denom": "ibc/13DF61376C08483555C6D4C9203612086A1B23218EB5EBDBE609EEC7EFF2D82D",
+        "amount": "41664426"
+      },
+      {
+        "denom": "ibc/16FF1B6621924520CD2BC9B95EB64786ABB4EA38CAC4951D0247050C8DFC5E72",
+        "amount": "1000000"
+      },
+      {
+        "denom": "ibc/194F05289ACFB9F472E8886F52BC12BCC707C09150DE7128D486FDB8E2ABCAB6",
+        "amount": "81000"
+      },
+      {
+        "denom": "ibc/1A1E6D8B944B178CCE0669F93C708F49F1A8CD42AB819BA326BCEDD13CA5925F",
+        "amount": "129727194"
+      },
+      {
+        "denom": "ibc/1C60D019E017EF82280EBE7D0B17844F77F025C116A5D1B1C7AA38E000C1DA1D",
+        "amount": "1000000"
+      },
+      {
+        "denom": "ibc/20B9AADC64D4620751C8CF832F4CFD54BBD6169DD9CD74BD99264F2343498CA6",
+        "amount": "2000000"
+      },
+      {
+        "denom": "ibc/256CAAD2DB12D1F6143468A25958BC1BA2A2202BBF4956B84E46662CFCC0818D",
+        "amount": "496000000"
+      },
+      {
+        "denom": "ibc/2716B3FFEAA9B701193FD9D02D546B841E16B46309BEAF151C2EA9502440B115",
+        "amount": "26000000"
+      },
+      {
+        "denom": "ibc/3E35008738AC049C9C1A1E37F785E947A8DAA9811B3EA3B25580664294056151",
+        "amount": "13489667133"
+      },
+      {
+        "denom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+        "amount": "5243179136"
+      },
+      {
+        "denom": "ibc/4A934C6AC522E12313DD6906FB05DB3BDE6D6BDC29934C6A656C3413CFD7E135",
+        "amount": "56823"
+      },
+      {
+        "denom": "ibc/4C3D435DB4F9FD6AB43F661D012AFB68C9CEC810A143709E93E3DD396AB5AEAC",
+        "amount": "109713"
+      },
+      {
+        "denom": "ibc/4CC1E8B69CA48C78D7C5A2CCB91F105F70186148E3118FD08A0F1BE7E3891BEF",
+        "amount": "26285"
+      },
+      {
+        "denom": "ibc/50C09E93EA54EAF1FA6325BAE5AA7724C7D72858EE9805CC1BC519EEC260338B",
+        "amount": "6760705"
+      },
+      {
+        "denom": "ibc/52B707D1E99EBA20041F0238FFBC4417DAB066C7261229BAFB25AB08B8D44A81",
+        "amount": "112300000"
+      },
+      {
+        "denom": "ibc/533CA3CF7197DA76D9C590BDD10D83BFF54ACC79881C64B6BF1A36FEA640510D",
+        "amount": "18770"
+      },
+      {
+        "denom": "ibc/53C7C2AA9898EA61604CB847177C4B359B1BB5C541A0F333306D7C8EEC11823E",
+        "amount": "1990625"
+      },
+      {
+        "denom": "ibc/552963B375860E3213984367FC0E78B8A88F9F7E75041A731ED6F4045A8E96F6",
+        "amount": "5539349"
+      },
+      {
+        "denom": "ibc/56A422BE026779F847A8EFFFD4F7A91746953288BAB26C4EAE5E21BF4CBB70EE",
+        "amount": "1000000"
+      },
+      {
+        "denom": "ibc/56BD4E7860D18C6A8565CCE8F1ECD381CC49ACB407D2A54E6D6A8673123A83BF",
+        "amount": "1000000000000000"
+      },
+      {
+        "denom": "ibc/5F3ECA456D264F96EC9E845E41EF8C5E05E68B3FA6F239390BE5910B484EACAF",
+        "amount": "1000000"
+      },
+      {
+        "denom": "ibc/5F78C42BCC76287AE6B3185C6C1455DFFF8D805B1847F94B9B625384B93885C7",
+        "amount": "5260100"
+      },
+      {
+        "denom": "ibc/64ADA1661E3C1A4293E3BB15D5BD13012D0DB3D9002C117C30D7C429A32F4D51",
+        "amount": "127400444"
+      },
+      {
+        "denom": "ibc/67266ED1C1314239758134CD52E94D78EB39735A82A571EA10B39F7FFA9B2FF8",
+        "amount": "1018442738"
+      },
+      {
+        "denom": "ibc/6C00E4AA0CC7618370F81F7378638AE6C48EFF8C9203CE1C2357012B440EBDB7",
+        "amount": "28209297"
+      },
+      {
+        "denom": "ibc/6D42727C323C8AF2821966C83E0708F0C17FB0B0DE38BA5E4D23F2EE7C0E9DDC",
+        "amount": "152315"
+      },
+      {
+        "denom": "ibc/6EDEC5F08EAC65AEA2EE5F78492D4B95BBCD8E35BD379DA050AEEB09EF487D8A",
+        "amount": "75000000"
+      },
+      {
+        "denom": "ibc/7AADFC0AFA04A43A9AD02401A2BD902A7371E000C82B8EC39DA14CF543140003",
+        "amount": "944383"
+      },
+      {
+        "denom": "ibc/81BD95B0890B8D0130755E8338CF4AA48C7CBBD149C1D66EC9F9B62AFAE5C4F3",
+        "amount": "16928523"
+      },
+      {
+        "denom": "ibc/85A3AB7EB3075CCC1EEC3DFEEE0572FC980CE5A77C3359F3A14EA7F7DFC628AE",
+        "amount": "33288027"
+      },
+      {
+        "denom": "ibc/86C47890A76159A5342B1D1BC405AF8C5A85270C892B272E9F58527EE52CAD5E",
+        "amount": "1004369966"
+      },
+      {
+        "denom": "ibc/876CB29566F68F2B9E592D4A760DB0417A9941CFCE1A05AD9C27A8A06EDFDFCB",
+        "amount": "97646110"
+      },
+      {
+        "denom": "ibc/8B2CF3928B150338F6AA58A3EF003DF62FAE4CD78A0F0BC922C004A816D65E0B",
+        "amount": "393553"
+      },
+      {
+        "denom": "ibc/8B479D352C19AE1EE7EB36C13B74B61BA074348FA9B9B6BEDBDC3D065D893082",
+        "amount": "10000"
+      },
+      {
+        "denom": "ibc/8E2FCB4549D7A0CE4778BB9438373264427C24FB4A86EC493D99AAF44D23BE9F",
+        "amount": "610"
+      },
+      {
+        "denom": "ibc/92FD0BA0E0931C712B1651B2F3C85F3D6995B7BAD1FAE7455541F84B06574E74",
+        "amount": "1550000"
+      },
+      {
+        "denom": "ibc/9427EF9F49E9783D640755BC88B60A6ABDCF408EAE3F6FC63FE0B9F47252B869",
+        "amount": "35553739"
+      },
+      {
+        "denom": "ibc/98D01B33078D149938C9B1E2F760E55F4991E76D2A59244DF78F10C4D12863F4",
+        "amount": "100000"
+      },
+      {
+        "denom": "ibc/A2803F0C846064C43D9BA8AA4051398DC583EBD5FA69A609DBF6939ADBD2CA2C",
+        "amount": "56802"
+      },
+      {
+        "denom": "ibc/A46E618711FC1790F7497A2B419E1D3B46ACC47CBA97410F9F9B800B47BDE283",
+        "amount": "10000000"
+      },
+      {
+        "denom": "ibc/A76242A61DC2C54C8C661D312F438E0D3A38740743D25E01C3DBDD9E215588B6",
+        "amount": "3000000"
+      },
+      {
+        "denom": "ibc/AB305490F17ECCAE3F2B0398A572E0EFB3AF394B90C3A1663DA28C1F0869F624",
+        "amount": "10977"
+      },
+      {
+        "denom": "ibc/AD50A0E326D60BEB87A6D437419514D71131DDF0F61DC2F03E91E4023F33C664",
+        "amount": "2095366"
+      },
+      {
+        "denom": "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+        "amount": "1539"
+      },
+      {
+        "denom": "ibc/B94818A1AB6AF88C78878EC3D4659E7F5B957C65CC5EF01C8EE2CA559CF8E605",
+        "amount": "5"
+      },
+      {
+        "denom": "ibc/B9EAA704866C86D516967EC865B0DD3D27E81D99FDB167B09FCD33DA25AEF331",
+        "amount": "56753221"
+      },
+      {
+        "denom": "ibc/BB1E34ACA8877CACC89AAB13A4FA6A4FC0FB12120F97F161A56D58F679458E13",
+        "amount": "1000"
+      },
+      {
+        "denom": "ibc/BD28A816EBC769D0B5C32DB62482CD1EB4CEA22D4170966F13B2D141BC15111C",
+        "amount": "108251123"
+      },
+      {
+        "denom": "ibc/BFA3493067247940AA3E010859D73C4313921E189DD66B41B366842F3E4B0A44",
+        "amount": "35831186"
+      },
+      {
+        "denom": "ibc/C1FD3227942CAA04F01912FA3EF508BBAD3E4CF47982703892AC445B323BD8AB",
+        "amount": "10000"
+      },
+      {
+        "denom": "ibc/CA048F627DCCEAFD3C74ED5EA121980A5D93AF3A6FB90A1EA35BA5B210A5EED3",
+        "amount": "220000"
+      },
+      {
+        "denom": "ibc/CB8C277729EE173BE3C26EC6276A541D41671CCF1A68C9D796AD52308A8EBF99",
+        "amount": "22713314"
+      },
+      {
+        "denom": "ibc/CC516D84A1F658B09B13980937630ED4B3E08AC83EF0716CC0CB48943AF6E777",
+        "amount": "2"
+      },
+      {
+        "denom": "ibc/CF4C14BCBFFC2BF1195B7B3022F2FC2AA0C6DEC1D42EEF5505E61B8C6646A0EB",
+        "amount": "138836203"
+      },
+      {
+        "denom": "ibc/CFCEF5A109EA8E273BCE642BF79440419C365E91FA9559C3BF68D41EFD8D286F",
+        "amount": "28700839"
+      },
+      {
+        "denom": "ibc/DBB7316D88202332E4D617255746ADFC419301BBCE839E9AECEE6CC9E9B9E2CB",
+        "amount": "131672539073771526"
+      },
+      {
+        "denom": "ibc/DC22B1693875C0E8BBA85901AE87CF155950C99245767E0006DACC2F6ECB5E00",
+        "amount": "149469340"
+      },
+      {
+        "denom": "ibc/DE1E92792C72BD79E5B91C367133F923B32A8E46E0A6986DB177AFFC00BA7E72",
+        "amount": "1000000"
+      },
+      {
+        "denom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+        "amount": "138362719911"
+      },
+      {
+        "denom": "ibc/E2621BF421356413AA83D684B3201F61EDFDB3294424A79BA6887ED4A5F41917",
+        "amount": "1038530"
+      },
+      {
+        "denom": "ibc/E4EE281A786DEE595A3FD6F029882299844803FA6F96859F199DA5A6485530DC",
+        "amount": "4997058"
+      },
+      {
+        "denom": "ibc/E66B4846228FBDA4891542BE503E518E3DB6D3EBD5C083E72D021043DAE9FCD1",
+        "amount": "115011"
+      },
+      {
+        "denom": "ibc/E74F5E2BB44A1DF3A0EF61FE0AA2C4840EF2A409CB29A102EFCBA05C2D4427A3",
+        "amount": "12340"
+      },
+      {
+        "denom": "ibc/E7916A1E0CA82E2E2023083D197F3318E56C1F224C78217FB2856C59483C9A75",
+        "amount": "612405"
+      },
+      {
+        "denom": "ibc/E7FA8D2095742180BDA6E921A04A3EAB6FE9FB28BC328838EE5E40453272DB37",
+        "amount": "7400000000000001"
+      },
+      {
+        "denom": "ibc/E8D2AF1EEBDD8F56CF9F39B5C81D5C2A1207A39679CD91558E6F26051288B9F6",
+        "amount": "56955"
+      },
+      {
+        "denom": "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+        "amount": "10002"
+      },
+      {
+        "denom": "ibc/EF3A8A0642F865E753994B3CE35D6DBD2DA2E81EF83EDCBD197DDB90DD09E1DD",
+        "amount": "1000000000000000"
+      },
+      {
+        "denom": "ibc/F000A578697C96F89EDFE98059493C997EF80C1D9BD474A7B57F83A1A7715C50",
+        "amount": "9375"
+      },
+      {
+        "denom": "ibc/F533DF315CF09327D3B8112AB8BB66CAE248C7FE0020CA8F18941BD7BF713A81",
+        "amount": "5806789"
+      }
+    ],
+    "statistics": {
+      "tokenTypes": {
+        "cw20": 28,
+        "native": 1,
+        "xrpl": 4,
+        "ibc": 6
+      },
+      "mostTraded": [
+        {
+          "denom": "ucore",
+          "count": 49,
+          "token": {
+            "denom": "ucore",
+            "symbol": "COREUM",
+            "name": "Coreum",
+            "type": "native",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+          "count": 28,
+          "token": {
+            "denom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+            "symbol": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+            "name": "CW20 Token (usara-core1r9gc0rnxn...)",
+            "type": "cw20",
+            "contractAddress": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+          "count": 19,
+          "token": {
+            "denom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+            "symbol": "XRP-570c00a6...",
+            "name": "XRP Ledger Token (xrpl570c00a604-core1...)",
+            "type": "xrpl",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+          "count": 10,
+          "token": {
+            "denom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+            "symbol": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+            "name": "CW20 Token (drop-core1zhs909jp9y...)",
+            "type": "cw20",
+            "contractAddress": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+          "count": 9,
+          "token": {
+            "denom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+            "symbol": "XRP-11278ecf...",
+            "name": "XRP Ledger Token (xrpl11278ecf9e-core1...)",
+            "type": "xrpl",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+          "count": 8,
+          "token": {
+            "denom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+            "symbol": "IBC-E1E3674A...",
+            "name": "IBC Token (E1E3674A...)",
+            "type": "ibc",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+          "count": 8,
+          "token": {
+            "denom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+            "symbol": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+            "name": "CW20 Token (usbc-core1rfxrg75fzu...)",
+            "type": "cw20",
+            "contractAddress": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+          "count": 7,
+          "token": {
+            "denom": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+            "symbol": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+            "name": "CW20 Token (ucat-core129pfw890e2...)",
+            "type": "cw20",
+            "contractAddress": "ucat-core129pfw890e2e0c7p4uw04z88zjfudm2zydcd7zj4jj9lr492t4mws89skd6",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+          "count": 6,
+          "token": {
+            "denom": "ibc/13B2C536BB057AC79D5616B8EA1B9540EC1F2170718CAFF6F0083C966FFFED0B",
+            "symbol": "IBC-13B2C536...",
+            "name": "IBC Token (13B2C536...)",
+            "type": "ibc",
+            "decimals": 6
+          }
+        },
+        {
+          "denom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+          "count": 6,
+          "token": {
+            "denom": "ibc/45C001A5AE212D09879BE4627C45B64D5636086285590D5145A51E18E9D16722",
+            "symbol": "IBC-45C001A5...",
+            "name": "IBC Token (45C001A5...)",
+            "type": "ibc",
+            "decimals": 6
+          }
+        }
+      ]
+    }
+  }

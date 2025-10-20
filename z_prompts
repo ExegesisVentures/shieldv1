@@ -1,0 +1,463 @@
+# AI Code Assistant - Prompt Templates & Strategies
+
+## 🎯 Most Effective Prompting Strategies
+
+### 1. **Full System Context Prompts**
+```
+"I need to implement [feature]. Before you start:
+1. List all files that will need changes
+2. Identify all connections/dependencies
+3. Show me the complete implementation plan
+Then implement it step by step."
+```
+
+### 2. **Checklist-Style Prompts**
+```
+"Add a hover dropdown menu to the wallet button. Make sure to:
+- [ ] Add proper event handlers (preventDefault, stopPropagation)
+- [ ] Handle hover state (onMouseEnter/onMouseLeave)
+- [ ] Fix z-index for proper layering
+- [ ] Add click-outside detection
+- [ ] Test with and without wallets connected
+- [ ] Ensure no gap between button and menu
+- [ ] Connect to authentication flow"
+```
+
+### 3. **End-to-End Implementation**
+```
+"Implement [feature] end-to-end. This means:
+- Frontend components
+- Backend APIs (if needed)
+- State management
+- Error handling
+- Loading states
+- Success/failure flows
+Don't stop until the complete user flow works."
+```
+
+### 4. **Dependency Mapping First**
+```
+"Before implementing [feature], show me:
+1. What components depend on this?
+2. What does this depend on?
+3. What state needs to be shared?
+4. What events need to be triggered?
+5. What edge cases exist?"
+```
+
+### 5. **Integration Verification**
+```
+"After implementing [feature], verify:
+- Does it work with existing features?
+- Are all event listeners cleaned up?
+- Does it handle all user states (logged in, guest, no wallets)?
+- Are there any race conditions?
+- Does it work after page refresh?"
+```
+
+### 6. **Testing Scenarios Upfront**
+```
+"Implement [feature] and include test scenarios for:
+1. Happy path (normal use)
+2. Edge cases (no data, errors)
+3. State transitions (hover, click, navigate away)
+4. Browser actions (refresh, console open, back button)"
+```
+
+---
+
+## 📋 Reusable Prompt Templates
+
+### 🆕 **Adding New Features**
+```
+I need to add [feature name] to [component/page].
+
+**Context:**
+- Current state: [describe what exists]
+- Desired state: [describe what you want]
+- User flow: [step by step what user should experience]
+
+**Requirements:**
+1. [Specific requirement 1]
+2. [Specific requirement 2]
+3. [Specific requirement 3]
+
+**Before you code, please:**
+1. List all files that need changes
+2. Identify all components/functions affected
+3. Map out the data flow
+4. List edge cases to handle
+
+**Then implement it completely, making sure:**
+- All connections are made (event handlers, props, state)
+- No syntax errors
+- Works for all user states
+- Includes proper error handling
+- No console errors
+
+**Finally, tell me what to test.**
+```
+
+### 🐛 **Fixing Bugs**
+```
+I have a bug with [feature/component]. The issue is:
+- What's happening: [describe the problem]
+- What should happen: [describe expected behavior]
+- When it occurs: [describe when the bug happens]
+
+**Before you fix it, please:**
+1. Identify the root cause
+2. List all files that need changes
+3. Check for related issues
+4. Plan the complete fix
+
+**Then fix it completely, ensuring:**
+- The bug is resolved
+- No new bugs are introduced
+- All related functionality still works
+- Edge cases are handled
+- Code is clean and maintainable
+
+**Finally, tell me how to verify the fix.**
+```
+
+### 🔄 **Refactoring Code**
+```
+I need to refactor [component/feature] because:
+- Current issues: [list problems]
+- Goals: [what you want to achieve]
+- Constraints: [any limitations]
+
+**Before you refactor, please:**
+1. Analyze the current code structure
+2. Identify what can be improved
+3. Plan the new structure
+4. List all files that will change
+
+**Then refactor completely, ensuring:**
+- Functionality remains the same
+- Code is cleaner and more maintainable
+- Performance is improved (if applicable)
+- All tests still pass
+- No breaking changes
+
+**Finally, tell me what to verify.**
+```
+
+### 🔌 **Integrating Third-Party Services**
+```
+I need to integrate [service name] for [purpose].
+
+**Context:**
+- What we're integrating: [service details]
+- Why we need it: [business reason]
+- Where it fits: [which part of the app]
+
+**Before you implement, please:**
+1. Research the service API/requirements
+2. Plan the integration architecture
+3. Identify all files that need changes
+4. List environment variables needed
+5. Plan error handling
+
+**Then implement completely, including:**
+- Service integration
+- Error handling
+- Loading states
+- Success/failure flows
+- Environment configuration
+- Documentation
+
+**Finally, tell me how to test the integration.**
+```
+
+### 🔐 **Adding Authentication Flows**
+```
+I need to add authentication for [user type/feature].
+
+**Requirements:**
+- Authentication method: [email, social, wallet, etc.]
+- User states: [authenticated, guest, admin, etc.]
+- Protected routes: [which pages need auth]
+- User data: [what to store/retrieve]
+
+**Before you implement, please:**
+1. Map out all user states
+2. Plan the authentication flow
+3. Identify all components that need auth
+4. Plan state management
+5. List all files that need changes
+
+**Then implement completely, including:**
+- Authentication logic
+- State management
+- Protected routes
+- User session handling
+- Error handling
+- Loading states
+
+**Finally, tell me how to test the auth flow.**
+```
+
+### 🎨 **UI/UX Improvements**
+```
+I need to improve the UI/UX for [component/page].
+
+**Current issues:**
+- [List specific problems]
+- [User experience issues]
+
+**Goals:**
+- [What you want to achieve]
+- [User experience improvements]
+
+**Before you implement, please:**
+1. Analyze the current UI/UX
+2. Plan the improvements
+3. Identify all components that need changes
+4. Consider responsive design
+5. Plan accessibility improvements
+
+**Then implement completely, ensuring:**
+- UI is improved and intuitive
+- Responsive design works on all devices
+- Accessibility standards are met
+- Performance is maintained
+- All user flows work smoothly
+
+**Finally, tell me how to test the improvements.**
+```
+
+---
+
+## 🔑 Key Phrases That Help AI
+
+### ✅ **Use These Phrases:**
+- **"End-to-end"** - Makes AI think about complete flows
+- **"Don't forget to..."** - Highlights critical steps
+- **"Make sure it works when..."** - Forces edge case thinking
+- **"List all files first"** - Makes AI plan before coding
+- **"Verify connections"** - Reminds AI to check dependencies
+- **"Test scenarios"** - Makes AI think about validation
+- **"Before you code..."** - Forces planning phase
+- **"Complete implementation"** - Ensures nothing is missed
+- **"Handle all edge cases"** - Forces comprehensive thinking
+- **"Verify it works with..."** - Ensures integration
+
+********
+ask yourself if you have looked at all possible problems, analyse them then determie who u will solve all those problems while acting as the best coder in the world who never had any errors, verify and test
+---
+
+## 💡 Pro Tips
+
+### **Iterative Refinement**
+When AI gives you a solution, ask:
+```
+"Does this implementation handle:
+1. [Edge case 1]?
+2. [Edge case 2]?
+3. [User state 3]?
+
+If not, update it to include those."
+```
+
+### **Context Switching**
+When working on related features, remind AI:
+```
+"Remember we're working on [project name]. 
+The context is [brief description].
+Make sure this fits with our existing [architecture/patterns/design]."
+```
+
+### **Testing Reminders**
+Always end with:
+```
+"Tell me exactly what to test and how to verify it works."
+```
+
+
+
+###**For any task, remember:**
+
+1. **Context** - What exists, what you want
+2. **Requirements** - Specific, measurable goals
+3. **Planning** - List files, dependencies, edge cases
+4. **Implementation** - Complete, tested, integrated
+5. **Verification** - How to test and confirm it works
+
+Clear cache and localStorage (Cmd+Shift+Delete or Ctrl+Shift+Delete)
+
+
+
+Great question! Based on our session today (and the wallet dropdown issues we went through), here are the **best prompting strategies** to help me (or any AI) connect all the pieces correctly:
+
+## 🎯 Most Effective Prompting Strategies
+
+### 1. **Start with "Full System Context" Prompts**
+```
+"I need to implement [feature]. Before you start:
+1. List all files that will need changes
+2. Identify all connections/dependencies
+3. Show me the complete implementation plan
+Then implement it step by step."
+```
+
+### 2. **Use "Checklist-Style" Prompts**
+```
+"Add a hover dropdown menu to the wallet button. Make sure to:
+- [ ] Add proper event handlers (preventDefault, stopPropagation)
+- [ ] Handle hover state (onMouseEnter/onMouseLeave)
+- [ ] Fix z-index for proper layering
+- [ ] Add click-outside detection
+- [ ] Test with and without wallets connected
+- [ ] Ensure no gap between button and menu
+- [ ] Connect to authentication flow"
+```
+
+### 3. **Request "End-to-End" Implementation**
+```
+"Implement [feature] end-to-end. This means:
+- Frontend components
+- Backend APIs (if needed)
+- State management
+- Error handling
+- Loading states
+- Success/failure flows
+Don't stop until the complete user flow works."
+```
+
+### 4. **Ask for "Dependency Mapping" First**
+```
+"Before implementing [feature], show me:
+1. What components depend on this?
+2. What does this depend on?
+3. What state needs to be shared?
+4. What events need to be triggered?
+5. What edge cases exist?"
+```
+
+### 5. **Use "Integration Verification" Prompts**
+```
+"After implementing [feature], verify:
+- Does it work with existing features?
+- Are all event listeners cleaned up?
+- Does it handle all user states (logged in, guest, no wallets)?
+- Are there any race conditions?
+- Does it work after page refresh?"
+```
+
+### 6. **Request "Testing Scenarios" Upfront**
+```
+"Implement [feature] and include test scenarios for:
+1. Happy path (normal use)
+2. Edge cases (no data, errors)
+3. State transitions (hover, click, navigate away)
+4. Browser actions (refresh, console open, back button)"
+```
+
+## 📋 Template for Complex Features
+
+Here's a **prompt template** that works really well:
+
+```
+I need to [implement/fix] [feature name].
+
+**Context:**
+- Current state: [describe what exists]
+- Desired state: [describe what you want]
+- User flow: [step by step what user should experience]
+
+**Requirements:**
+1. [Specific requirement 1]
+2. [Specific requirement 2]
+3. [Specific requirement 3]
+
+**Before you code, please:**
+1. List all files that need changes
+2. Identify all components/functions affected
+3. Map out the data flow
+4. List edge cases to handle
+
+**Then implement it completely, making sure:**
+- All connections are made (event handlers, props, state)
+- No syntax errors
+- Works for all user states
+- Includes proper error handling
+- No console errors
+
+**Finally, tell me what to test.**
+```
+
+## 🎯 Specific to Today's Issues
+
+For the wallet dropdown issue, this prompt would have worked better:
+
+```
+"Add a hover-activated dropdown menu to the wallet button that:
+
+**Must handle:**
+- Shows on hover for ALL users (authenticated, guest with/without wallets)
+- Stays open when moving mouse from button to menu (no gap)
+- Closes when mouse leaves the entire area
+- Has proper z-index to appear above everything
+- Prevents event bubbling (stopPropagation)
+- Shows different options based on user state
+- Connects "Connect Wallet" to modal (not page navigation)
+- Connects "Sign In" to /sign-in page
+- Works after cache clear, page refresh, console open
+
+**Implementation checklist:**
+- [ ] Add hover state management
+- [ ] Fix positioning (no gap between button and menu)
+- [ ] Add proper event handlers
+- [ ] Handle all user states conditionally
+- [ ] Import and connect WalletConnectModal
+- [ ] Test hover behavior
+- [ ] Verify no syntax errors
+- [ ] Check all closing tags match
+
+Don't implement until you've listed all affected files and dependencies."
+```
+
+## 🔑 Key Phrases That Help Me
+
+Use these phrases in your prompts:
+
+- ✅ **"End-to-end"** - Makes me think about complete flows
+- ✅ **"Don't forget to..."** - Highlights critical steps
+- ✅ **"Make sure it works when..."** - Forces edge case thinking
+- ✅ **"List all files first"** - Makes me plan before coding
+- ✅ **"Verify connections"** - Reminds me to check dependencies
+- ✅ **"Test scenarios"** - Makes me think about validation
+- ✅ **"Before you code..."** - Forces planning phase
+
+## 🚫 What NOT to Do
+
+Avoid vague prompts like:
+- ❌ "Add a dropdown menu" (too general)
+- ❌ "Fix the wallet button" (unclear what's broken)
+- ❌ "Make it work" (no context)
+- ❌ "Do the hover thing" (ambiguous)
+
+## 💡 Pro Tip: Iterative Refinement
+
+When I give you a solution, ask:
+```
+"Does this implementation handle:
+1. [Edge case 1]?
+2. [Edge case 2]?
+3. [User state 3]?
+
+If not, update it to include those."
+```
+
+This forces me to review my own work before you test it.
+
+---
+
+Would you like me to create a **reusable prompt template file** that you can copy/paste for different types of tasks? I can make templates for:
+- Adding new features
+- Fixing bugs
+- Refactoring code
+- Integrating third-party services
+- Adding authentication flows
