@@ -200,8 +200,9 @@ export default function SimplifiedDashboard() {
             }
             return sum + value;
           }, 0);
-          const totalWithNftAndPrices = totalValueWithPrices + nftHolding.valueUsd;
-          console.log(`💰 [Total Value] Tokens: $${totalValueWithPrices.toFixed(2)}, NFT: $${nftHolding.valueUsd.toFixed(2)}, Total: $${totalWithNftAndPrices.toFixed(2)}`);
+          const nftValue = nftHolding?.valueUsd || 0;
+          const totalWithNftAndPrices = totalValueWithPrices + nftValue;
+          console.log(`💰 [Total Value] Tokens: $${totalValueWithPrices.toFixed(2)}, NFT: $${nftValue.toFixed(2)}, Total: $${totalWithNftAndPrices.toFixed(2)}`);
           setTotalValue(isNaN(totalWithNftAndPrices) ? 0 : totalWithNftAndPrices);
           
           // Calculate weighted average 24h change (including NFT)
@@ -210,7 +211,9 @@ export default function SimplifiedDashboard() {
               const weight = token.valueUsd / totalWithNftAndPrices;
               return acc + (token.change24h * weight);
             }, 0);
-            const nftWeightedChange = (nftHolding.valueUsd / totalWithNftAndPrices) * nftHolding.change24h;
+            const nftWeightedChange = nftHolding 
+              ? (nftHolding.valueUsd / totalWithNftAndPrices) * nftHolding.change24h 
+              : 0;
             setChange24h(tokenWeightedChange + nftWeightedChange);
           }
         }).catch((error) => {
