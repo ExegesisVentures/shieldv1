@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "generated": "2025-10-13T06:30:00.000Z",
+    "description": "Complete list of Coreum tokens with metadata for Web App",
+    "totalTokens": 39,
+    "network": "mainnet"
+  },
+  "tokens": [
+    {
+      "symbol": "COREUM",
+      "name": "Coreum",
+      "denom": "ucore",
+      "type": "native",
+      "decimals": 6,
+      "logo": "coreum.svg",
+      "description": "Native Coreum blockchain token"
+    },
+    {
+      "symbol": "SARA",
+      "name": "Pulsara Token",
+      "denom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+      "contractAddress": "core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+      "type": "cw20",
+      "decimals": 6,
+      "logo": "pulsara.svg",
+      "description": "Pulsara DEX native token"
+    },
+    {
+      "symbol": "DROP",
+      "name": "Drop Token",
+      "denom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "contractAddress": "core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "type": "cw20",
+      "decimals": 6,
+      "logo": "drop.svg"
+    },
+    {
+      "symbol": "XRP-570c00a6",
+      "name": "XRP Ledger Token",
+      "denom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "type": "xrpl",
+      "decimals": 6,
+      "logo": "xrp.svg",
+      "description": "XRP bridged from XRP Ledger"
+    },
+    {
+      "symbol": "XRP-11278ecf",
+      "name": "XRP Ledger Token",
+      "denom": "xrpl11278ecf9e-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "type": "xrpl",
+      "decimals": 6,
+      "logo": "xrp.svg"
+    },
+    {
+      "symbol": "IBC-E1E3674A",
+      "name": "IBC Token",
+      "denom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+      "type": "ibc",
+      "decimals": 6,
+      "logo": "ibc.svg",
+      "description": "Cross-chain IBC token"
+    },
+    {
+      "symbol": "BUKEC",
+      "name": "BUKEC Token",
+      "denom": "ubukec-core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+      "contractAddress": "core1sj0phdvucwd5x53yesr0qhnyvhwvze0vxk76qsg4xptws6z29nxs9je79w",
+      "type": "cw20",
+      "decimals": 6
+    },
+    {
+      "symbol": "LICORE",
+      "name": "Licensed Coreum",
+      "denom": "ulicore-core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+      "contractAddress": "core13gza3msdh8hegqxhgezll9quucsr63s0gp43k274xwt66k4e8pmq5zpnm9",
+      "type": "cw20",
+      "decimals": 6
+    },
+    {
+      "symbol": "USBC",
+      "name": "USD-Backed Coreum",
+      "denom": "usbc-core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+      "contractAddress": "core1rfxrg75fzuq5hgnnymjgsxj70d9w9cs8xuza7x",
+      "type": "cw20",
+      "decimals": 6,
+      "description": "USD-pegged stablecoin"
+    }
+  ],
+  "helpers": {
+    "denomToSymbol": "Use this mapping to convert API denoms to displayable symbols",
+    "example": "ucore -> COREUM, usara-core1r9g... -> SARA"
+  }
+}

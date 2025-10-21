@@ -1,0 +1,37 @@
+- rule: "Workspace Map"
+  content: |
+    You are inside ShieldNest, a Coreum portfolio app.
+    Folders:
+      app/                 -> Next.js App Router
+      components/          -> UI components
+      utils/               -> helpers (supabase, wallet, errors, nft)
+      contexts/            -> React providers (to be added)
+    Users:
+      Visitor -> can connect/paste but NOT saved (local/session only); show exit-intent & post-action nudges.
+      Public  -> email/pw or wallet-bootstrap linked to email; data saved in Supabase.
+      Private -> PMA signed (PDF + on-chain hash) AND Shield NFT ownership; unlock member features.
+    v1 Rules:
+      - No trading (DEX) in v1.
+      - Shield NFT is a placeholder (image + $5k–$6k value) from admin setting.
+
+- rule: "Security"
+  content: |
+    Never put secrets in client code. Use Supabase server helpers and RLS. Sanitize logs.
+
+- rule: "Errors"
+  content: |
+    Always return { code, message, hint?, causeId }. Do not surface raw provider errors to users.
+
+- rule: "Structure"
+  content: |
+    UI in components/, state in hooks/, shared state in contexts/, services in utils/.
+    Keep functions small and typed; write comments for the next developer.
+
+- rule: "Feature Flags"
+  content: |
+    DEX trading and NFT sell-back are COMING SOON—guard behind flags; do not expose unfinished APIs.
+
+- rule: "Task Style"
+  content: |
+    Propose small diffs. When adding a feature, list files to create/edit, risks, and rollback notes.
+

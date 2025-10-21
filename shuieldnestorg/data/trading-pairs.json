@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "generated": "2025-10-13T06:30:00.000Z",
+    "description": "All 74 trading pairs available on CoreDEX",
+    "totalPairs": 74,
+    "sources": ["Pulsara DEX", "Cruise Control"]
+  },
+  "pairs": [
+    {
+      "symbol": "COREUM/SARA",
+      "displaySymbol": "CORE/SARA",
+      "baseDenom": "ucore",
+      "quoteDenom": "usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+      "baseSymbol": "COREUM",
+      "quoteSymbol": "SARA",
+      "apiSymbol": "ucore_usara-core1r9gc0rnxnzpq33u82f44aufgdwvyxv4wyepyck98m9v2pxua6naqr8h03z",
+      "pools": [
+        {
+          "dex": "Pulsara DEX",
+          "contract": "core1aszl9qu0pjcunp4ajseplfsue8la272nm3pula953q3d3rfnqrqs9dzt4q"
+        },
+        {
+          "dex": "Cruise Control",
+          "contract": "core1yw5ft8qavvsz4hcqw89hrafgjpv24teerdze5zwl8qym4q7uc4cskcsslu"
+        }
+      ],
+      "popular": true
+    },
+    {
+      "symbol": "COREUM/DROP",
+      "displaySymbol": "CORE/DROP",
+      "baseDenom": "ucore",
+      "quoteDenom": "drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "baseSymbol": "COREUM",
+      "quoteSymbol": "DROP",
+      "apiSymbol": "ucore_drop-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "pools": [
+        {
+          "dex": "Pulsara DEX",
+          "contract": "core1uk4z0aq4lcpg8pp4t2da2fmzu0lrmz4s4pad8fd8rz0zejnqs3hqd05973"
+        },
+        {
+          "dex": "Cruise Control",
+          "contract": "core16uxhuf9mjkd7wtvzmzdsmsh7lh9twrtmwgttazfxuk88zn5j6l2qcdval5"
+        }
+      ],
+      "popular": true
+    },
+    {
+      "symbol": "COREUM/XRP-570c00a6",
+      "displaySymbol": "CORE/XRP",
+      "baseDenom": "ucore",
+      "quoteDenom": "xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "baseSymbol": "COREUM",
+      "quoteSymbol": "XRP-570c00a6",
+      "apiSymbol": "ucore_xrpl570c00a604-core1zhs909jp9yktml6qqx9f0ptcq2xnhhj99cja03j3lfcsp2pgm86studdrz",
+      "pools": [
+        {
+          "dex": "Pulsara DEX",
+          "contract": "core14q7v4vtv7mfknwh8cvlyjddsysqtn5f3wh9hmwcf0jwxxk69lkesrvx73h"
+        }
+      ],
+      "popular": true
+    },
+    {
+      "symbol": "COREUM/IBC-E1E3674A",
+      "displaySymbol": "CORE/IBC",
+      "baseDenom": "ucore",
+      "quoteDenom": "ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+      "baseSymbol": "COREUM",
+      "quoteSymbol": "IBC-E1E3674A",
+      "apiSymbol": "ucore_ibc/E1E3674A0E4E1EF9C69646F9AF8D9497173821826074622D831BAB73CCB99A2D",
+      "pools": [
+        {
+          "dex": "Pulsara DEX",
+          "contract": "core12mnf796j0kgvckedkydf3l4etpcw3as9tfx6857y0vcl54g8ld3s9lwczs"
+        },
+        {
+          "dex": "Cruise Control",
+          "contract": "core1weltv9ha2c9uwh5vcstrxdxv82jpdm8kk4ww8v2y76tk6tsvvedqj0wem6"
+        }
+      ]
+    }
+  ],
+  "note": "Use 'apiSymbol' field when calling the API. Use 'displaySymbol' for UI."
+}
+
