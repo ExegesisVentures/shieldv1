@@ -12,6 +12,7 @@ import { getMultiAddressBalances, EnrichedBalance, getTokenPrice, getTokenChange
 import { getShieldNftHolding, ShieldNftHolding, fetchShieldSettings, hasShieldNft } from "@/utils/nft/shield";
 import { preloadTokenImages } from "@/utils/coreum/token-images";
 import { initializeDashboardSession, refreshSessionIfNeeded } from "@/utils/auth/session-refresh";
+import { isTokenHidden } from "@/utils/hidden-tokens";
 // import { detectAvailableWalletProvider, WalletProvider } from "@/utils/wallet/detection";
 
 export default function SimplifiedDashboard() {
@@ -192,8 +193,15 @@ export default function SimplifiedDashboard() {
             }
           }
           
-          // Recalculate totals with actual prices
+          // Recalculate totals with actual prices (excluding hidden tokens)
           const totalValueWithPrices = tokensWithPrices.reduce((sum, token) => {
+            // Check if token is hidden
+            const denom = token.denom || token.symbol;
+            if (isTokenHidden(denom)) {
+              console.log(`👁️‍🗨️ Excluding hidden token from total value: ${token.symbol}`);
+              return sum;
+            }
+            
             const value = isNaN(token.valueUsd) || !isFinite(token.valueUsd) ? 0 : token.valueUsd;
             if (isNaN(token.valueUsd) || !isFinite(token.valueUsd)) {
               console.warn(`⚠️ Invalid valueUsd for ${token.symbol}:`, token.valueUsd, 'balance:', token.balanceFormatted);
@@ -205,9 +213,15 @@ export default function SimplifiedDashboard() {
           console.log(`💰 [Total Value] Tokens: $${totalValueWithPrices.toFixed(2)}, NFT: $${nftValue.toFixed(2)}, Total: $${totalWithNftAndPrices.toFixed(2)}`);
           setTotalValue(isNaN(totalWithNftAndPrices) ? 0 : totalWithNftAndPrices);
           
-          // Calculate weighted average 24h change (including NFT)
+          // Calculate weighted average 24h change (including NFT, excluding hidden tokens)
           if (totalWithNftAndPrices > 0) {
             const tokenWeightedChange = tokensWithPrices.reduce((acc, token) => {
+              // Check if token is hidden
+              const denom = token.denom || token.symbol;
+              if (isTokenHidden(denom)) {
+                return acc; // Skip hidden tokens
+              }
+              
               const weight = token.valueUsd / totalWithNftAndPrices;
               return acc + (token.change24h * weight);
             }, 0);
