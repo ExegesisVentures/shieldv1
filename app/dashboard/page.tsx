@@ -341,7 +341,7 @@ export default function Dashboard() {
               getTokenPrice("CORE"),
               getTokenChange24h("CORE")
             ]).then(results => [
-              results[0].status === 'fulfilled' ? results[0].value : null,
+              results[0].status === 'fulfilled' ? results[0].value : undefined,
               results[1].status === 'fulfilled' ? results[1].value : staticCorePrice,
               results[2].status === 'fulfilled' ? results[2].value : staticCoreChange
             ]);
