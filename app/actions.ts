@@ -9,6 +9,27 @@ import { ensurePublicUserProfile } from "@/utils/supabase/user-profile";
 export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  
+  // Debug logging for environment variables
+  const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const hasSupabaseKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  console.log("🔍 Sign-in attempt:", {
+    email,
+    hasSupabaseUrl,
+    hasSupabaseKey,
+    supabaseUrl: hasSupabaseUrl ? process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 30) + "..." : "MISSING",
+  });
+  
+  if (!hasSupabaseUrl || !hasSupabaseKey) {
+    console.error("❌ Supabase environment variables not configured!");
+    return encodedRedirect(
+      "error", 
+      "/sign-in", 
+      "Server configuration error. Please check environment variables."
+    );
+  }
+
   const client = await createSupabaseClient();
 
   const { data, error } = await client.auth.signInWithPassword({
@@ -17,12 +38,16 @@ export const signInAction = async (formData: FormData) => {
   });
 
   if (error) {
+    console.error("❌ Sign-in error:", error);
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
   if (!data.user) {
+    console.error("❌ Sign-in failed: No user data returned");
     return encodedRedirect("error", "/sign-in", "Authentication failed");
   }
+
+  console.log("✅ Sign-in successful for:", email);
 
   // Ensure user profile exists (in case they signed up before we had the function)
   try {
