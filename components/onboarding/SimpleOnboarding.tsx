@@ -238,7 +238,7 @@ export default function SimpleOnboarding({ publicUserId }: SimpleOnboardingProps
         <WalletConnectModal
           isOpen={showWalletModal}
           onClose={() => setShowWalletModal(false)}
-          onWalletConnected={handleWalletConnected}
+          onSuccess={handleWalletConnected}
         />
       )}
     </div>
