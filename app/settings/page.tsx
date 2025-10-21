@@ -10,6 +10,7 @@ import { createSupabaseClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { uploadProfilePicture, getProfilePictureUrl, deleteProfilePicture, validateProfilePictureFile } from "@/utils/storage/profile-pictures";
+import type { User } from "@supabase/supabase-js";
 
 interface UserProfile {
   public_user_id: string;
@@ -17,14 +18,8 @@ interface UserProfile {
   [key: string]: unknown;
 }
 
-interface AuthUser {
-  id: string;
-  email?: string;
-  [key: string]: unknown;
-}
-
 export default function SettingsPage() {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
