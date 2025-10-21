@@ -47,13 +47,13 @@ export async function POST(req: Request) {
     console.log("Adding custodial wallet:", { email, address, label });
 
     // Get user by email
-    const { data: authUser, error: userError } = await supabase.auth.admin.getUserById(
+    const { data: authUserData, error: userError } = await supabase.auth.admin.getUserById(
       email // Try as user ID first
     );
 
     let targetAuthUserId: string;
 
-    if (userError || !authUser) {
+    if (userError || !authUserData?.user) {
       // Try finding by email instead
       const { data: users, error: emailError } = await supabase.auth.admin.listUsers();
       
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
 
       targetAuthUserId = foundUser.id;
     } else {
-      targetAuthUserId = authUser.id;
+      targetAuthUserId = authUserData.user.id;
     }
 
     // Get user's public_user_id
