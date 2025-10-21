@@ -130,9 +130,26 @@ function DashboardContent() {
     const updateHiddenTokensState = () => {
       console.log('📢 [hiddenTokensChanged] Event received, updating state');
       const hiddenList = getHiddenTokens();
-      const denomSet = new Set(hiddenList.map(ht => ht.denom));
-      console.log('📊 [hiddenTokensChanged] Hidden tokens:', hiddenList.length, Array.from(denomSet));
-      setHiddenTokenDenoms(denomSet);
+      const newDenoms = hiddenList.map(ht => ht.denom);
+      
+      // Only update if the denoms actually changed (compare by value, not reference)
+      setHiddenTokenDenoms(prevDenoms => {
+        const prevArray = Array.from(prevDenoms).sort();
+        const newArray = [...newDenoms].sort();
+        
+        // Deep equality check
+        const hasChanged = prevArray.length !== newArray.length || 
+                          prevArray.some((val, idx) => val !== newArray[idx]);
+        
+        if (hasChanged) {
+          console.log('📊 [hiddenTokens] Changed from', prevArray, 'to', newArray);
+          return new Set(newDenoms);
+        } else {
+          console.log('📊 [hiddenTokens] No change, keeping same Set reference');
+          return prevDenoms; // Keep same reference if values unchanged
+        }
+      });
+      
       setHiddenTokenCount(hiddenList.length);
     };
     
