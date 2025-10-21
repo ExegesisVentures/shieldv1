@@ -312,7 +312,7 @@ export default function Dashboard() {
         let nftHolding: ShieldNftHolding | null = null;
         if (userOwnsShieldNft) {
           // Show Shield NFT immediately with static price
-          nftHolding = getShieldNftHolding(staticCorePrice, staticCoreChange, null, 8.5);
+          nftHolding = getShieldNftHolding(staticCorePrice, staticCoreChange, undefined, 8.5);
           setShieldNft(nftHolding);
         } else {
           // User doesn't own Shield NFT, don't show it
