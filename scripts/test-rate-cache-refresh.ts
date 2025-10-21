@@ -101,7 +101,7 @@ async function testDatabasePairs() {
     });
   }
   
-  return count && count > 0;
+  return Boolean(count && count > 0);
 }
 
 async function testVPSQuote() {
