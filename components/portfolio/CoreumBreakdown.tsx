@@ -3,7 +3,7 @@
 import { IoCash, IoTrendingUp, IoGift, IoTime, IoCopy, IoDownload } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatAddressSnippet, copyToClipboard, showToast } from "@/utils/address-utils";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { claimAllRewardsClient, claimAndCompoundRewardsClient, type WalletProvider } from "@/utils/coreum/claim";
 import { delegateTokensClient, undelegateTokensClient, redelegateTokensClient, fetchValidators, fetchDelegations, type StakingValidator } from "@/utils/coreum/stake";
 import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
@@ -162,21 +162,11 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
     }
   };
 
-  const canClaim = useMemo(() => {
-    return primaryWallet && (parseFloat(primaryWallet.rewards || "0") > 0);
-  }, [primaryWallet]);
-
-  const canStake = useMemo(() => {
-    return primaryWallet && (totals.available > 0);
-  }, [primaryWallet, totals.available]);
-
-  const canUnstake = useMemo(() => {
-    return primaryWallet && (totals.staked > 0);
-  }, [primaryWallet, totals.staked]);
-
-  const canRedelegate = useMemo(() => {
-    return primaryWallet && (totals.unbonding > 0 || totals.staked > 0);
-  }, [primaryWallet, totals.unbonding, totals.staked]);
+  // Simple boolean checks - no need for useMemo
+  const canClaim = primaryWallet && (parseFloat(primaryWallet.rewards || "0") > 0);
+  const canStake = primaryWallet && (totals.available > 0);
+  const canUnstake = primaryWallet && (totals.staked > 0);
+  const canRedelegate = primaryWallet && (totals.unbonding > 0 || totals.staked > 0);
 
   const openClaimRewards = () => {
     if (!primaryWallet) return;
