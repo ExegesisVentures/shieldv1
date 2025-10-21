@@ -10,7 +10,8 @@ import {
   IoSettings,
   IoLogOut,
   IoChevronBack,
-  IoMenu
+  IoMenu,
+  IoShield
 } from "react-icons/io5";
 import { useState } from "react";
 
@@ -96,7 +97,7 @@ export default function Sidebar({ userType = "public" }: SidebarProps) {
               {!collapsed && (
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-white" />
+                    <IoShield className="w-5 h-5 text-white" />
                   </div>
                   <span className="font-bold text-xl text-gray-900 dark:text-white">
                     ShieldNest
