@@ -209,7 +209,7 @@ export default function Dashboard() {
       window.removeEventListener('hiddenTokensChanged', handleHiddenTokensChange);
       subscription.unsubscribe();
     };
-  }, [refreshCounter]);
+  }, []); // Empty deps - only run once on mount
 
   const checkForSavePrompt = async () => {
     // NEVER show save prompt for authenticated users
