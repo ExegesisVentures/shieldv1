@@ -34,8 +34,10 @@ export async function getSimplePortfolio(address: string): Promise<SimplePortfol
     // Connect to Coreum RPC
     const client = await CosmWasmClient.connect(COREUM_RPC);
     
-    // Get all balances in one call
-    const balances = await client.getAllBalances(address);
+    // Get all balances using REST API
+    const response = await fetch(`${COREUM_RPC.replace('26657', '1317')}/cosmos/bank/v1beta1/balances/${address}`);
+    const data = await response.json();
+    const balances = data.balances || [];
     
     console.log(`📊 [Simple Portfolio] Found ${balances.length} token balances`);
     
