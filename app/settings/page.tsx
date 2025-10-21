@@ -11,9 +11,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { uploadProfilePicture, getProfilePictureUrl, deleteProfilePicture, validateProfilePictureFile } from "@/utils/storage/profile-pictures";
 
+interface UserProfile {
+  public_user_id: string;
+  auth_user_id: string;
+  [key: string]: unknown;
+}
+
 export default function SettingsPage() {
   const [user, setUser] = useState<unknown>(null);
-  const [profile, setProfile] = useState<unknown>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
