@@ -7,13 +7,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { createSupabaseServer } from "@/utils/supabase/server";
+import { createSupabaseClient } from "@/utils/supabase/server";
 import { isUserAdmin } from "@/utils/admin";
 import { refreshMultipleWallets } from "@/utils/coreum/rewards-history";
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createSupabaseServer();
+    const supabase = await createSupabaseClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
