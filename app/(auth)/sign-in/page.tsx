@@ -46,6 +46,7 @@ export default async function SignIn(props: {
               placeholder="you@example.com" 
               required 
               className="mt-1"
+              autoComplete="email"
             />
           </div>
           
@@ -64,6 +65,7 @@ export default async function SignIn(props: {
               name="password"
               placeholder="Your password"
               required
+              autoComplete="current-password"
             />
           </div>
 

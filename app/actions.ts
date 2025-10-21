@@ -136,3 +136,45 @@ export const signOutAction = async () => {
   await client.auth.signOut();
   return redirect("/");
 };
+
+export const forgotPasswordAction = async (formData: FormData) => {
+  const email = formData.get("email") as string;
+  const client = await createSupabaseClient();
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+  const { error } = await client.auth.resetPasswordForEmail(email, {
+    redirectTo: `${siteUrl}/reset-password`,
+  });
+
+  if (error) {
+    return encodedRedirect("error", "/forgot-password", error.message);
+  }
+
+  return encodedRedirect(
+    "success",
+    "/sign-in",
+    "Check your email for a password reset link."
+  );
+};
+
+export const resetPasswordAction = async (formData: FormData) => {
+  const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
+  const client = await createSupabaseClient();
+
+  if (password !== confirmPassword) {
+    return encodedRedirect("error", "/reset-password", "Passwords do not match.");
+  }
+
+  const { error } = await client.auth.updateUser({
+    password,
+  });
+
+  if (error) {
+    return encodedRedirect("error", "/reset-password", error.message);
+  }
+
+  return encodedRedirect("success", "/sign-in", "Password updated successfully.");
+};

@@ -122,6 +122,7 @@ export default function AddEmailToWalletAccount() {
             placeholder="you@example.com"
             required
             disabled={loading}
+            autoComplete="email"
           />
         </div>
 
@@ -140,6 +141,7 @@ export default function AddEmailToWalletAccount() {
             required
             disabled={loading}
             minLength={6}
+            autoComplete="new-password"
           />
         </div>
 
@@ -158,6 +160,7 @@ export default function AddEmailToWalletAccount() {
             required
             disabled={loading}
             minLength={6}
+            autoComplete="new-password"
           />
         </div>
 

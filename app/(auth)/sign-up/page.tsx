@@ -27,7 +27,7 @@ export default async function SignUp(props: {
       </p>
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
         <Label htmlFor="email">Email</Label>
-        <Input name="email" placeholder="you@example.com" required />
+        <Input name="email" placeholder="you@example.com" required autoComplete="email" />
         <div className="flex justify-between items-center">
           <Label htmlFor="password">Password</Label>
         </div>
@@ -36,6 +36,7 @@ export default async function SignUp(props: {
           name="password"
           placeholder="Your password"
           required
+          autoComplete="new-password"
         />
         <AuthSubmitButton label="Sign up" pendingLabel="Signing up..." />
         <FormMessage message={searchParams} />

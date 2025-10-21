@@ -250,6 +250,7 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                     autoFocus
                     disabled={loading}
+                    autoComplete="email"
                   />
                 </div>
               </div>
@@ -267,6 +268,7 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
                     onChange={(e) => setData({ ...data, password: e.target.value })}
                     autoFocus
                     disabled={loading}
+                    autoComplete="new-password"
                   />
                 </div>
                 <div>
@@ -278,6 +280,7 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
                     value={data.confirmPassword || ""}
                     onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
                     disabled={loading}
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
