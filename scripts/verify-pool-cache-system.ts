@@ -125,7 +125,7 @@ async function testPriceFetching() {
       const priceData = await getTokenPrice(symbol);
       
       if (priceData) {
-        console.log(`✅ ${symbol}: $${priceData.price.toFixed(6)} (${priceData.change24h >= 0 ? '+' : ''}${priceData.change24h.toFixed(2)}%)`);
+        console.log(`✅ ${symbol}: $${priceData.toFixed(6)}`);
       } else {
         console.log(`⚠️  ${symbol}: No price data available (may not be listed or has no liquidity)`);
       }
