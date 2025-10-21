@@ -23,18 +23,7 @@ import { IoEyeOffOutline } from "react-icons/io5";
 // Import fallback manager for debugging
 import "@/utils/coreum/fallback-manager";
 
-let renderCount = 0;
-const MAX_RENDERS = 50;
-
 function DashboardContent() {
-  renderCount++;
-  console.log(`🔢 [Dashboard] Render #${renderCount}`);
-  
-  if (renderCount > MAX_RENDERS) {
-    console.error(`🔴 [Dashboard] INFINITE LOOP DETECTED! Exceeded ${MAX_RENDERS} renders`);
-    throw new Error(`Infinite render loop detected! Component has rendered ${renderCount} times.`);
-  }
-  
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [walletCount, setWalletCount] = useState(0);
@@ -59,76 +48,48 @@ function DashboardContent() {
   // Memoize wallet addresses to prevent unnecessary re-renders in child components
   const walletAddresses = useMemo(() => wallets.map(w => w.address), [wallets]);
 
-  // Memoize filtered and mapped tokens to prevent infinite re-render loops
-  const visibleTokens = useMemo(() => {
-    console.log('🔄 [useMemo] Computing visibleTokens, tokens.length:', tokens.length);
+  // Simple helper function to build token breakdown - NO useMemo to avoid dependency issues
+  const buildTokenBreakdown = useCallback((token: EnrichedBalance) => {
+    const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
+    const tokenKey = token.denom || token.symbol;
     
-    try {
-      const filtered = tokens.filter(t => {
-        if (t.symbol === 'CORE') return false;
-        const denom = t.denom || t.symbol;
-        return !hiddenTokenDenoms.has(denom);
-      });
-      
-      console.log('✅ [useMemo] Filtered to', filtered.length, 'tokens');
-      
-      const mapped = filtered.map(t => {
-        // Build per-wallet breakdown by scanning tokensByAddress
-        const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
-        const tokenKey = t.denom || t.symbol;
-        
-        for (const [addr, walletTokens] of Object.entries(tokensByAddress)) {
-          const wt = walletTokens.find(x => (x.denom || x.symbol) === tokenKey);
-          if (wt && parseFloat(wt.balance || '0') > 0) {
-            const walletMeta = wallets.find(w => w.address === addr);
-            breakdown.push({
-              address: addr,
-              label: walletMeta?.label,
-              balance: wt.balanceFormatted,
-              valueUsd: wt.valueUsd,
-            });
-          }
-        }
-
-        // Keep total row the same, pass breakdown for hover indent
-        return {
-          symbol: t.symbol,
-          name: t.name,
-          balance: t.balanceFormatted,
-          valueUsd: t.valueUsd,
-          change24h: t.change24h,
-          logoUrl: t.logoUrl,
-          denom: t.denom,
-          contractAddress: t.denom, // Pass full denom as contract address
-          available: t.available,
-          staked: t.staked,
-          rewards: t.rewards,
-          breakdown,
-        };
-      });
-      
-      console.log('✅ [useMemo] Mapped to', mapped.length, 'token objects');
-      return mapped;
-    } catch (error) {
-      console.error('❌ [useMemo] Error during computation:', error);
-      throw error;
+    for (const [addr, walletTokens] of Object.entries(tokensByAddress)) {
+      const wt = walletTokens.find(x => (x.denom || x.symbol) === tokenKey);
+      if (wt && parseFloat(wt.balance || '0') > 0) {
+        const walletMeta = wallets.find(w => w.address === addr);
+        breakdown.push({
+          address: addr,
+          label: walletMeta?.label,
+          balance: wt.balanceFormatted,
+          valueUsd: wt.valueUsd,
+        });
+      }
     }
-  }, [tokens, tokensByAddress, wallets, hiddenTokenDenoms]);
+    return breakdown;
+  }, [tokensByAddress, wallets]);
   
-  // Debug: Track dependency changes
-  useEffect(() => {
-    console.log('🔍 [Dependencies Changed]', {
-      tokensLength: tokens.length,
-      walletsLength: wallets.length,
-      tokensByAddressKeys: Object.keys(tokensByAddress).length,
-      hiddenTokenDenomsSize: hiddenTokenDenoms.size,
-    });
-  }, [tokens, wallets, tokensByAddress, hiddenTokenDenoms]);
+  // Filter visible tokens - computed directly, no useMemo
+  const visibleTokens = tokens
+    .filter(t => t.symbol !== 'CORE')
+    .filter(t => !hiddenTokenDenoms.has(t.denom || t.symbol))
+    .map(t => ({
+      symbol: t.symbol,
+      name: t.name,
+      balance: t.balanceFormatted,
+      valueUsd: t.valueUsd,
+      change24h: t.change24h,
+      logoUrl: t.logoUrl,
+      denom: t.denom,
+      contractAddress: t.denom,
+      available: t.available,
+      staked: t.staked,
+      rewards: t.rewards,
+      breakdown: buildTokenBreakdown(t),
+    }));
   
   // Update hidden tokens state when they change
   useEffect(() => {
     const updateHiddenTokensState = () => {
-      console.log('📢 [hiddenTokensChanged] Event received, updating state');
       const hiddenList = getHiddenTokens();
       const newDenoms = hiddenList.map(ht => ht.denom);
       
@@ -142,10 +103,8 @@ function DashboardContent() {
                           prevArray.some((val, idx) => val !== newArray[idx]);
         
         if (hasChanged) {
-          console.log('📊 [hiddenTokens] Changed from', prevArray, 'to', newArray);
           return new Set(newDenoms);
         } else {
-          console.log('📊 [hiddenTokens] No change, keeping same Set reference');
           return prevDenoms; // Keep same reference if values unchanged
         }
       });
@@ -154,15 +113,11 @@ function DashboardContent() {
     };
     
     // Initialize on mount
-    console.log('🚀 [hiddenTokens] Initializing hidden tokens state');
     updateHiddenTokensState();
     
     // Update when event fires
     window.addEventListener('hiddenTokensChanged', updateHiddenTokensState);
-    return () => {
-      console.log('🧹 [hiddenTokens] Cleaning up listener');
-      window.removeEventListener('hiddenTokensChanged', updateHiddenTokensState);
-    };
+    return () => window.removeEventListener('hiddenTokensChanged', updateHiddenTokensState);
   }, []);
 
   useEffect(() => {
