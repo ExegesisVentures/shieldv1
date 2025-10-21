@@ -42,21 +42,18 @@ export default function Dashboard() {
   const [coreumChange24h, setCoreumChange24h] = useState<number | undefined>(undefined);
   const [showHiddenTokens, setShowHiddenTokens] = useState(false);
   const [hiddenTokenCount, setHiddenTokenCount] = useState(0);
+  const [hiddenTokenDenoms, setHiddenTokenDenoms] = useState<Set<string>>(new Set());
 
   // Memoize wallet addresses to prevent unnecessary re-renders in child components
   const walletAddresses = useMemo(() => wallets.map(w => w.address), [wallets]);
 
   // Memoize filtered and mapped tokens to prevent infinite re-render loops
   const visibleTokens = useMemo(() => {
-    // Get hidden tokens list ONCE at the start to avoid multiple localStorage reads
-    const hiddenTokensList = getHiddenTokens();
-    const hiddenDenoms = new Set(hiddenTokensList.map(ht => ht.denom));
-    
     return tokens
       .filter(t => t.symbol !== 'CORE')
       .filter(t => {
         const denom = t.denom || t.symbol;
-        return !hiddenDenoms.has(denom);
+        return !hiddenTokenDenoms.has(denom);
       })
       .map(t => {
         // Build per-wallet breakdown by scanning tokensByAddress
@@ -91,19 +88,23 @@ export default function Dashboard() {
           breakdown,
         };
       });
-  }, [tokens, tokensByAddress, wallets]);
+  }, [tokens, tokensByAddress, wallets, hiddenTokenDenoms]);
   
-  // Force re-render when hidden tokens change by updating a dummy state
+  // Update hidden tokens state when they change
   useEffect(() => {
-    const handleHiddenChange = () => {
-      // The useMemo will automatically recompute because getHiddenTokens()
-      // reads fresh data from localStorage on every computation
-      // We just need to trigger a re-render
-      setHiddenTokenCount(getHiddenTokens().length);
+    const updateHiddenTokensState = () => {
+      const hiddenList = getHiddenTokens();
+      const denomSet = new Set(hiddenList.map(ht => ht.denom));
+      setHiddenTokenDenoms(denomSet);
+      setHiddenTokenCount(hiddenList.length);
     };
     
-    window.addEventListener('hiddenTokensChanged', handleHiddenChange);
-    return () => window.removeEventListener('hiddenTokensChanged', handleHiddenChange);
+    // Initialize on mount
+    updateHiddenTokensState();
+    
+    // Update when event fires
+    window.addEventListener('hiddenTokensChanged', updateHiddenTokensState);
+    return () => window.removeEventListener('hiddenTokensChanged', updateHiddenTokensState);
   }, []);
 
   useEffect(() => {
@@ -127,9 +128,6 @@ export default function Dashboard() {
     
     // Preload common token images for better UX
     preloadTokenImages(['CORE', 'XRP', 'SOLO', 'ATOM', 'OSMO', 'COZY', 'KONG', 'MART', 'CAT', 'ROLL', 'SMART']);
-    
-    // Update hidden token count on mount
-    updateHiddenTokenCount();
     
     // Listen for wallet changes with debouncing
     let walletChangeTimeout: NodeJS.Timeout;
@@ -554,12 +552,6 @@ export default function Dashboard() {
     } else {
       window.location.href = '/sign-up';
     }
-  };
-
-  const updateHiddenTokenCount = () => {
-    const hidden = getHiddenTokens();
-    console.log('📊 Updating hidden token count:', hidden.length, hidden);
-    setHiddenTokenCount(hidden.length);
   };
 
   return (
