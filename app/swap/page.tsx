@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import SwapInterface from "@/components/swap/SwapInterface";
 
 /**
@@ -22,8 +23,14 @@ export default function SwapPage() {
           </p>
         </div>
 
-        {/* Swap Interface */}
-        <SwapInterface />
+        {/* Swap Interface - Wrapped in Suspense for useSearchParams() */}
+        <Suspense fallback={
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+          </div>
+        }>
+          <SwapInterface />
+        </Suspense>
 
         {/* Features Section */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
