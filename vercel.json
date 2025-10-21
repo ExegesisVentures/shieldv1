@@ -6,5 +6,11 @@
   "framework": "nextjs",
   "outputDirectory": ".next",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "crons": [
+    {
+      "path": "/api/cron/auto-update-rewards",
+      "schedule": "0 */48 * * *"
+    }
+  ]
 }

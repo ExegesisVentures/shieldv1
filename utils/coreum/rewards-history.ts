@@ -9,6 +9,7 @@ const COREUM_REST_ENDPOINT = process.env.NEXT_PUBLIC_COREUM_REST_ENDPOINT || "ht
 const COREUM_RPC_ENDPOINT = process.env.NEXT_PUBLIC_COREUM_RPC_ENDPOINT || "https://full-node.mainnet-1.coreum.dev:26657";
 const MIN_REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours - minimum time between refreshes
 const STALENESS_THRESHOLD = 36 * 60 * 60 * 1000; // 36 hours - show reminder after this
+const AUTO_UPDATE_THRESHOLD = 48 * 60 * 60 * 1000; // 48 hours - auto-update if older than this
 
 // Supabase client with service role for database writes
 const getServiceSupabase = () => {
@@ -36,6 +37,12 @@ interface RewardsHistoryData {
 /**
  * Query Coreum blockchain for all MsgWithdrawDelegatorReward transactions for an address
  * This includes direct claims and authz auto-compounding (MsgExec wrapping MsgWithdrawDelegatorReward)
+ * 
+ * IMPORTANT: This function queries ONLY for the specific wallet address provided.
+ * It does NOT scan blocks or find random addresses - it queries using:
+ * withdraw_rewards.delegator='<address>' which filters to ONLY this wallet's transactions.
+ * 
+ * This ensures we only track rewards for user wallets in our system, not random blockchain addresses.
  */
 export async function queryRewardsTransactions(address: string): Promise<RewardTransaction[]> {
   const transactions: RewardTransaction[] = [];
@@ -46,11 +53,13 @@ export async function queryRewardsTransactions(address: string): Promise<RewardT
 
   console.log(`🔍 [Rewards History] Querying blockchain for ${address}`);
   console.log(`🔍 [Rewards History] Looking for MsgWithdrawDelegatorReward transactions (including authz)`);
+  console.log(`🔍 [Rewards History] ONLY querying for this specific address - not scanning blocks`);
 
   try {
     do {
       // Query transactions using RPC endpoint (REST API doesn't work for tx queries)
-      // Query specifically for withdraw_rewards transactions
+      // Query specifically for withdraw_rewards transactions for THIS ADDRESS ONLY
+      // The query filter ensures we only get transactions where delegator = this address
       let page = pageCount + 1;
       let url = `${COREUM_RPC_ENDPOINT}/tx_search?query="withdraw_rewards.delegator='${address}'"&per_page=100&page=${page}&order_by="desc"`;
 
