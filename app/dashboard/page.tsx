@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import WalletConnectModal from "@/components/wallet/WalletConnectModal";
 import WalletMigrationModal from "@/components/modals/WalletMigrationModal";
@@ -45,11 +45,11 @@ function DashboardContent() {
   const [hiddenTokenCount, setHiddenTokenCount] = useState(0);
   const [hiddenTokenDenoms, setHiddenTokenDenoms] = useState<Set<string>>(new Set());
 
-  // Memoize wallet addresses to prevent unnecessary re-renders in child components
-  const walletAddresses = useMemo(() => wallets.map(w => w.address), [wallets]);
+  // Compute wallet addresses - simple array map, no memoization
+  const walletAddresses = wallets.map(w => w.address);
 
-  // Simple helper function to build token breakdown - NO useMemo to avoid dependency issues
-  const buildTokenBreakdown = useCallback((token: EnrichedBalance) => {
+  // Helper function to build token breakdown - inline, no hooks
+  const buildTokenBreakdown = (token: EnrichedBalance) => {
     const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
     const tokenKey = token.denom || token.symbol;
     
@@ -66,9 +66,9 @@ function DashboardContent() {
       }
     }
     return breakdown;
-  }, [tokensByAddress, wallets]);
+  };
   
-  // Filter visible tokens - computed directly, no useMemo
+  // Filter visible tokens - computed directly every render (it's fast!)
   const visibleTokens = tokens
     .filter(t => t.symbol !== 'CORE')
     .filter(t => !hiddenTokenDenoms.has(t.denom || t.symbol))
