@@ -28,15 +28,7 @@ interface CoreumBreakdownProps {
 const getValidatorAvatar = (validator: StakingValidator): string => {
   const moniker = validator.description?.moniker || "";
   
-  // Try to get validator logo from blockchain data first
-  if (validator.description?.logo) {
-    return validator.description.logo;
-  }
-  
-  // Try to get from Keybase if identity is available
-  if (validator.description?.identity) {
-    return `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${validator.description.identity}&fields=pictures`;
-  }
+  // Note: identity property is not available in the current StakingValidator interface
   
   // Try common validator logo URLs
   const monikerLower = moniker.toLowerCase();
