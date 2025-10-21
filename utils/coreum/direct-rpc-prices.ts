@@ -155,7 +155,7 @@ export async function getCompletePortfolioFromRPC(address: string): Promise<{
     const client = await CosmWasmClient.connect(COREUM_RPC);
     
     // Get balances
-    const balances = await client.getBalance(address);
+    const balances = await client.getAllBalances(address);
     console.log(`📊 [Complete RPC] Found ${balances.length} token balances`);
     
     // Get all prices

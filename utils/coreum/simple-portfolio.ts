@@ -35,7 +35,7 @@ export async function getSimplePortfolio(address: string): Promise<SimplePortfol
     const client = await CosmWasmClient.connect(COREUM_RPC);
     
     // Get all balances in one call
-    const balances = await client.getBalance(address);
+    const balances = await client.getAllBalances(address);
     
     console.log(`📊 [Simple Portfolio] Found ${balances.length} token balances`);
     
