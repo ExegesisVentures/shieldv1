@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     // Map symbols to XRPL currency codes
     const xrplCurrencies: Record<string, string> = {
       'SOLO': '534F4C4F00000000000000000000000000000000', // SOLO hex
-      'ROLL': 'ROLL', // May need hex conversion
+      'ROLL': '524F4C4C00000000000000000000000000000000', // ROLL hex
       'XRP': 'XRP',
     };
     
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     // Fallback prices
     const fallbacks: Record<string, number> = {
       'SOLO': 0.44,
-      'ROLL': 0.05,
+      'ROLL': 0.0000051,
       'XRP': 2.63,
     };
     

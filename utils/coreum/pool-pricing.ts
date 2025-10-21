@@ -593,30 +593,35 @@ export async function getTokenPrice(symbol: string): Promise<{
     if (pairs.length === 0) {
       console.log(`⚠️ [Pool Price] No trading pairs found for ${symbol}`);
       
-      // Try DexScreener for ROLL (XRPL token, not Coreum!)
+      // Try XRPL oracle for ROLL, then fallback to static price
       if (symbol.toUpperCase() === 'ROLL') {
         try {
           const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-          // ROLL is on XRPL - pair address must include _xrp suffix
-          const rollPairAddress = '524f4c4c00000000000000000000000000000000.rpwxbmm3xngckxkhufzvpfesoceellixfa_xrp';
-          const response = await fetch(`${baseUrl}/api/dexscreener/price?symbol=ROLL&contract=${rollPairAddress}&chain=xrpl`);
+          const response = await fetch(`${baseUrl}/api/xrpl/oracle?symbol=ROLL`);
           
           if (response.ok) {
             const data = await response.json();
             if (data.price > 0) {
-              console.log(`✅ [DexScreener XRPL] ROLL: $${data.price.toFixed(6)}`);
+              console.log(`✅ [XRPL Oracle] ROLL: $${data.price.toFixed(8)}`);
               return {
                 price: data.price,
                 change24h: data.change24h || 0,
                 volume24h: 0,
               };
             }
-          } else {
-            console.log(`⚠️ [DexScreener] ROLL fetch failed: ${response.status}`);
           }
         } catch (error) {
-          console.log(`⚠️ [DexScreener] ROLL error:`, error);
+          console.log(`⚠️ [XRPL Oracle] ROLL error:`, error);
         }
+        
+        // Static fallback price for ROLL
+        const rollPrice = 0.0000051;
+        console.log(`📌 [Static ROLL Price] $${rollPrice.toFixed(8)}`);
+        return {
+          price: rollPrice,
+          change24h: 0,
+          volume24h: 0,
+        };
       }
       
       // Static fallback for other tokens

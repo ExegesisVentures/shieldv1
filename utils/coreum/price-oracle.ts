@@ -122,7 +122,7 @@ export function getStaticFallbackPrice(symbol: string): { price: number; change2
     'KONG': { price: 0.000000015, change24h: 0 },
     'MART': { price: 0.001, change24h: 0 },
     'CAT': { price: 0.0001, change24h: 0 },
-    'ROLL': { price: 0.0001, change24h: 0 },
+    'ROLL': { price: 0.0000051, change24h: 0 },
     'SMART': { price: 0.01, change24h: 0 },
     'SARA': { price: 0.001, change24h: 0 },
     'PULSARA': { price: 0.001, change24h: 0 },

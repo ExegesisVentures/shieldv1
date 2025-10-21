@@ -1,12 +1,13 @@
 "use client";
 
-import { IoCash, IoTrendingUp, IoGift, IoTime, IoCopy, IoDownload, IoChevronDown } from "react-icons/io5";
+import { IoCash, IoTrendingUp, IoGift, IoTime, IoCopy, IoDownload } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatAddressSnippet, copyToClipboard, showToast } from "@/utils/address-utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { claimAllRewardsClient, claimAndCompoundRewardsClient, type WalletProvider } from "@/utils/coreum/claim";
 import { delegateTokensClient, undelegateTokensClient, redelegateTokensClient, fetchValidators, fetchDelegations, type StakingValidator } from "@/utils/coreum/stake";
 import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
+import { ThreeArrowSpinner } from "@/components/ui/ThreeArrowSpinner";
 
 interface CoreumToken {
   address: string;
@@ -699,25 +700,19 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
 
       {/* Per-Wallet Breakdown (if multiple wallets) */}
       {hasMultipleWallets && (
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <div 
-            className="flex items-center justify-between cursor-pointer group mb-4 p-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+            className="flex items-center gap-2 cursor-pointer group p-2 -mx-2 rounded-lg transition-colors inline-flex"
             onClick={() => setShowBreakdown(!showBreakdown)}
-            onMouseEnter={() => setShowBreakdown(true)}
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Per Wallet Breakdown
             </h3>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                {tokens.length} wallets combined
-              </span>
-              <IoChevronDown 
-                className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-300 ${
-                  showBreakdown ? 'rotate-180' : ''
-                }`}
-              />
-            </div>
+            <ThreeArrowSpinner 
+              size="sm" 
+              variant="warning"
+              className="w-6 h-6"
+            />
           </div>
           
           <div 
