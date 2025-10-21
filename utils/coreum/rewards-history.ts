@@ -39,6 +39,7 @@ interface RewardsHistoryData {
  */
 export async function queryRewardsTransactions(address: string): Promise<RewardTransaction[]> {
   const transactions: RewardTransaction[] = [];
+  const seenTxHashes = new Set<string>(); // Deduplication
   let paginationKey: string | null = null;
   const maxPages = 100; // Safety limit
   let pageCount = 0;
@@ -77,11 +78,15 @@ export async function queryRewardsTransactions(address: string): Promise<RewardT
       // Parse each transaction, filtering for reward claims
       for (const tx of txs) {
         const parsed = parseRPCRewardTransaction(tx, address);
-        if (parsed) {
+        if (parsed && !seenTxHashes.has(parsed.txhash)) {
+          seenTxHashes.add(parsed.txhash);
           transactions.push(parsed);
           console.log(`  ✓ Found reward: ${(BigInt(parsed.amount) / BigInt(1_000_000)).toString()} CORE at ${parsed.timestamp}`);
         }
       }
+
+      // Increment page count
+      pageCount++;
 
       // Safety check
       if (pageCount >= maxPages) {
@@ -90,7 +95,7 @@ export async function queryRewardsTransactions(address: string): Promise<RewardT
       }
 
       // Check if there are more pages
-      const hasMore = (pageCount) * 100 < totalCount;
+      const hasMore = pageCount * 100 < totalCount;
       if (!hasMore) break;
 
     } while (true);
