@@ -12,7 +12,7 @@ import HiddenTokensList from "@/components/portfolio/HiddenTokensList";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { getAllWallets, getWalletCount } from "@/utils/wallet/simplified-operations";
 import { getMultiAddressBalances, EnrichedBalance, getTokenPrice, getTokenChange24h, loadTokenPricesInParallel, refreshTokenPrices, loadTokenPricesWithCacheStrategy } from "@/utils/coreum/rpc";
-import { getShieldNftHolding, ShieldNftHolding, fetchShieldSettings, hasShieldNft } from "@/utils/nft/shield";
+import { getShieldNftHolding, ShieldNftHolding, ShieldSettings, fetchShieldSettings, hasShieldNft } from "@/utils/nft/shield";
 import { preloadTokenImages } from "@/utils/coreum/token-images";
 import { initializeDashboardSession, refreshSessionIfNeeded } from "@/utils/auth/session-refresh";
 // import { detectAvailableWalletProvider, WalletProvider } from "@/utils/wallet/detection";
