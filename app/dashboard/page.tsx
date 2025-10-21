@@ -24,7 +24,6 @@ import "@/utils/coreum/fallback-manager";
 
 export default function Dashboard() {
   const [showConnectModal, setShowConnectModal] = useState(false);
-  const [refreshCounter, setRefreshCounter] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [walletCount, setWalletCount] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
@@ -92,7 +91,20 @@ export default function Dashboard() {
           breakdown,
         };
       });
-  }, [tokens, tokensByAddress, wallets, refreshCounter]);
+  }, [tokens, tokensByAddress, wallets]);
+  
+  // Force re-render when hidden tokens change by updating a dummy state
+  useEffect(() => {
+    const handleHiddenChange = () => {
+      // The useMemo will automatically recompute because getHiddenTokens()
+      // reads fresh data from localStorage on every computation
+      // We just need to trigger a re-render
+      setHiddenTokenCount(getHiddenTokens().length);
+    };
+    
+    window.addEventListener('hiddenTokensChanged', handleHiddenChange);
+    return () => window.removeEventListener('hiddenTokensChanged', handleHiddenChange);
+  }, []);
 
   useEffect(() => {
     console.log('🚀 Dashboard mounted, loading data...');
@@ -116,22 +128,8 @@ export default function Dashboard() {
     // Preload common token images for better UX
     preloadTokenImages(['CORE', 'XRP', 'SOLO', 'ATOM', 'OSMO', 'COZY', 'KONG', 'MART', 'CAT', 'ROLL', 'SMART']);
     
-    // Update hidden token count
+    // Update hidden token count on mount
     updateHiddenTokenCount();
-    
-    // Listen for hidden tokens changes
-    const handleHiddenTokensChange = () => {
-      console.log('📢 hiddenTokensChanged event received in dashboard!');
-      updateHiddenTokenCount();
-      // Force re-render
-      setRefreshCounter(prev => {
-        console.log('🔄 Incrementing refresh counter:', prev, '→', prev + 1);
-        return prev + 1;
-      });
-    };
-    
-    console.log('👂 Adding hiddenTokensChanged listener');
-    window.addEventListener('hiddenTokensChanged', handleHiddenTokensChange);
     
     // Listen for wallet changes with debouncing
     let walletChangeTimeout: NodeJS.Timeout;
@@ -197,12 +195,10 @@ export default function Dashboard() {
     
     window.addEventListener('walletStorageChange', handleWalletChange);
     window.addEventListener('walletDatabaseChange', handleWalletChange);
-    window.addEventListener('hiddenTokensChanged', handleHiddenTokensChange);
     
     return () => {
       window.removeEventListener('walletStorageChange', handleWalletChange);
       window.removeEventListener('walletDatabaseChange', handleWalletChange);
-      window.removeEventListener('hiddenTokensChanged', handleHiddenTokensChange);
       subscription.unsubscribe();
     };
   }, []); // Empty deps - only run once on mount
@@ -650,7 +646,7 @@ export default function Dashboard() {
             loading={false}
             isAuthenticated={isAuthenticated}
             onAddWallet={() => setShowConnectModal(true)}
-            onRefresh={refreshCounter}
+            onRefresh={hiddenTokenCount}
             onRefreshPrices={handleRefreshPrices}
             refreshingPrices={refreshingPrices}
           />
