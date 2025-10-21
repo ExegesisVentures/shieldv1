@@ -9,6 +9,7 @@ import CollapsibleWalletCard from "./CollapsibleWalletCard";
 import RewardsProgressModal from "./RewardsProgressModal";
 import TimerRefreshButton from "./TimerRefreshButton";
 import { formatAddressSnippet } from "@/utils/address-utils";
+import AnimatedNumber, { AnimatedCurrency, AnimatedBalance } from "@/components/ui/AnimatedNumber";
 
 interface PortfolioTotalsProps {
   totalValue?: number;
@@ -558,7 +559,25 @@ export default function PortfolioTotals({
             )}
           </div>
           <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
-            {formatValue(getConvertedValue())}
+            {selectedCurrency === 'USD' ? (
+              <AnimatedCurrency 
+                value={getConvertedValue()} 
+                decimals={2}
+                symbol="$"
+              />
+            ) : (
+              <AnimatedNumber
+                value={getConvertedValue()}
+                format="custom"
+                formatter={(val) => {
+                  const currency = currencies.find(c => c.symbol === selectedCurrency);
+                  if (selectedCurrency === 'JPY') {
+                    return `${currency?.icon || selectedCurrency} ${Math.round(val).toLocaleString("en-US")}`;
+                  }
+                  return `${currency?.icon || selectedCurrency} ${val.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }}
+              />
+            )}
           </h3>
         </div>
 
@@ -675,7 +694,7 @@ export default function PortfolioTotals({
               <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-10 w-32 rounded"></div>
             ) : (
               <h3 className="text-4xl font-bold" style={{ color: '#25D695' }}>
-                {totalRewards.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <AnimatedBalance value={totalRewards} decimals={2} />
               </h3>
             )}
           </div>
@@ -749,10 +768,10 @@ export default function PortfolioTotals({
                   </div>
                   <div className="text-right ml-3">
                     <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                      {(parseFloat(wallet.rewards) / 1_000_000).toLocaleString("en-US", { 
-                        minimumFractionDigits: 2, 
-                        maximumFractionDigits: 2 
-                      })}
+                      <AnimatedBalance 
+                        value={parseFloat(wallet.rewards) / 1_000_000} 
+                        decimals={2}
+                      />
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">CORE</div>
                   </div>

@@ -28,11 +28,8 @@ const WiseOwlChat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
-  // Use HTTPS for production deployment, fallback to localhost for dev
-  const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 
-    (typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
-      ? 'https://chat.shieldnest.org' 
-      : 'http://localhost:3001');
+  // Use local Next.js API route
+  const API_URL = '';
 
   // Track mouse position and calculate rotation
   useEffect(() => {

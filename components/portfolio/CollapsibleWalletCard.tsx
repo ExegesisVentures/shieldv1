@@ -6,6 +6,7 @@ import { IoWallet, IoAdd } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { ThreeArrowSpinner } from "@/components/ui/ThreeArrowSpinner";
 import ConnectedWallets from "@/components/wallet/ConnectedWallets";
+import { AnimatedInteger } from "@/components/ui/AnimatedNumber";
 
 interface CollapsibleWalletCardProps {
   walletCount: number;
@@ -22,6 +23,7 @@ export default function CollapsibleWalletCard({
 }: CollapsibleWalletCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [shouldMount, setShouldMount] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
@@ -34,6 +36,18 @@ export default function CollapsibleWalletCard({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Pre-mount ConnectedWallets component after a short delay to optimize hover performance
+  useEffect(() => {
+    if (walletCount > 0 && !loading) {
+      // Delay mounting to avoid blocking initial render, but mount early enough
+      // so data is ready before user hovers
+      const mountTimer = setTimeout(() => {
+        setShouldMount(true);
+      }, 200);
+      return () => clearTimeout(mountTimer);
+    }
+  }, [walletCount, loading]);
 
   // Close dropdown on scroll
   useEffect(() => {
@@ -103,7 +117,7 @@ export default function CollapsibleWalletCard({
             </div>
             <div className="flex items-center justify-center gap-4">
               <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
-                {walletCount}
+                <AnimatedInteger value={walletCount} />
               </h3>
               <div className="flex items-center gap-1 group">
                 <div className="neo-icon-glow-yellow neo-transition">
@@ -127,10 +141,14 @@ export default function CollapsibleWalletCard({
         </div>
       </Card>
 
-      {/* Expanded Wallet List - Portal positioned below card (like Total Value dropdown) */}
-      {isExpanded && walletCount > 0 && typeof window !== 'undefined' && createPortal(
+      {/* Wallet List Popup - Pre-mounted for instant display, visibility controlled by isExpanded */}
+      {shouldMount && walletCount > 0 && typeof window !== 'undefined' && createPortal(
         <div 
-          className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-orange-200 dark:border-orange-700 p-6 z-[999998] animate-in slide-in-from-top-2 duration-200"
+          className={`fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-orange-200 dark:border-orange-700 p-6 z-[999998] transition-all duration-200 ${
+            isExpanded 
+              ? 'opacity-100 visible translate-y-0' 
+              : 'opacity-0 invisible -translate-y-2 pointer-events-none'
+          }`}
           style={{
             top: cardRef.current ? cardRef.current.getBoundingClientRect().bottom + 4 : '50%',
             left: cardRef.current ? cardRef.current.getBoundingClientRect().left : '50%',

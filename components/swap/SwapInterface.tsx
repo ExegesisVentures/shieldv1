@@ -5,6 +5,7 @@ import { IoSwapVertical, IoSettings, IoInformationCircle, IoTrendingUp, IoWarnin
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AnimatedBalance, AnimatedPercentage } from "@/components/ui/AnimatedNumber";
 
 /**
  * SwapInterface Component
@@ -350,7 +351,10 @@ export default function SwapInterface() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Minimum Received</span>
               <span className="text-sm font-bold text-gray-900 dark:text-white">
-                {(parseFloat(quote.bestQuote.minimumOutput) / Math.pow(10, outputToken.decimals)).toFixed(6)}{" "}
+                <AnimatedBalance 
+                  value={parseFloat(quote.bestQuote.minimumOutput) / Math.pow(10, outputToken.decimals)} 
+                  decimals={6}
+                />{" "}
                 {outputToken.symbol}
               </span>
             </div>
@@ -365,7 +369,7 @@ export default function SwapInterface() {
                   </span>
                 </div>
                 <span className="text-xs font-bold text-green-600 dark:text-green-400">
-                  +{quote.savingsPercent.toFixed(2)}%
+                  <AnimatedPercentage value={quote.savingsPercent} decimals={2} showPlusSign={true} />
                 </span>
               </div>
             )}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { IoShieldCheckmark, IoOpenOutline, IoTrendingUp, IoTrendingDown, IoClose } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import { AnimatedCurrency, AnimatedPercentage } from "@/components/ui/AnimatedNumber";
 
 interface NftHolding {
   symbol: string;
@@ -168,7 +169,7 @@ export default function NftHoldings({ nfts = [], loading = false }: NftHoldingsP
                   {/* Value */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900 dark:text-white">
-                      ${nft.valueUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      <AnimatedCurrency value={nft.valueUsd} decimals={2} />
                     </div>
                   </td>
 
@@ -184,8 +185,7 @@ export default function NftHoldings({ nfts = [], loading = false }: NftHoldingsP
                       ) : (
                         <IoTrendingDown className="w-4 h-4" />
                       )}
-                      {isPositive ? "+" : ""}
-                      {nft.change24h.toFixed(2)}%
+                      <AnimatedPercentage value={nft.change24h} decimals={2} showPlusSign={true} />
                     </div>
                   </td>
 
@@ -299,7 +299,7 @@ export default function NftHoldings({ nfts = [], loading = false }: NftHoldingsP
                           ? 'text-green-600 dark:text-green-400' 
                           : 'text-red-600 dark:text-red-400'
                       }`}>
-                        {selectedNft.change30d >= 0 ? '+' : ''}{selectedNft.change30d.toFixed(2)}%
+                        <AnimatedPercentage value={selectedNft.change30d} decimals={2} showPlusSign={true} />
                       </div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
                         Last 30 days

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fetchLiquidityPools, type LiquidityPool } from "@/utils/coreum/liquidity-pools";
+import { AnimatedCurrency } from "@/components/ui/AnimatedNumber";
 
 interface PoolsTableProps {
   pools?: LiquidityPool[];
@@ -505,9 +506,9 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                   <div className="space-y-3 mb-5">
                     {/* TVL */}
                     <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value IoLockCloseded</span>
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value Locked</span>
                       <span className="text-base font-bold text-gray-900 dark:text-white">
-                        ${pool.tvl.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        <AnimatedCurrency value={pool.tvl} decimals={0} />
                       </span>
                     </div>
 
@@ -515,7 +516,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                     <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                       <span className="text-sm font-medium text-gray-600 dark:text-gray-400">24h Volume</span>
                       <span className="text-base font-semibold text-purple-600 dark:text-purple-400">
-                        ${pool.volume24h.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        <AnimatedCurrency value={pool.volume24h} decimals={0} />
                       </span>
                     </div>
 
@@ -523,7 +524,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                     <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                       <span className="text-sm font-medium text-gray-600 dark:text-gray-400">24h Fees Earned</span>
                       <span className="text-base font-semibold text-blue-600 dark:text-blue-400">
-                        ${pool.fees24h.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        <AnimatedCurrency value={pool.fees24h} decimals={0} />
                       </span>
                     </div>
                   </div>

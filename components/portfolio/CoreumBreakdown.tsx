@@ -6,6 +6,7 @@ import { formatAddressSnippet, copyToClipboard, showToast } from "@/utils/addres
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { claimAllRewardsClient, claimAndCompoundRewardsClient, type WalletProvider } from "@/utils/coreum/claim";
 import { delegateTokensClient, undelegateTokensClient, redelegateTokensClient, fetchValidators, fetchDelegations, type StakingValidator } from "@/utils/coreum/stake";
+import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
 
 interface CoreumToken {
   address: string;
@@ -490,11 +491,11 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           {coreumPrice !== undefined ? (
             <>
               <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                ${coreumPrice.toFixed(4)}
+                <AnimatedCurrency value={coreumPrice} decimals={4} symbol="$" />
               </span>
               {coreumChange24h !== undefined && (
                 <span className={`text-base font-semibold ${coreumChange24h >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {coreumChange24h >= 0 ? '+' : ''}{coreumChange24h.toFixed(2)}%
+                  <AnimatedPercentage value={coreumChange24h} decimals={2} showPlusSign={true} />
                 </span>
               )}
             </>

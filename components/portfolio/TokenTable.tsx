@@ -9,6 +9,7 @@ import { getLpPairInfo } from "@/utils/coreum/token-images";
 import DualTokenLogo from "@/components/ui/DualTokenLogo";
 import ConfirmPopover from "@/components/ui/ConfirmPopover";
 import { hideToken } from "@/utils/hidden-tokens";
+import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
 
 interface Token {
   symbol: string;
@@ -39,6 +40,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
   const [showHideConfirm, setShowHideConfirm] = useState<{
     denom: string;
     symbol: string;
+    logoUrl?: string;
     position: { x: number; y: number };
   } | null>(null);
 
@@ -52,7 +54,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     }
   };
 
-  const handleHideTokenClick = (event: React.MouseEvent, denom: string, symbol: string) => {
+  const handleHideTokenClick = (event: React.MouseEvent, denom: string, symbol: string, logoUrl?: string) => {
     event.preventDefault();
     event.stopPropagation();
     
@@ -62,17 +64,17 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
       y: rect.bottom,
     };
 
-    console.log('🔍 Hide token clicked:', { denom, symbol, position });
-    setShowHideConfirm({ denom, symbol, position });
+    console.log('🔍 Hide token clicked:', { denom, symbol, logoUrl, position });
+    setShowHideConfirm({ denom, symbol, logoUrl, position });
   };
 
   const confirmHideToken = () => {
     if (!showHideConfirm) return;
     
-    const { denom, symbol } = showHideConfirm;
-    console.log('✅ Confirming hide for:', symbol, denom);
+    const { denom, symbol, logoUrl } = showHideConfirm;
+    console.log('✅ Confirming hide for:', symbol, denom, logoUrl);
     
-    hideToken(denom, symbol);
+    hideToken(denom, symbol, logoUrl);
     setShowHideConfirm(null);
     
     console.log('📢 Token hidden, event should fire');
@@ -349,7 +351,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                       </div>
                     ) : (
                       <div className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
-                        ${token.valueUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        <AnimatedCurrency value={token.valueUsd} decimals={2} />
                       </div>
                     )}
                   </td>
@@ -371,8 +373,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                         ) : (
                           <IoTrendingDown className="w-6 h-6" />
                         )}
-                        {isPositive ? "+" : ""}
-                        {token.change24h.toFixed(2)}%
+                        <AnimatedPercentage value={token.change24h} decimals={2} showPlusSign={true} />
                       </div>
                     )}
                   </td>
@@ -382,7 +383,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                     <div className="flex items-center justify-end gap-2">
                       {/* Hide Token Button - visible on hover with better styling */}
                       <button
-                        onClick={(e) => handleHideTokenClick(e, token.denom || token.symbol, displaySymbol)}
+                        onClick={(e) => handleHideTokenClick(e, token.denom || token.symbol, displaySymbol, token.logoUrl)}
                         className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-orange-50 dark:hover:bg-orange-900/20 text-gray-400 hover:text-orange-600 dark:hover:text-orange-400"
                         title={`Hide ${displaySymbol}`}
                       >

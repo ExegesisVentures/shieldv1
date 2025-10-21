@@ -4,6 +4,7 @@ import { IoShieldCheckmark, IoOpenOutline, IoBanOutline } from "react-icons/io5"
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { AnimatedCurrency } from "@/components/ui/AnimatedNumber";
 
 interface ShieldNftPanelProps {
   imageUrl?: string | null;
@@ -69,7 +70,7 @@ export default function ShieldNftPanel({
             Estimated Value
           </p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            ${valueUsd.toLocaleString()}
+            <AnimatedCurrency value={valueUsd} decimals={0} />
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
             *Placeholder value for v1

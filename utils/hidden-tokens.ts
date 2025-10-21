@@ -10,6 +10,7 @@ export interface HiddenToken {
   denom: string;
   symbol: string;
   hiddenAt: string;
+  logoUrl?: string;
 }
 
 /**
@@ -30,12 +31,12 @@ export function getHiddenTokens(): HiddenToken[] {
 /**
  * Hide a token
  */
-export function hideToken(denom: string, symbol: string): void {
+export function hideToken(denom: string, symbol: string, logoUrl?: string): void {
   if (typeof window === 'undefined') return;
   
   try {
     const hiddenTokens = getHiddenTokens();
-    console.log('🔒 Hiding token:', { denom, symbol, currentHidden: hiddenTokens.length });
+    console.log('🔒 Hiding token:', { denom, symbol, logoUrl, currentHidden: hiddenTokens.length });
     
     // Check if already hidden
     if (hiddenTokens.some(t => t.denom === denom)) {
@@ -48,6 +49,7 @@ export function hideToken(denom: string, symbol: string): void {
       denom,
       symbol,
       hiddenAt: new Date().toISOString(),
+      logoUrl,
     };
     
     hiddenTokens.push(newHidden);

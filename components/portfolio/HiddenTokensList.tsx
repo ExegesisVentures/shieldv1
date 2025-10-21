@@ -114,9 +114,29 @@ export default function HiddenTokensList({ isOpen, onClose }: HiddenTokensListPr
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold">
-                          {token.symbol.charAt(0)}
-                        </div>
+                        {/* Token Logo */}
+                        {token.logoUrl ? (
+                          <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shadow-sm bg-white dark:bg-gray-700">
+                            <img
+                              src={token.logoUrl}
+                              alt={token.symbol}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                // Fallback to gradient circle if image fails to load
+                                e.currentTarget.style.display = 'none';
+                                const parent = e.currentTarget.parentElement;
+                                if (parent) {
+                                  parent.className = 'w-10 h-10 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold';
+                                  parent.textContent = token.symbol.charAt(0);
+                                }
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold">
+                            {token.symbol.charAt(0)}
+                          </div>
+                        )}
                         <div>
                           <p className="font-semibold text-gray-900 dark:text-white">
                             {token.symbol}
