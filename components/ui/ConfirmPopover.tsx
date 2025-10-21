@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoWarning, IoCheckmark, IoClose } from "react-icons/io5";
 
 interface ConfirmPopoverProps {
@@ -23,6 +23,41 @@ export default function ConfirmPopover({
   cancelText = "Cancel",
 }: ConfirmPopoverProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
+  const [adjustedPosition, setAdjustedPosition] = useState({ 
+    x: position.x, 
+    y: position.y, 
+    shouldFlipVertical: false,
+    shouldFlipHorizontal: false 
+  });
+
+  useEffect(() => {
+    // Adjust position based on viewport boundaries
+    if (popoverRef.current) {
+      const popoverRect = popoverRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      
+      // Estimated popover height (with padding and arrow)
+      const popoverHeight = popoverRect.height || 180; // Fallback estimate
+      const popoverWidth = popoverRect.width || 320; // Fallback estimate
+      
+      // Check if popover would overflow bottom
+      const wouldOverflowBottom = position.y + popoverHeight + 20 > viewportHeight;
+      
+      // Check if popover would overflow right
+      const wouldOverflowRight = position.x + (popoverWidth / 2) > viewportWidth - 20;
+      
+      // Check if popover would overflow left
+      const wouldOverflowLeft = position.x - (popoverWidth / 2) < 20;
+      
+      setAdjustedPosition({
+        x: position.x,
+        y: position.y,
+        shouldFlipVertical: wouldOverflowBottom,
+        shouldFlipHorizontal: wouldOverflowRight || wouldOverflowLeft
+      });
+    }
+  }, [position]);
 
   useEffect(() => {
     // Click outside to close
@@ -48,14 +83,21 @@ export default function ConfirmPopover({
     };
   }, [onCancel]);
 
+  // Calculate transform based on flip state
+  const getTransform = () => {
+    const xOffset = "-50%";
+    const yOffset = adjustedPosition.shouldFlipVertical ? "calc(-100% - 20px)" : "10px";
+    return `translate(${xOffset}, ${yOffset})`;
+  };
+
   return (
     <div
       ref={popoverRef}
-      className="fixed z-[10000] animate-in fade-in slide-in-from-bottom-2 duration-200"
+      className="fixed z-[10000] animate-in fade-in duration-200"
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        transform: "translate(-50%, 10px)",
+        left: `${adjustedPosition.x}px`,
+        top: `${adjustedPosition.y}px`,
+        transform: getTransform(),
       }}
     >
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-orange-500/30 dark:border-orange-400/30 p-4 min-w-[280px] max-w-[360px]">
@@ -95,8 +137,12 @@ export default function ConfirmPopover({
         </div>
       </div>
 
-      {/* Arrow pointing up */}
-      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-gray-800 border-l-2 border-t-2 border-orange-500/30 dark:border-orange-400/30 rotate-45"></div>
+      {/* Arrow - points up when below button, down when above */}
+      {adjustedPosition.shouldFlipVertical ? (
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-gray-800 border-r-2 border-b-2 border-orange-500/30 dark:border-orange-400/30 rotate-45"></div>
+      ) : (
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white dark:bg-gray-800 border-l-2 border-t-2 border-orange-500/30 dark:border-orange-400/30 rotate-45"></div>
+      )}
     </div>
   );
 }

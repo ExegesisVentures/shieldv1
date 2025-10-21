@@ -487,7 +487,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           </h2>
         </div>
         <div className="flex items-center gap-3">
-          {coreumPrice !== undefined && (
+          {coreumPrice !== undefined ? (
             <>
               <span className="text-2xl font-bold text-gray-900 dark:text-white">
                 ${coreumPrice.toFixed(4)}
@@ -498,6 +498,11 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                 </span>
               )}
             </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className="animate-pulse h-8 w-24 bg-gray-300 dark:bg-gray-600 rounded"></div>
+              <div className="animate-pulse h-6 w-16 bg-gray-300 dark:bg-gray-600 rounded"></div>
+            </div>
           )}
         </div>
       </div>
