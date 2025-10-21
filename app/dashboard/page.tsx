@@ -47,6 +47,57 @@ export default function Dashboard() {
   // Memoize wallet addresses to prevent unnecessary re-renders in child components
   const walletAddresses = useMemo(() => wallets.map(w => w.address), [wallets]);
 
+  // Memoize filtered and mapped tokens to prevent infinite re-render loops
+  const visibleTokens = useMemo(() => {
+    return tokens
+      .filter(t => {
+        const keep = t.symbol !== 'CORE';
+        if (!keep) console.log('🚫 Filtering out CORE');
+        return keep;
+      })
+      .filter(t => {
+        const denom = t.denom || t.symbol;
+        const hidden = isTokenHidden(denom);
+        if (hidden) {
+          console.log('👁️‍🗨️ Token is hidden, filtering out:', t.symbol, denom);
+        }
+        return !hidden;
+      })
+      .map(t => {
+        // Build per-wallet breakdown by scanning tokensByAddress
+        const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
+        const tokenKey = t.denom || t.symbol;
+        for (const [addr, walletTokens] of Object.entries(tokensByAddress)) {
+          const wt = walletTokens.find(x => (x.denom || x.symbol) === tokenKey);
+          if (wt && parseFloat(wt.balance || '0') > 0) {
+            const walletMeta = wallets.find(w => w.address === addr);
+            breakdown.push({
+              address: addr,
+              label: walletMeta?.label,
+              balance: wt.balanceFormatted,
+              valueUsd: wt.valueUsd,
+            });
+          }
+        }
+
+        // Keep total row the same, pass breakdown for hover indent
+        return {
+          symbol: t.symbol,
+          name: t.name,
+          balance: t.balanceFormatted,
+          valueUsd: t.valueUsd,
+          change24h: t.change24h,
+          logoUrl: t.logoUrl,
+          denom: t.denom,
+          contractAddress: t.denom, // Pass full denom as contract address
+          available: t.available,
+          staked: t.staked,
+          rewards: t.rewards,
+          breakdown,
+        };
+      });
+  }, [tokens, tokensByAddress, wallets, refreshCounter]);
+
   useEffect(() => {
     console.log('🚀 Dashboard mounted, loading data...');
     
@@ -663,54 +714,7 @@ export default function Dashboard() {
             )}
           </div>
           <TokenTable 
-            tokens={tokens
-              .filter(t => {
-                const keep = t.symbol !== 'CORE';
-                if (!keep) console.log('🚫 Filtering out CORE');
-                return keep;
-              })
-              .filter(t => {
-                const denom = t.denom || t.symbol;
-                const hidden = isTokenHidden(denom);
-                if (hidden) {
-                  console.log('👁️‍🗨️ Token is hidden, filtering out:', t.symbol, denom);
-                }
-                return !hidden;
-              })
-              .map(t => {
-
-                // Build per-wallet breakdown by scanning tokensByAddress
-                const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
-                const tokenKey = t.denom || t.symbol;
-                for (const [addr, walletTokens] of Object.entries(tokensByAddress)) {
-                  const wt = walletTokens.find(x => (x.denom || x.symbol) === tokenKey);
-                  if (wt && parseFloat(wt.balance || '0') > 0) {
-                    const walletMeta = wallets.find(w => w.address === addr);
-                    breakdown.push({
-                      address: addr,
-                      label: walletMeta?.label,
-                      balance: wt.balanceFormatted,
-                      valueUsd: wt.valueUsd,
-                    });
-                  }
-                }
-
-                // Keep total row the same, pass breakdown for hover indent
-                return {
-                  symbol: t.symbol,
-                  name: t.name,
-                  balance: t.balanceFormatted,
-                  valueUsd: t.valueUsd,
-                  change24h: t.change24h,
-                  logoUrl: t.logoUrl,
-                  denom: t.denom,
-                  contractAddress: t.denom, // Pass full denom as contract address
-                  available: t.available,
-                  staked: t.staked,
-                  rewards: t.rewards,
-                  breakdown,
-                };
-              })}
+            tokens={visibleTokens}
             loading={false}
           />
         </div>
