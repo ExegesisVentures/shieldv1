@@ -49,19 +49,15 @@ export default function Dashboard() {
 
   // Memoize filtered and mapped tokens to prevent infinite re-render loops
   const visibleTokens = useMemo(() => {
+    // Get hidden tokens list ONCE at the start to avoid multiple localStorage reads
+    const hiddenTokensList = getHiddenTokens();
+    const hiddenDenoms = new Set(hiddenTokensList.map(ht => ht.denom));
+    
     return tokens
-      .filter(t => {
-        const keep = t.symbol !== 'CORE';
-        if (!keep) console.log('🚫 Filtering out CORE');
-        return keep;
-      })
+      .filter(t => t.symbol !== 'CORE')
       .filter(t => {
         const denom = t.denom || t.symbol;
-        const hidden = isTokenHidden(denom);
-        if (hidden) {
-          console.log('👁️‍🗨️ Token is hidden, filtering out:', t.symbol, denom);
-        }
-        return !hidden;
+        return !hiddenDenoms.has(denom);
       })
       .map(t => {
         // Build per-wallet breakdown by scanning tokensByAddress
