@@ -17,8 +17,14 @@ interface UserProfile {
   [key: string]: unknown;
 }
 
+interface AuthUser {
+  id: string;
+  email?: string;
+  [key: string]: unknown;
+}
+
 export default function SettingsPage() {
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
