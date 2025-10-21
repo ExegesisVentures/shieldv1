@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { IoOpenOutline, IoTrendingUp, IoTrendingDown, IoCash, IoCopy, IoEyeOffOutline, IoSwapHorizontal, IoSend, IoFlame } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatTokenSymbol, formatTokenName, sortTokensWithCoreFirst } from "@/utils/token-display";
@@ -172,8 +172,8 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     );
   }
 
-  // Sort tokens with CORE first - memoized to prevent unnecessary re-sorts
-  const sortedTokens = useMemo(() => sortTokensWithCoreFirst(tokens), [tokens]);
+  // Sort tokens with CORE first - just compute it, no memoization
+  const sortedTokens = sortTokensWithCoreFirst(tokens);
 
   return (
     <>
