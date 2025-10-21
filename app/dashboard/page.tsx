@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import WalletConnectModal from "@/components/wallet/WalletConnectModal";
 import WalletMigrationModal from "@/components/modals/WalletMigrationModal";
 import AutoConnectWallet from "@/components/auth/AutoConnectWallet";
@@ -22,7 +23,18 @@ import { IoEyeOffOutline } from "react-icons/io5";
 // Import fallback manager for debugging
 import "@/utils/coreum/fallback-manager";
 
-export default function Dashboard() {
+let renderCount = 0;
+const MAX_RENDERS = 50;
+
+function DashboardContent() {
+  renderCount++;
+  console.log(`🔢 [Dashboard] Render #${renderCount}`);
+  
+  if (renderCount > MAX_RENDERS) {
+    console.error(`🔴 [Dashboard] INFINITE LOOP DETECTED! Exceeded ${MAX_RENDERS} renders`);
+    throw new Error(`Infinite render loop detected! Component has rendered ${renderCount} times.`);
+  }
+  
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [walletCount, setWalletCount] = useState(0);
@@ -49,16 +61,22 @@ export default function Dashboard() {
 
   // Memoize filtered and mapped tokens to prevent infinite re-render loops
   const visibleTokens = useMemo(() => {
-    return tokens
-      .filter(t => t.symbol !== 'CORE')
-      .filter(t => {
+    console.log('🔄 [useMemo] Computing visibleTokens, tokens.length:', tokens.length);
+    
+    try {
+      const filtered = tokens.filter(t => {
+        if (t.symbol === 'CORE') return false;
         const denom = t.denom || t.symbol;
         return !hiddenTokenDenoms.has(denom);
-      })
-      .map(t => {
+      });
+      
+      console.log('✅ [useMemo] Filtered to', filtered.length, 'tokens');
+      
+      const mapped = filtered.map(t => {
         // Build per-wallet breakdown by scanning tokensByAddress
         const breakdown: Array<{ address: string; label?: string; balance: string; valueUsd: number }> = [];
         const tokenKey = t.denom || t.symbol;
+        
         for (const [addr, walletTokens] of Object.entries(tokensByAddress)) {
           const wt = walletTokens.find(x => (x.denom || x.symbol) === tokenKey);
           if (wt && parseFloat(wt.balance || '0') > 0) {
@@ -88,23 +106,46 @@ export default function Dashboard() {
           breakdown,
         };
       });
+      
+      console.log('✅ [useMemo] Mapped to', mapped.length, 'token objects');
+      return mapped;
+    } catch (error) {
+      console.error('❌ [useMemo] Error during computation:', error);
+      throw error;
+    }
   }, [tokens, tokensByAddress, wallets, hiddenTokenDenoms]);
+  
+  // Debug: Track dependency changes
+  useEffect(() => {
+    console.log('🔍 [Dependencies Changed]', {
+      tokensLength: tokens.length,
+      walletsLength: wallets.length,
+      tokensByAddressKeys: Object.keys(tokensByAddress).length,
+      hiddenTokenDenomsSize: hiddenTokenDenoms.size,
+    });
+  }, [tokens, wallets, tokensByAddress, hiddenTokenDenoms]);
   
   // Update hidden tokens state when they change
   useEffect(() => {
     const updateHiddenTokensState = () => {
+      console.log('📢 [hiddenTokensChanged] Event received, updating state');
       const hiddenList = getHiddenTokens();
       const denomSet = new Set(hiddenList.map(ht => ht.denom));
+      console.log('📊 [hiddenTokensChanged] Hidden tokens:', hiddenList.length, Array.from(denomSet));
       setHiddenTokenDenoms(denomSet);
       setHiddenTokenCount(hiddenList.length);
     };
     
     // Initialize on mount
+    console.log('🚀 [hiddenTokens] Initializing hidden tokens state');
     updateHiddenTokensState();
     
     // Update when event fires
     window.addEventListener('hiddenTokensChanged', updateHiddenTokensState);
-    return () => window.removeEventListener('hiddenTokensChanged', updateHiddenTokensState);
+    return () => {
+      console.log('🧹 [hiddenTokens] Cleaning up listener');
+      window.removeEventListener('hiddenTokensChanged', updateHiddenTokensState);
+    };
   }, []);
 
   useEffect(() => {
@@ -757,5 +798,13 @@ export default function Dashboard() {
         onClose={() => setShowHiddenTokens(false)}
       />
     </main>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <ErrorBoundary>
+      <DashboardContent />
+    </ErrorBoundary>
   );
 }
