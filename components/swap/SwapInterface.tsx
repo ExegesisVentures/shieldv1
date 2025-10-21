@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AnimatedBalance, AnimatedPercentage } from "@/components/ui/AnimatedNumber";
+import { useSearchParams } from "next/navigation";
 
 /**
  * SwapInterface Component
@@ -91,7 +92,22 @@ const AVAILABLE_TOKENS: Token[] = [
 ];
 
 export default function SwapInterface() {
-  const [inputToken, setInputToken] = useState<Token>(AVAILABLE_TOKENS[0]);
+  const searchParams = useSearchParams();
+  
+  // Get pre-selected token from URL params (e.g., ?token=ucore or ?token=CORE)
+  const preselectedTokenParam = searchParams?.get('token');
+  const findPreselectedToken = () => {
+    if (!preselectedTokenParam) return AVAILABLE_TOKENS[0];
+    
+    // Try to find by denom first, then by symbol
+    const found = AVAILABLE_TOKENS.find(
+      t => t.denom.toLowerCase() === preselectedTokenParam.toLowerCase() || 
+           t.symbol.toLowerCase() === preselectedTokenParam.toLowerCase()
+    );
+    return found || AVAILABLE_TOKENS[0];
+  };
+  
+  const [inputToken, setInputToken] = useState<Token>(findPreselectedToken());
   const [outputToken, setOutputToken] = useState<Token>(AVAILABLE_TOKENS[1]);
   const [inputAmount, setInputAmount] = useState<string>("");
   const [outputAmount, setOutputAmount] = useState<string>("");
@@ -100,6 +116,20 @@ export default function SwapInterface() {
   const [loading, setLoading] = useState(false);
   const [quote, setQuote] = useState<MultiDexQuote | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+  // Update input token when URL param changes
+  useEffect(() => {
+    if (preselectedTokenParam) {
+      const token = findPreselectedToken();
+      setInputToken(token);
+      // Make sure output token is different
+      if (token.denom === outputToken.denom) {
+        const differentToken = AVAILABLE_TOKENS.find(t => t.denom !== token.denom);
+        if (differentToken) setOutputToken(differentToken);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preselectedTokenParam]);
 
   // Debounce quote fetching
   useEffect(() => {

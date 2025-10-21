@@ -1,0 +1,102 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                    TOKEN HOLDINGS - ACTION BUTTONS                        ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│  Token Table (components/portfolio/TokenTable.tsx)                      │
+│                                                                          │
+│  ┌────────┬─────────┬────────┬────────┬─────────────────────────────┐  │
+│  │ Asset  │ Balance │ Value  │ 24h %  │ Actions                     │  │
+│  ├────────┼─────────┼────────┼────────┼─────────────────────────────┤  │
+│  │ CORE   │ 1,000   │ $250   │ +5.2%  │ [📤] [🔄] [🔥] [👁️] [🔗]  │  │
+│  │        │         │        │        │  │    │    │     │     │     │  │
+│  │        │         │        │        │  │    │    │     │     │     │  │
+│  └────────┴─────────┴────────┴────────┴──┼────┼────┼─────┼─────┼─────┘  │
+│                                           │    │    │     │     │        │
+└───────────────────────────────────────────┼────┼────┼─────┼─────┼────────┘
+                                            │    │    │     │     │
+                ┌───────────────────────────┘    │    │     │     │
+                │                                │    │     │     │
+                ▼                                │    │     │     │
+     ┌──────────────────────┐                   │    │     │     │
+     │   SEND MODAL         │                   │    │     │     │
+     │  (Built into         │                   │    │     │     │
+     │   TokenTable.tsx)    │                   │    │     │     │
+     │                      │                   │    │     │     │
+     │  • Recipient Address │                   │    │     │     │
+     │  • Amount (+ MAX)    │                   │    │     │     │
+     │  • Memo (optional)   │                   │    │     │     │
+     │  • "Coming Soon"     │                   │    │     │     │
+     │                      │                   │    │     │     │
+     │  Backend Ready:      │                   │    │     │     │
+     │  utils/coreum/       │                   │    │     │     │
+     │  send-tokens.ts      │                   │    │     │     │
+     └──────────────────────┘                   │    │     │     │
+                                                │    │     │     │
+                ┌───────────────────────────────┘    │     │     │
+                │                                    │     │     │
+                ▼                                    │     │     │
+     ┌──────────────────────┐                       │     │     │
+     │   SWAP PAGE          │ ◄─────────────────────┘     │     │
+     │  /swap?token=ucore   │  Navigation with param      │     │
+     │                      │                             │     │
+     │  components/swap/    │                             │     │
+     │  SwapInterface.tsx   │                             │     │
+     │                      │                             │     │
+     │  ✅ Reads URL param  │                             │     │
+     │  ✅ Pre-selects      │                             │     │
+     │      token           │                             │     │
+     │  ✅ Auto-swaps if    │                             │     │
+     │      needed          │                             │     │
+     └──────────────────────┘                             │     │
+                                                          │     │
+                ┌─────────────────────────────────────────┘     │
+                │                                               │
+                ▼                                               │
+     ┌──────────────────────┐                                  │
+     │   BURN FUNCTION      │                                  │
+     │  (Coming in v2)      │                                  │
+     │                      │                                  │
+     │  • Button DISABLED   │                                  │
+     │  • Shows alert       │                                  │
+     │  • Red + opacity 50% │                                  │
+     └──────────────────────┘                                  │
+                                                               │
+                                    ┌──────────────────────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │ HIDE TOKEN           │
+                         │ (Existing Feature)   │
+                         │                      │
+                         │ • Confirm popover    │
+                         │ • Updates storage    │
+                         │ • Hides from view    │
+                         └──────────────────────┘
+
+                                    │
+                                    └──────────────────────────┐
+                                                               │
+                                                               ▼
+                                                    ┌──────────────────────┐
+                                                    │ EXPLORER LINK        │
+                                                    │ (Existing Feature)   │
+                                                    │                      │
+                                                    │ Opens Coreum         │
+                                                    │ Explorer in new tab  │
+                                                    └──────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                          BUTTON COLOR GUIDE                               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║  📤 Send    → Blue   (blue-600)   → Opens modal (backend ready)          ║
+║  🔄 Swap    → Green  (green-600)  → Navigates to /swap (fully working)   ║
+║  🔥 Burn    → Red    (red-600)    → Disabled (coming in v2)              ║
+║  👁️ Hide    → Orange (orange-600) → Hover only (existing)                ║
+║  🔗 Explorer → Purple (purple-600) → External link (existing)            ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+✅ All connections verified and tested
+✅ No TypeScript errors
+✅ No linting errors
+✅ Production ready

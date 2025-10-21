@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IoOpenOutline, IoTrendingUp, IoTrendingDown, IoCash, IoCopy, IoEyeOffOutline } from "react-icons/io5";
+import { IoOpenOutline, IoTrendingUp, IoTrendingDown, IoCash, IoCopy, IoEyeOffOutline, IoSwapHorizontal, IoSend, IoFlame } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatTokenSymbol, formatTokenName, sortTokensWithCoreFirst } from "@/utils/token-display";
 import { formatAddressSnippet } from "@/utils/address-utils";
@@ -10,6 +10,7 @@ import DualTokenLogo from "@/components/ui/DualTokenLogo";
 import ConfirmPopover from "@/components/ui/ConfirmPopover";
 import { hideToken } from "@/utils/hidden-tokens";
 import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
+import { useRouter } from "next/navigation";
 
 interface Token {
   symbol: string;
@@ -36,12 +37,16 @@ interface TokenTableProps {
 }
 
 export default function TokenTable({ tokens = [], loading = false }: TokenTableProps) {
+  const router = useRouter();
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [showHideConfirm, setShowHideConfirm] = useState<{
     denom: string;
     symbol: string;
     logoUrl?: string;
     position: { x: number; y: number };
+  } | null>(null);
+  const [showSendModal, setShowSendModal] = useState<{
+    token: Token;
   } | null>(null);
 
   const handleCopyContractAddress = async (fullAddress: string, tokenSymbol: string) => {
@@ -83,6 +88,21 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
   const cancelHideToken = () => {
     console.log('❌ Hide cancelled');
     setShowHideConfirm(null);
+  };
+
+  const handleSendToken = (token: Token) => {
+    setShowSendModal({ token });
+  };
+
+  const handleSwapToken = (token: Token) => {
+    // Navigate to swap page with pre-selected token
+    const denom = token.denom || token.symbol;
+    router.push(`/swap?token=${encodeURIComponent(denom)}`);
+  };
+
+  const handleBurnToken = (token: Token) => {
+    // Burn functionality - coming soon in v2
+    alert(`Burn functionality for ${token.symbol} is coming soon!`);
   };
 
   if (loading) {
@@ -380,8 +400,36 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
 
                   {/* Actions */}
                   <td className="px-4 sm:px-6 py-5 whitespace-nowrap text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      {/* Hide Token Button - visible on hover with better styling */}
+                    <div className="flex items-center justify-end gap-1.5">
+                      {/* Send Button */}
+                      <button
+                        onClick={() => handleSendToken(token)}
+                        className="p-2 rounded-lg text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
+                        title={`Send ${displaySymbol}`}
+                      >
+                        <IoSend className="w-5 h-5" />
+                      </button>
+                      
+                      {/* Swap Button */}
+                      <button
+                        onClick={() => handleSwapToken(token)}
+                        className="p-2 rounded-lg text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all"
+                        title={`Swap ${displaySymbol}`}
+                      >
+                        <IoSwapHorizontal className="w-5 h-5" />
+                      </button>
+                      
+                      {/* Burn Button - Coming Soon */}
+                      <button
+                        onClick={() => handleBurnToken(token)}
+                        className="p-2 rounded-lg text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all opacity-50 cursor-not-allowed"
+                        title={`Burn ${displaySymbol} (Coming Soon)`}
+                        disabled
+                      >
+                        <IoFlame className="w-5 h-5" />
+                      </button>
+                      
+                      {/* Hide Token Button - visible on hover */}
                       <button
                         onClick={(e) => handleHideTokenClick(e, token.denom || token.symbol, displaySymbol, token.logoUrl)}
                         className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-orange-50 dark:hover:bg-orange-900/20 text-gray-400 hover:text-orange-600 dark:hover:text-orange-400"
@@ -421,6 +469,105 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
         confirmText="Hide"
         cancelText="Cancel"
       />
+    )}
+
+    {/* Send Token Modal */}
+    {showSendModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 border-2 border-blue-200 dark:border-blue-800">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Send {formatTokenSymbol(showSendModal.token.symbol, showSendModal.token.denom || showSendModal.token.symbol)}
+            </h3>
+            <button
+              onClick={() => setShowSendModal(null)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl p-4 mb-6">
+            <p className="text-sm text-blue-900 dark:text-blue-100">
+              <strong>Available Balance:</strong> {showSendModal.token.balance} {formatTokenSymbol(showSendModal.token.symbol, showSendModal.token.denom || showSendModal.token.symbol)}
+            </p>
+            {showSendModal.token.valueUsd > 0 && (
+              <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                ≈ ${showSendModal.token.valueUsd.toFixed(2)} USD
+              </p>
+            )}
+          </div>
+
+          <form className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Recipient Address
+              </label>
+              <input
+                type="text"
+                placeholder="core1..."
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Amount
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.000001"
+                  placeholder="0.00"
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                >
+                  MAX
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Memo (Optional)
+              </label>
+              <input
+                type="text"
+                placeholder="Add a note..."
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-700 rounded-xl p-4">
+              <p className="text-sm text-yellow-900 dark:text-yellow-100">
+                <strong>⚠️ Coming Soon:</strong> Send functionality will be available in the next update. For now, please use your wallet extension to send tokens.
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowSendModal(null)}
+                className="flex-1 px-6 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled
+                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Send Tokens
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     )}
   </>
   );

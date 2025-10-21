@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { getAllWallets } from "@/utils/wallet/simplified-operations";
 import { IoWallet, IoTrash, IoStar, IoOpenOutline, IoCopy, IoCheckmark } from "react-icons/io5";
 import VerificationBadge from "@/components/wallet/VerificationBadge";
+import ConfirmPopover from "@/components/ui/ConfirmPopover";
 
 interface WalletData {
   id: string;
@@ -29,6 +31,18 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
   const [isVisitor, setIsVisitor] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<{
+    walletId: string;
+    walletAddress: string;
+    position: { x: number; y: number };
+  } | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Track if component is mounted (for portal)
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   // Check for connected Keplr wallet
   useEffect(() => {
@@ -179,11 +193,24 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
     }
   };
 
-  const handleDelete = async (walletId: string) => {
-    if (!confirm("Are you sure you want to remove this wallet?")) {
-      return;
-    }
+  const handleDeleteClick = (event: React.MouseEvent, walletId: string, walletAddress: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const rect = event.currentTarget.getBoundingClientRect();
+    const position = {
+      x: rect.left + rect.width / 2,
+      y: rect.bottom,
+    };
 
+    setShowDeleteConfirm({ walletId, walletAddress, position });
+  };
+
+  const confirmDelete = async () => {
+    if (!showDeleteConfirm) return;
+    
+    const { walletId, walletAddress } = showDeleteConfirm;
+    setShowDeleteConfirm(null);
     setDeleting(walletId);
 
     try {
@@ -197,7 +224,7 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
         
         // Trigger wallet storage change event for anonymous users
         window.dispatchEvent(new CustomEvent('walletStorageChange', {
-          detail: { action: 'remove', index }
+          detail: { action: 'removed', address: walletAddress }
         }));
         
         await loadWallets();
@@ -210,6 +237,11 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
           console.error("Failed to delete wallet:", error);
           alert("Failed to remove wallet. Please try again.");
         } else {
+          // Trigger wallet database change event for authenticated users
+          window.dispatchEvent(new CustomEvent('walletDatabaseChange', {
+            detail: { action: 'removed', address: walletAddress }
+          }));
+          
           await loadWallets();
         }
       }
@@ -219,6 +251,10 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
     } finally {
       setDeleting(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(null);
   };
 
   const truncateAddress = (address: string) => {
@@ -332,7 +368,7 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
             {/* Delete Button - visitors can delete any wallet, authenticated users can't delete primary */}
             {(isVisitor || !wallet.is_primary) && (
               <button
-                onClick={() => handleDelete(wallet.id)}
+                onClick={(e) => handleDeleteClick(e, wallet.id, wallet.address)}
                 disabled={deleting === wallet.id}
                 className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50"
                 title="Remove wallet"
@@ -347,6 +383,20 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
           </div>
         </div>
       )})}
+
+      {/* Delete Confirmation Popover */}
+      {mounted && showDeleteConfirm && createPortal(
+        <ConfirmPopover
+          message="Remove this wallet?"
+          subMessage="This will remove the wallet from your portfolio tracking."
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+          position={showDeleteConfirm.position}
+          confirmText="Remove"
+          cancelText="Cancel"
+        />,
+        document.body
+      )}
     </div>
   );
 }
