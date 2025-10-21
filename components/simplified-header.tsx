@@ -37,7 +37,8 @@ export default async function SimplifiedHeader() {
     }
   } catch (error) {
     // Only log as warning if it's not a session missing error
-    if (!error.message?.includes('Auth session missing') && !error.message?.includes('session_not_found')) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (!errorMessage.includes('Auth session missing') && !errorMessage.includes('session_not_found')) {
       console.warn("Failed to get user from Supabase:", error);
     }
     // Continue with user = null
