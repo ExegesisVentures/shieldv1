@@ -250,14 +250,14 @@ export async function removeWallet(address: string): Promise<WalletConnectionRes
     const user = session?.user || null;
 
     if (user) {
-      // AUTHENTICATED USER - remove from database
+      // AUTHENTICATED USER - soft delete from database
       const userWallets = await getUserWallets(supabase);
       const wallet = userWallets.find(w => w.address === address);
       
       if (wallet) {
         await supabase
           .from("wallets")
-          .delete()
+          .update({ deleted_at: new Date().toISOString() })
           .eq("id", wallet.id);
 
         // Trigger wallet database change event
@@ -311,12 +311,12 @@ export async function clearAllWallets(): Promise<WalletConnectionResult> {
     const user = session?.user || null;
 
     if (user) {
-      // AUTHENTICATED USER - clear database wallets
+      // AUTHENTICATED USER - soft delete all database wallets
       const userId = await getUserId(supabase);
       if (userId) {
         await supabase
           .from("wallets")
-          .delete()
+          .update({ deleted_at: new Date().toISOString() })
           .eq("public_user_id", userId);
 
         // Trigger wallet database change event

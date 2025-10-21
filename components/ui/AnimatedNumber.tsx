@@ -61,6 +61,7 @@ export default function AnimatedNumber({
 }: AnimatedNumberProps) {
   const [displayValue, setDisplayValue] = useState(value);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const previousValueRef = useRef(value);
   const animationFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -68,6 +69,13 @@ export default function AnimatedNumber({
   useEffect(() => {
     // If value hasn't changed, do nothing
     if (value === previousValueRef.current) {
+      return;
+    }
+
+    // Don't animate if component is being hovered (prevents glitching)
+    if (isHovered) {
+      setDisplayValue(value);
+      previousValueRef.current = value;
       return;
     }
 
@@ -116,7 +124,7 @@ export default function AnimatedNumber({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [value, duration, useRollingAnimation]);
+  }, [value, duration, useRollingAnimation, isHovered]);
 
   const formatNumber = (num: number): string => {
     if (format === 'custom' && formatter) {
@@ -158,9 +166,13 @@ export default function AnimatedNumber({
   const parts = formattedValue.split('');
 
   return (
-    <span className={`inline-flex items-center ${className} ${isAnimating ? 'animate-pulse-subtle' : ''}`}>
+    <span 
+      className={`inline-flex items-center ${className} ${isAnimating ? 'animate-pulse-subtle' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {prefix && <span className="mr-0.5">{prefix}</span>}
-      {useRollingAnimation ? (
+      {useRollingAnimation && !isHovered ? (
         <span className="inline-flex">
           {parts.map((char, index) => {
             // Check if character is a digit

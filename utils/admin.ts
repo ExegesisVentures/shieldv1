@@ -71,7 +71,8 @@ export async function isUserAdmin(supabase: SupabaseClient): Promise<boolean> {
       const { data: wallets } = await supabase
         .from("wallets")
         .select("address")
-        .eq("public_user_id", profile.public_user_id);
+        .eq("public_user_id", profile.public_user_id)
+        .is("deleted_at", null); // Only check non-deleted wallets
 
       if (wallets && wallets.length > 0) {
         const userWalletAddresses = wallets.map(w => w.address.toLowerCase());

@@ -625,69 +625,76 @@
     z-index: 2;
   }
   
-  /* Icon hover states - enhanced 3D effect per color */
+  /* Icon hover states - reduced 3D effect to prevent glitching */
   .group:hover .neo-icon-glow-green {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(37, 214, 149, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(37, 214, 149, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-purple {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(168, 85, 247, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(168, 85, 247, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-blue {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(77, 156, 255, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(77, 156, 255, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-orange {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(255, 140, 66, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(255, 140, 66, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-teal,
   .group:hover .neo-icon-glow-cyan {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(6, 182, 212, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(6, 182, 212, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-yellow {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(255, 187, 41, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(255, 187, 41, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   .group:hover .neo-icon-glow-red {
-    transform: scale(1.05);
+    transform: scale(1.02);
     box-shadow: 
-      0 8px 24px rgba(216, 29, 60, 0.35),
-      0 4px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 3px rgba(255, 255, 255, 0.2),
-      inset 0 -3px 12px rgba(0, 0, 0, 0.25);
+      0 4px 12px rgba(216, 29, 60, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 2px rgba(255, 255, 255, 0.15),
+      inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-out;
   }
   
   /* Make SVG icons relative so they show above pseudo-elements */
@@ -704,9 +711,20 @@
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
 
-  /* Smooth transitions */
+  /* Smooth transitions - optimized for performance */
   .neo-transition {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Performance optimizations for hover states */
+  .token-table-row {
+    will-change: background-color;
+    transform: translateZ(0); /* Force hardware acceleration */
+    backface-visibility: hidden; /* Prevent flickering */
+  }
+
+  .token-table-row:hover {
+    will-change: auto; /* Reset after hover */
   }
 
   /* Slide in animations */

@@ -78,11 +78,12 @@ export async function migrateVisitorWallets(
     return result;
   }
 
-  // Get existing wallets in database to avoid duplicates
+  // Get existing wallets in database to avoid duplicates (excluding soft-deleted)
   const { data: existingWallets } = await supabase
     .from("wallets")
     .select("address")
-    .eq("public_user_id", publicUserId); // Fixed: was user_id
+    .eq("public_user_id", publicUserId) // Fixed: was user_id
+    .is("deleted_at", null); // Only check non-deleted wallets
 
   const existingAddresses = new Set(
     (existingWallets || []).map((w) => w.address.toLowerCase())
@@ -96,6 +97,7 @@ export async function migrateVisitorWallets(
       .select("id")
       .eq("public_user_id", publicUserId) // Fixed: was user_id
       .eq("is_primary", true)
+      .is("deleted_at", null) // Only check non-deleted wallets
       .maybeSingle();
     
     hasPrimaryWallet = !!primaryCheck;

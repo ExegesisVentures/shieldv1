@@ -144,11 +144,12 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
           return;
         }
         
-        // Get full wallet data from database
+        // Get full wallet data from database (excluding soft-deleted wallets)
         const { data: dbWallets, error } = await supabase
           .from("wallets")
           .select("*")
           .eq("public_user_id", profile.public_user_id)
+          .is("deleted_at", null) // Only fetch non-deleted wallets
           .order("created_at", { ascending: false });
         
         if (error) {
@@ -229,9 +230,12 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
         
         await loadWallets();
       } else {
-        // Delete from database
+        // Soft delete from database (set deleted_at timestamp)
         const supabase = createSupabaseClient();
-        const { error } = await supabase.from("wallets").delete().eq("id", walletId);
+        const { error } = await supabase
+          .from("wallets")
+          .update({ deleted_at: new Date().toISOString() })
+          .eq("id", walletId);
 
         if (error) {
           console.error("Failed to delete wallet:", error);

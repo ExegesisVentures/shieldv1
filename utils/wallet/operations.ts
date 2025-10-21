@@ -20,7 +20,7 @@ export interface Wallet {
 }
 
 /**
- * Fetch all wallets for the current user
+ * Fetch all wallets for the current user (excludes soft-deleted wallets)
  */
 export async function fetchUserWallets(
   supabase: SupabaseClient,
@@ -30,6 +30,7 @@ export async function fetchUserWallets(
     .from("wallets")
     .select("*")
     .eq("public_user_id", publicUserId) // Fixed: was user_id
+    .is("deleted_at", null) // Only fetch non-deleted wallets
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -41,7 +42,7 @@ export async function fetchUserWallets(
 }
 
 /**
- * Add a new wallet
+ * Add a new wallet (or un-delete if previously deleted)
  */
 export async function addWallet(
   supabase: SupabaseClient,
@@ -50,15 +51,42 @@ export async function addWallet(
   label: string,
   source: string = "manual"
 ): Promise<{ success: boolean; wallet?: Wallet; error?: UiError }> {
-  // Check if wallet already exists for this user
+  // Check if wallet already exists for this user (including soft-deleted)
   const { data: existing } = await supabase
     .from("wallets")
-    .select("id")
+    .select("id, deleted_at")
     .eq("public_user_id", publicUserId) // Fixed: was user_id
     .eq("address", address.toLowerCase())
     .maybeSingle();
 
   if (existing) {
+    // If wallet exists but is deleted, un-delete it
+    if (existing.deleted_at) {
+      const { data, error } = await supabase
+        .from("wallets")
+        .update({
+          deleted_at: null,
+          label, // Update label on un-delete
+          source, // Update source on un-delete
+          ownership_verified: false, // Reset verification status
+          verified_at: null,
+        })
+        .eq("id", existing.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error un-deleting wallet:", error);
+        return {
+          success: false,
+          error: uiError("WALLET_RESTORE_FAILED", "Failed to restore wallet.", error.message),
+        };
+      }
+
+      return { success: true, wallet: data };
+    }
+
+    // Wallet exists and is not deleted
     return {
       success: false,
       error: uiError("WALLET_EXISTS", "This wallet is already connected to your account."),
@@ -75,6 +103,7 @@ export async function addWallet(
       source,
       ownership_verified: false, // Not verified by default
       verified_at: null,
+      deleted_at: null, // Explicitly set to null for new wallets
     })
     .select()
     .single();
@@ -115,7 +144,7 @@ export async function updateWalletLabel(
 }
 
 /**
- * Delete a wallet
+ * Delete a wallet (soft delete - sets deleted_at timestamp)
  */
 export async function deleteWallet(
   supabase: SupabaseClient,
@@ -123,7 +152,7 @@ export async function deleteWallet(
 ): Promise<{ success: boolean; error?: UiError }> {
   const { error } = await supabase
     .from("wallets")
-    .delete()
+    .update({ deleted_at: new Date().toISOString() })
     .eq("id", walletId);
 
   if (error) {

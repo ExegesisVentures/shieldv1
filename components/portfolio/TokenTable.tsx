@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { IoOpenOutline, IoTrendingUp, IoTrendingDown, IoCash, IoCopy, IoEyeOffOutline, IoSwapHorizontal, IoSend, IoFlame } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatTokenSymbol, formatTokenName, sortTokensWithCoreFirst } from "@/utils/token-display";
@@ -49,7 +49,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     token: Token;
   } | null>(null);
 
-  const handleCopyContractAddress = async (fullAddress: string, tokenSymbol: string) => {
+  const handleCopyContractAddress = useCallback(async (fullAddress: string, tokenSymbol: string) => {
     try {
       await navigator.clipboard.writeText(fullAddress);
       setCopiedToken(tokenSymbol);
@@ -57,7 +57,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     } catch (err) {
       console.error('Failed to copy contract address:', err);
     }
-  };
+  }, []);
 
   const handleHideTokenClick = (event: React.MouseEvent, denom: string, symbol: string, logoUrl?: string) => {
     event.preventDefault();
@@ -172,8 +172,8 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     );
   }
 
-  // Sort tokens with CORE first
-  const sortedTokens = sortTokensWithCoreFirst(tokens);
+  // Sort tokens with CORE first - memoized to prevent unnecessary re-sorts
+  const sortedTokens = useMemo(() => sortTokensWithCoreFirst(tokens), [tokens]);
 
   return (
     <>
@@ -221,7 +221,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
               return (
                 <tr
                   key={token.denom || token.symbol}
-                  className={`group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                  className={`group token-table-row hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 ${
                     isCoreToken ? "bg-purple-50/30 dark:bg-purple-900/10" : ""
                   }`}
                 >
@@ -263,7 +263,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                           </div>
                         ) : (
                           // Fallback for tokens without logos
-                          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center font-bold text-base sm:text-lg transition-all duration-300 ${
+                          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center font-bold text-base sm:text-lg transition-colors duration-150 ${
                             isCoreToken 
                               ? "neo-icon-glow-purple" 
                               : "bg-gradient-to-br from-gray-500 to-gray-600 text-white shadow-lg"
@@ -293,7 +293,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                           {!isCoreToken && token.denom && (
                             <button
                               onClick={() => handleCopyContractAddress(token.denom!, displaySymbol)}
-                              className="relative p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                              className="relative p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors duration-150"
                               title={`IoCopy ${displaySymbol} contract address`}
                             >
                               <IoCopy className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" />
@@ -349,7 +349,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                               <span className="text-xs text-gray-400">{formatAddressSnippet(w.address, 4)}</span>
                               <button
                                 onClick={() => handleCopyContractAddress(w.address, w.label || 'Wallet')}
-                                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors duration-150"
                                 title={`Copy ${w.label || 'wallet'} address`}
                               >
                                 <IoCopy className="w-3 h-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" />
@@ -404,8 +404,8 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                       {/* Send Button */}
                       <button
                         onClick={() => handleSendToken(token)}
-                        className="p-2 rounded-lg text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
-                        title={`Send ${displaySymbol}`}
+                        className="p-2 rounded-lg text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-150"
+                        title={`Send ${displaySymbol} - Transfer tokens to another wallet`}
                       >
                         <IoSend className="w-5 h-5" />
                       </button>
@@ -413,8 +413,8 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                       {/* Swap Button */}
                       <button
                         onClick={() => handleSwapToken(token)}
-                        className="p-2 rounded-lg text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all"
-                        title={`Swap ${displaySymbol}`}
+                        className="p-2 rounded-lg text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors duration-150"
+                        title={`Swap ${displaySymbol} - Exchange for other tokens`}
                       >
                         <IoSwapHorizontal className="w-5 h-5" />
                       </button>
@@ -422,29 +422,29 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                       {/* Burn Button - Coming Soon */}
                       <button
                         onClick={() => handleBurnToken(token)}
-                        className="p-2 rounded-lg text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all opacity-50 cursor-not-allowed"
-                        title={`Burn ${displaySymbol} (Coming Soon)`}
+                        className="p-2 rounded-lg text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 opacity-50 cursor-not-allowed"
+                        title={`Burn ${displaySymbol} - Permanently remove tokens (Coming Soon)`}
                         disabled
                       >
                         <IoFlame className="w-5 h-5" />
                       </button>
                       
-                      {/* Hide Token Button - visible on hover */}
+                      {/* Hide Token Button - always visible */}
                       <button
                         onClick={(e) => handleHideTokenClick(e, token.denom || token.symbol, displaySymbol, token.logoUrl)}
-                        className="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:bg-orange-50 dark:hover:bg-orange-900/20 text-gray-400 hover:text-orange-600 dark:hover:text-orange-400"
-                        title={`Hide ${displaySymbol}`}
+                        className="p-2 rounded-lg transition-all duration-150 hover:bg-orange-50 dark:hover:bg-orange-900/20 text-gray-400 hover:text-orange-600 dark:hover:text-orange-400"
+                        title={`Hide ${displaySymbol} - Remove from view (can be restored later)`}
                       >
                         <IoEyeOffOutline className="w-5 h-5" />
                       </button>
                       
                       {/* Explorer Link */}
                       <a
-                        href={`https://explorer.coreum.com/coreum/assets/${token.symbol}`}
+                        href={`https://explorer.coreum.com/coreum/assets/${encodeURIComponent(token.denom || token.symbol)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all"
-                        title="View on explorer"
+                        className="p-2 rounded-lg text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors duration-150"
+                        title={`View ${displaySymbol} on Coreum Explorer`}
                       >
                         <IoOpenOutline className="w-5 h-5" />
                       </a>

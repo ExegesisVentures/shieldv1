@@ -185,7 +185,7 @@ export async function deleteUserProfile(supabase: SupabaseClient): Promise<void>
 }
 
 /**
- * Add wallet to user account
+ * Add wallet to user account (or un-delete if previously deleted)
  */
 export async function addWalletToUser(
   supabase: SupabaseClient,
@@ -196,16 +196,53 @@ export async function addWalletToUser(
   const userId = await getUserId(supabase);
   if (!userId) throw new Error("User not found");
 
+  // Check if wallet already exists (including soft-deleted)
+  const { data: existing } = await supabase
+    .from("wallets")
+    .select("id, deleted_at")
+    .eq("public_user_id", userId)
+    .eq("address", address.toLowerCase())
+    .maybeSingle();
+
+  if (existing) {
+    // If wallet exists but is deleted, un-delete it
+    if (existing.deleted_at) {
+      const { data: wallet, error } = await supabase
+        .from("wallets")
+        .update({
+          deleted_at: null,
+          label, // Update label on un-delete
+          source, // Update source on un-delete
+          ownership_verified: false, // Reset verification status
+          verified_at: null,
+        })
+        .eq("id", existing.id)
+        .select("*")
+        .single();
+
+      if (error) {
+        throw new Error(`Failed to restore wallet: ${error.message}`);
+      }
+
+      return wallet;
+    }
+
+    // Wallet exists and is not deleted - this is a duplicate
+    throw new Error("Wallet already exists for this user");
+  }
+
+  // Insert new wallet
   const { data: wallet, error } = await supabase
     .from("wallets")
     .insert({
       public_user_id: userId,
-      address,
+      address: address.toLowerCase(),
       label,
       source,
       created_at: new Date().toISOString(),
       ownership_verified: false,
       verified_at: null,
+      deleted_at: null,
     })
     .select("*")
     .single();
@@ -218,7 +255,7 @@ export async function addWalletToUser(
 }
 
 /**
- * Get user's wallets
+ * Get user's wallets (excludes soft-deleted wallets)
  */
 export async function getUserWallets(supabase: SupabaseClient): Promise<Wallet[]> {
   const userId = await getUserId(supabase);
@@ -232,6 +269,7 @@ export async function getUserWallets(supabase: SupabaseClient): Promise<Wallet[]
     .from("wallets")
     .select("*")
     .eq("public_user_id", userId)
+    .is("deleted_at", null) // Only fetch non-deleted wallets
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -244,7 +282,7 @@ export async function getUserWallets(supabase: SupabaseClient): Promise<Wallet[]
 }
 
 /**
- * Remove wallet from user account
+ * Remove wallet from user account (soft delete - sets deleted_at timestamp)
  */
 export async function removeWalletFromUser(
   supabase: SupabaseClient,
@@ -255,7 +293,7 @@ export async function removeWalletFromUser(
 
   const { error } = await supabase
     .from("wallets")
-    .delete()
+    .update({ deleted_at: new Date().toISOString() })
     .eq("id", walletId)
     .eq("public_user_id", userId);
 

@@ -29,11 +29,12 @@ export async function POST(req: Request) {
     // Check if user is currently authenticated
     const { data: { user: currentUser } } = await supabase.auth.getUser();
 
-    // Check if wallet exists in database
+    // Check if wallet exists in database (excluding soft-deleted wallets)
     const { data: wallet, error: walletError } = await supabase
       .from("wallets")
       .select("id, public_user_id, label, created_at, is_custodial, ownership_verified")
       .eq("address", address)
+      .is("deleted_at", null) // Only check non-deleted wallets
       .maybeSingle();
 
     if (walletError) {
