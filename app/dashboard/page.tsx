@@ -248,13 +248,13 @@ export default function Dashboard() {
       } else {
         // OPTIMIZED: Use timeout for auth check to prevent hanging
         const authPromise = supabase.auth.getSession();
-        const authTimeout = new Promise((_, reject) => 
+        const authTimeout = new Promise<never>((_, reject) => 
           setTimeout(() => reject(new Error('Auth timeout')), 3000)
         );
         
         try {
-          const { data: { session } } = await Promise.race([authPromise, authTimeout]);
-          user = session?.user || null;
+          const result = await Promise.race([authPromise, authTimeout]);
+          user = result.data.session?.user || null;
         } catch (error) {
           console.warn('⚠️ [Dashboard] Auth check timeout, continuing as anonymous');
           user = null;
