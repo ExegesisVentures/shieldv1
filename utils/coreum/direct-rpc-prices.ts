@@ -165,7 +165,7 @@ export async function getCompletePortfolioFromRPC(address: string): Promise<{
     console.log(`💰 [Complete RPC] Found ${priceMap.size} token prices`);
     
     // Combine balances with prices
-    const tokens = balances.map(balance => {
+    const tokens = balances.map((balance: { denom: string; amount: string }) => {
       const denom = balance.denom;
       const amount = balance.amount;
       
@@ -201,7 +201,7 @@ export async function getCompletePortfolioFromRPC(address: string): Promise<{
     });
     
     // Calculate total value
-    const totalValueUsd = tokens.reduce((sum, token) => sum + token.valueUsd, 0);
+    const totalValueUsd = tokens.reduce((sum: number, token: { valueUsd: number }) => sum + token.valueUsd, 0);
     
     console.log(`✅ [Complete RPC] Portfolio loaded: ${tokens.length} tokens, total value: $${totalValueUsd.toFixed(2)}`);
     

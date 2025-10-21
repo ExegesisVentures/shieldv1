@@ -17,6 +17,7 @@
  */
 
 import { getCurrentPoolPrice } from './pool-price-client';
+import { buildCoreDexUrl, COREDEX_NETWORK_HEADER, COREDEX_BASE_URL, COREDEX_WS_URL } from './coredex-config';
 import tokensListData from '@/data/tokens-list.json';
 
 // Use full pairs file (111 pairs from root coreum_tokens.json)

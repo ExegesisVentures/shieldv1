@@ -12,15 +12,6 @@ const nextConfig: NextConfig = {
     // Fail builds if there are TypeScript errors for type safety
     ignoreBuildErrors: false,
   },
-  // Exclude Supabase functions from Next.js compilation
-  webpack: (config: any) => {
-    config.module.rules.push({
-      test: /\.ts$/,
-      include: /supabase\/functions/,
-      loader: 'ignore-loader',
-    });
-    return config;
-  },
   images: {
     remotePatterns: [
       {

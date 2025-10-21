@@ -42,7 +42,7 @@ export async function getSimplePortfolio(address: string): Promise<SimplePortfol
     console.log(`📊 [Simple Portfolio] Found ${balances.length} token balances`);
     
     // Convert to simple format
-    const tokens: SimpleTokenBalance[] = balances.map(balance => {
+    const tokens: SimpleTokenBalance[] = balances.map((balance: { denom: string; amount: string }) => {
       const denom = balance.denom;
       const amount = balance.amount;
       
@@ -75,7 +75,7 @@ export async function getSimplePortfolio(address: string): Promise<SimplePortfol
     const tokensWithPrices = await addSimplePrices(tokens);
     
     // Calculate total value
-    const totalValueUsd = tokensWithPrices.reduce((sum, token) => {
+    const totalValueUsd = tokensWithPrices.reduce((sum: number, token: { valueUsd?: number }) => {
       return sum + (token.valueUsd || 0);
     }, 0);
     
@@ -164,7 +164,7 @@ export async function getMultiAddressSimplePortfolio(addresses: string[]): Promi
   });
   
   const aggregated = Array.from(tokenMap.values());
-  const totalValueUsd = aggregated.reduce((sum, token) => sum + (token.valueUsd || 0), 0);
+  const totalValueUsd = aggregated.reduce((sum: number, token: { valueUsd?: number }) => sum + (token.valueUsd || 0), 0);
   
   console.log(`✅ [Simple Portfolio] Aggregated ${aggregated.length} unique tokens, total value: $${totalValueUsd.toFixed(2)}`);
   

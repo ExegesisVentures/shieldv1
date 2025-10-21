@@ -86,14 +86,14 @@ export async function getCachedPools(): Promise<LiquidityPool[]> {
           // Get token0 price in USD if available
           const token0Price = await getTokenPrice(token0Symbol);
           if (token0Price) {
-            price0 = token0Price.price;
-            change24h = token0Price.change24h;
+            price0 = token0Price;
+            change24h = 0; // getTokenPrice doesn't return change24h
           }
           
           // Get token1 price in USD if available
           const token1Price = await getTokenPrice(token1Symbol);
           if (token1Price) {
-            price1 = token1Price.price;
+            price1 = token1Price;
           }
         } catch (error) {
           // Silently fail - we'll show 0 prices for now

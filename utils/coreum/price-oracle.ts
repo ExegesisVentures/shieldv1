@@ -71,7 +71,7 @@ export async function fetchTokenPriceFromDex(symbol: string): Promise<{ price: n
         setTimeout(() => reject(new Error('Price fetch timeout')), 5000)
       );
       
-      const priceData = await Promise.race([pricePromise, timeoutPromise]);
+      const priceData = await Promise.race([pricePromise, timeoutPromise]) as { price: number; change24h: number; volume24h: number } | null;
       
       if (priceData && priceData.price > 0) {
         // Cache the result for next time
