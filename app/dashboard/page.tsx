@@ -336,15 +336,15 @@ export default function Dashboard() {
         setTimeout(async () => {
           try {
             console.log("🔄 [Background] Fetching real prices...");
-            const [shieldSettings, corePrice, coreChange] = await Promise.allSettled([
+            const results = await Promise.allSettled([
               fetchShieldSettings(supabase),
               getTokenPrice("CORE"),
               getTokenChange24h("CORE")
-            ]).then(results => [
-              results[0].status === 'fulfilled' ? results[0].value : undefined,
-              results[1].status === 'fulfilled' ? results[1].value : staticCorePrice,
-              results[2].status === 'fulfilled' ? results[2].value : staticCoreChange
             ]);
+            
+            const shieldSettings: ShieldSettings | undefined = results[0].status === 'fulfilled' ? results[0].value : undefined;
+            const corePrice: number = results[1].status === 'fulfilled' ? results[1].value : staticCorePrice;
+            const coreChange: number = results[2].status === 'fulfilled' ? results[2].value : staticCoreChange;
 
             // Update Shield NFT with real prices (only if user owns it)
             let realNftHolding: ShieldNftHolding | null = null;
