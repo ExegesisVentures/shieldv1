@@ -23,6 +23,25 @@ interface RewardsHistoryWallet {
   rewards: string;
 }
 
+interface UserWallet {
+  id: string;
+  address: string;
+  label: string | null;
+  public_user_id: string;
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface UserData {
+  user_id: string;
+  email: string | null;
+  created_at: string;
+  wallets: UserWallet[];
+  wallet_count: number;
+  active_wallet_count: number;
+}
+
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isVisitorAdmin, setIsVisitorAdmin] = useState(false);
@@ -45,9 +64,18 @@ export default function AdminPage() {
   const [rewardsLoading, setRewardsLoading] = useState(false);
   const [refreshingRewards, setRefreshingRewards] = useState(false);
 
+  // User management state
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
   useEffect(() => {
     checkAdminAndLoadSettings();
     loadRewardsData();
+    loadUsers();
   }, []);
 
   async function checkAdminAndLoadSettings() {
@@ -171,6 +199,137 @@ export default function AdminPage() {
     } finally {
       setRefreshingRewards(false);
     }
+  }
+
+  async function loadUsers() {
+    setUsersLoading(true);
+    try {
+      const url = searchTerm 
+        ? `/api/admin/users?search=${encodeURIComponent(searchTerm)}`
+        : "/api/admin/users";
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.success) {
+        setUsers(data.data || []);
+      }
+    } catch (error) {
+      console.error("Error loading users:", error);
+    } finally {
+      setUsersLoading(false);
+    }
+  }
+
+  async function handleGrantShieldAccess(userId: string) {
+    if (!confirm("Grant Shield member access to this user?")) return;
+    
+    setActionLoading(true);
+    setMessage(null);
+    
+    try {
+      const response = await fetch("/api/admin/users/shield-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          grantAccess: true,
+          pmaSigned: true,
+          hasShieldNft: true,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage({ type: "success", text: "Shield access granted successfully!" });
+        await loadUsers();
+      } else {
+        setMessage({ type: "error", text: data.message || "Failed to grant access" });
+      }
+    } catch (error) {
+      console.error("Error granting access:", error);
+      setMessage({ type: "error", text: "An error occurred" });
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleRevokeShieldAccess(userId: string) {
+    if (!confirm("Revoke Shield member access from this user?")) return;
+    
+    setActionLoading(true);
+    setMessage(null);
+    
+    try {
+      const response = await fetch("/api/admin/users/shield-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          grantAccess: false,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage({ type: "success", text: "Shield access revoked successfully!" });
+        await loadUsers();
+      } else {
+        setMessage({ type: "error", text: data.message || "Failed to revoke access" });
+      }
+    } catch (error) {
+      console.error("Error revoking access:", error);
+      setMessage({ type: "error", text: "An error occurred" });
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleDeleteUser(userId: string) {
+    if (!confirm("Soft delete this user's wallets? This will mark all their wallets as deleted.")) return;
+    
+    setActionLoading(true);
+    setMessage(null);
+    
+    try {
+      const response = await fetch("/api/admin/users", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage({ type: "success", text: "User wallets deleted successfully!" });
+        await loadUsers();
+        setShowUserDetails(false);
+        setSelectedUser(null);
+      } else {
+        setMessage({ type: "error", text: data.message || "Failed to delete user" });
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      setMessage({ type: "error", text: "An error occurred" });
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchTerm(e.target.value);
+  }
+
+  function handleSearchSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    loadUsers();
+  }
+
+  function viewUserDetails(user: UserData) {
+    setSelectedUser(user);
+    setShowUserDetails(true);
   }
 
   if (loading) {
@@ -448,16 +607,246 @@ export default function AdminPage() {
           )}
         </Card>
 
+        {/* User Management Card */}
+        <Card className="p-6 mb-6">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              User Management
+            </h2>
+            <p className="text-sm text-gray-400">
+              Query, manage users, and grant Shield member access
+            </p>
+          </div>
+
+          {/* Search Bar */}
+          <form onSubmit={handleSearchSubmit} className="mb-6">
+            <div className="flex gap-2">
+              <Input
+                type="text"
+                placeholder="Search by email or wallet address..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="flex-1"
+              />
+              <Button type="submit" disabled={usersLoading || isVisitorAdmin}>
+                {usersLoading ? <Spinner className="mr-2" /> : null}
+                Search
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => { setSearchTerm(""); loadUsers(); }}
+                disabled={usersLoading || isVisitorAdmin}
+              >
+                Clear
+              </Button>
+            </div>
+          </form>
+
+          {/* Users List */}
+          {usersLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Spinner />
+            </div>
+          ) : users.length > 0 ? (
+            <div className="space-y-3">
+              <div className="text-sm text-gray-400 mb-3">
+                Found {users.length} user{users.length !== 1 ? "s" : ""}
+              </div>
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {users.map((user) => (
+                  <div
+                    key={user.user_id}
+                    className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-semibold text-white">
+                            {user.email || "No Email"}
+                          </p>
+                          {user.active_wallet_count > 0 && (
+                            <span className="px-2 py-0.5 text-xs bg-[#25d695] text-gray-900 rounded-full">
+                              {user.active_wallet_count} wallet{user.active_wallet_count !== 1 ? "s" : ""}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          User ID: {user.user_id}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Created: {new Date(user.created_at).toLocaleDateString()}
+                        </p>
+                        
+                        {/* Show first wallet if exists */}
+                        {user.wallets && user.wallets.length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                              {user.wallets[0].address.slice(0, 20)}...{user.wallets[0].address.slice(-8)}
+                              {user.wallets[0].label && ` (${user.wallets[0].label})`}
+                            </p>
+                            {user.wallets.length > 1 && (
+                              <p className="text-xs text-gray-400 mt-1">
+                                +{user.wallets.length - 1} more wallet{user.wallets.length - 1 !== 1 ? "s" : ""}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => viewUserDetails(user)}
+                          disabled={isVisitorAdmin}
+                        >
+                          Details
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => handleGrantShieldAccess(user.user_id)}
+                          disabled={actionLoading || isVisitorAdmin}
+                          className="bg-[#25d695] hover:bg-[#1fc182] text-gray-900"
+                        >
+                          Grant Shield
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              No users found. Try a different search term.
+            </div>
+          )}
+        </Card>
+
+        {/* User Details Modal */}
+        {showUserDetails && selectedUser && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <Card className="max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-white">User Details</h2>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowUserDetails(false)}
+                  >
+                    Close
+                  </Button>
+                </div>
+
+                {/* User Info */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-white mb-3">User Information</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Email:</span>
+                      <span className="text-white font-mono">{selectedUser.email || "N/A"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">User ID:</span>
+                      <span className="text-white font-mono text-xs">{selectedUser.user_id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Created:</span>
+                      <span className="text-white">{new Date(selectedUser.created_at).toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Total Wallets:</span>
+                      <span className="text-white">{selectedUser.wallet_count}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Active Wallets:</span>
+                      <span className="text-white">{selectedUser.active_wallet_count}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Wallets */}
+                {selectedUser.wallets && selectedUser.wallets.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-white mb-3">Wallets</h3>
+                    <div className="space-y-2">
+                      {selectedUser.wallets.map((wallet) => (
+                        <div
+                          key={wallet.id}
+                          className={`p-3 rounded-lg ${
+                            wallet.deleted_at
+                              ? "bg-red-50 dark:bg-red-900/20"
+                              : "bg-gray-50 dark:bg-gray-800"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <p className="font-medium text-white">
+                              {wallet.label || "Unlabeled"}
+                            </p>
+                            {wallet.deleted_at && (
+                              <span className="px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                                Deleted
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 font-mono break-all">
+                            {wallet.address}
+                          </p>
+                          <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                            Added: {new Date(wallet.created_at).toLocaleDateString()}
+                            {wallet.deleted_at && (
+                              <> • Deleted: {new Date(wallet.deleted_at).toLocaleDateString()}</>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Button
+                    onClick={() => handleGrantShieldAccess(selectedUser.user_id)}
+                    disabled={actionLoading || isVisitorAdmin}
+                    className="flex-1 bg-[#25d695] hover:bg-[#1fc182] text-gray-900"
+                  >
+                    {actionLoading ? <Spinner className="mr-2" /> : null}
+                    Grant Shield Access
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleRevokeShieldAccess(selectedUser.user_id)}
+                    disabled={actionLoading || isVisitorAdmin}
+                    className="flex-1"
+                  >
+                    Revoke Shield Access
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDeleteUser(selectedUser.user_id)}
+                    disabled={actionLoading || isVisitorAdmin}
+                    className="flex-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    Delete User Wallets
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
+        )}
+
         {/* Info Card */}
         <Card className="p-6 bg-blue-50 dark:bg-blue-900/20">
           <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
-            About Shield NFT Settings
+            About Admin Dashboard
           </h3>
           <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-            <li>• These settings control the placeholder Shield NFT displayed to private members</li>
-            <li>• The image URL should be publicly accessible</li>
-            <li>• Value range is for display purposes only (not blockchain data)</li>
-            <li>• Changes take effect immediately for all users</li>
+            <li>• Shield NFT settings control the placeholder displayed to private members</li>
+            <li>• User management allows you to search, view, and manage all users</li>
+            <li>• Grant Shield access to give users private member privileges</li>
+            <li>• Soft delete marks wallets as deleted without removing data</li>
           </ul>
         </Card>
       </div>
