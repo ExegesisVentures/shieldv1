@@ -12,7 +12,7 @@ import { createSupabaseClient } from "@/utils/supabase/client";
 
 type ProposalStatus = 'all' | 'voting' | 'passed' | 'rejected' | 'deposit';
 
-function GovernanceContent() {
+function ProposalsContent() {
   const [proposals, setProposals] = useState<EnrichedProposal[]>([]);
   const [filteredProposals, setFilteredProposals] = useState<EnrichedProposal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ function GovernanceContent() {
 
     // Set up auto-refresh
     refreshTimerRef.current = setInterval(() => {
-      console.log('🔄 [Governance] Auto-refreshing proposals (2-hour interval)...');
+      console.log('🔄 [Proposals] Auto-refreshing proposals (2-hour interval)...');
       handleRefresh();
     }, REFRESH_INTERVAL);
 
@@ -89,11 +89,11 @@ function GovernanceContent() {
   const loadProposals = async () => {
     setLoading(true);
     try {
-      console.log('🔄 [Governance Page] Fetching proposals from API...');
+      console.log('🔄 [Proposals Page] Fetching proposals from API...');
       const response = await fetch('/api/governance/proposals?enriched=true');
       const data = await response.json();
       
-      console.log('📦 [Governance Page] API Response:', {
+      console.log('📦 [Proposals Page] API Response:', {
         success: data.success,
         proposalCount: data.data?.length || 0,
         error: data.error
@@ -101,7 +101,7 @@ function GovernanceContent() {
       
       if (data.success) {
         const allProposals = data.data || [];
-        console.log(`✅ [Governance Page] Setting ${allProposals.length} proposals`);
+        console.log(`✅ [Proposals Page] Setting ${allProposals.length} proposals`);
         
         // Sort proposals: newest first (highest ID first)
         const sortedProposals = [...allProposals].sort((a, b) => {
@@ -112,7 +112,7 @@ function GovernanceContent() {
         
         // Log first proposal for debugging
         if (sortedProposals.length > 0) {
-          console.log('📋 [Governance Page] Sample proposal:', {
+          console.log('📋 [Proposals Page] Sample proposal:', {
             id: sortedProposals[0].proposal_id,
             title: sortedProposals[0].content?.title || sortedProposals[0].title,
             status: sortedProposals[0].status
@@ -137,13 +137,13 @@ function GovernanceContent() {
           ).length,
         };
         
-        console.log('📊 [Governance Page] Stats calculated:', stats);
+        console.log('📊 [Proposals Page] Stats calculated:', stats);
         setStats(stats);
       } else {
-        console.error('❌ [Governance Page] API returned error:', data.error);
+        console.error('❌ [Proposals Page] API returned error:', data.error);
       }
     } catch (error) {
-      console.error('❌ [Governance Page] Failed to load proposals:', error);
+      console.error('❌ [Proposals Page] Failed to load proposals:', error);
     } finally {
       setLoading(false);
     }
@@ -234,7 +234,7 @@ function GovernanceContent() {
                     filter: 'drop-shadow(0 0 20px rgba(168,85,247,0.3))'
                   }}
                 >
-                  {"Governance".split("").map((char, index) => (
+                  {"Proposals".split("").map((char, index) => (
                     <span
                       key={index}
                       className="governance-letter"
@@ -249,7 +249,7 @@ function GovernanceContent() {
                 </span>
               </h1>
               <p className="text-lg text-gray-400">
-                Participate in Coreum on-chain governance
+                Vote on proposals for the Coreum blockchain
               </p>
               {lastRefreshTime && (
                 <p className="text-sm text-gray-500 mt-1">
@@ -427,10 +427,10 @@ function GovernanceContent() {
   );
 }
 
-export default function GovernancePage() {
+export default function ProposalsPage() {
   return (
     <ErrorBoundary>
-      <GovernanceContent />
+      <ProposalsContent />
     </ErrorBoundary>
   );
 }

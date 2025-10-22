@@ -39,7 +39,7 @@ export default function ProposalsButton({ className = "" }: { className?: string
 
   return (
     <Link 
-      href="/governance" 
+      href="/proposals" 
       className={`relative inline-flex items-center gap-1.5 ${className}`}
     >
       <span className={hasActiveProposals ? 'animate-pulse' : ''}>
@@ -98,7 +98,7 @@ export function ProposalsButtonMobile({ onClick }: { onClick?: () => void }) {
 
   return (
     <Link
-      href="/governance"
+      href="/proposals"
       onClick={onClick}
       className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors rounded-lg relative"
     >
