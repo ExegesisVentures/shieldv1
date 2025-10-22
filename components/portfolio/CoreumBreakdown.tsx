@@ -611,7 +611,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Blue Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 via-blue-500/20 to-blue-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-blue-500/5 to-blue-600/10 dark:from-blue-500/10 dark:to-blue-600/5 backdrop-blur border-2 border-blue-200/40 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(77,156,255,0.3),0_0_40px_rgba(77,156,255,0.4),inset_0_0_30px_rgba(77,156,255,0.05)] hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-blue-500/5 to-blue-600/10 dark:from-blue-500/10 dark:to-blue-600/5 backdrop-blur border-2 border-blue-200/40 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(77,156,255,0.3),0_0_40px_rgba(77,156,255,0.4),inset_0_0_30px_rgba(77,156,255,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-blue neo-transition">
                 <IoCash className="w-7 h-7 sm:w-8 sm:h-8" />
@@ -636,7 +636,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Purple Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-400/30 via-purple-500/20 to-purple-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-purple-500/5 to-purple-600/10 dark:from-purple-500/10 dark:to-purple-600/5 backdrop-blur border-2 border-purple-200/40 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(168,85,247,0.3),0_0_40px_rgba(168,85,247,0.4),inset_0_0_30px_rgba(168,85,247,0.05)] hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-purple-500/5 to-purple-600/10 dark:from-purple-500/10 dark:to-purple-600/5 backdrop-blur border-2 border-purple-200/40 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(168,85,247,0.3),0_0_40px_rgba(168,85,247,0.4),inset_0_0_30px_rgba(168,85,247,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div 
                 className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
@@ -667,7 +667,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Green Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-green-400/30 via-green-500/20 to-green-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-green-500/5 to-green-600/10 dark:from-green-500/10 dark:to-green-600/5 backdrop-blur border-2 border-green-200/40 dark:border-green-500/30 hover:border-green-400 dark:hover:border-green-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(37,214,149,0.3),0_0_40px_rgba(37,214,149,0.4),inset_0_0_30px_rgba(37,214,149,0.05)] hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-green-500/5 to-green-600/10 dark:from-green-500/10 dark:to-green-600/5 backdrop-blur border-2 border-green-200/40 dark:border-green-500/30 hover:border-green-400 dark:hover:border-green-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(37,214,149,0.3),0_0_40px_rgba(37,214,149,0.4),inset_0_0_30px_rgba(37,214,149,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-green neo-transition">
                 <IoGift className="w-7 h-7 sm:w-8 sm:h-8" />
@@ -692,7 +692,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Orange Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-orange-400/30 via-orange-500/20 to-orange-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-orange-500/5 to-orange-600/10 dark:from-orange-500/10 dark:to-orange-600/5 backdrop-blur border-2 border-orange-200/40 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,140,66,0.3),0_0_40px_rgba(255,140,66,0.4),inset_0_0_30px_rgba(255,140,66,0.05)] hover:-translate-y-2 hover:scale-[1.02] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-orange-500/5 to-orange-600/10 dark:from-orange-500/10 dark:to-orange-600/5 backdrop-blur border-2 border-orange-200/40 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,140,66,0.3),0_0_40px_rgba(255,140,66,0.4),inset_0_0_30px_rgba(255,140,66,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-orange neo-transition">
                 <IoTime className="w-7 h-7 sm:w-8 sm:h-8" />
