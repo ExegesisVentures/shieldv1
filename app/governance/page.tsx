@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoGitBranch, IoFilter, IoSearch, IoRefresh, IoInformationCircle, IoAdd } from "react-icons/io5";
 import ProposalCard from "@/components/governance/ProposalCard";
 import ProposalDetailModal from "@/components/governance/ProposalDetailModal";
@@ -23,12 +23,17 @@ function GovernanceContent() {
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [showVotingHistory, setShowVotingHistory] = useState(false);
   const [showCreateProposal, setShowCreateProposal] = useState(false);
+  const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
   const [stats, setStats] = useState({
     total: 0,
     voting: 0,
     passed: 0,
     rejected: 0
   });
+
+  // Auto-refresh interval (2 hours = 7200000ms)
+  const REFRESH_INTERVAL = 2 * 60 * 60 * 1000;
+  const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Get user's connected wallet address
   useEffect(() => {
@@ -50,6 +55,27 @@ function GovernanceContent() {
     };
 
     getUserAddress();
+  }, []);
+
+  // Auto-refresh effect - refresh every 2 hours
+  useEffect(() => {
+    // Clear any existing timer
+    if (refreshTimerRef.current) {
+      clearInterval(refreshTimerRef.current);
+    }
+
+    // Set up auto-refresh
+    refreshTimerRef.current = setInterval(() => {
+      console.log('🔄 [Governance] Auto-refreshing proposals (2-hour interval)...');
+      handleRefresh();
+    }, REFRESH_INTERVAL);
+
+    // Cleanup on unmount
+    return () => {
+      if (refreshTimerRef.current) {
+        clearInterval(refreshTimerRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -77,16 +103,24 @@ function GovernanceContent() {
         const allProposals = data.data || [];
         console.log(`✅ [Governance Page] Setting ${allProposals.length} proposals`);
         
+        // Sort proposals: newest first (highest ID first)
+        const sortedProposals = [...allProposals].sort((a, b) => {
+          const idA = parseInt(a.proposal_id);
+          const idB = parseInt(b.proposal_id);
+          return idB - idA; // Descending order (newest first)
+        });
+        
         // Log first proposal for debugging
-        if (allProposals.length > 0) {
+        if (sortedProposals.length > 0) {
           console.log('📋 [Governance Page] Sample proposal:', {
-            id: allProposals[0].proposal_id,
-            title: allProposals[0].content?.title || allProposals[0].title,
-            status: allProposals[0].status
+            id: sortedProposals[0].proposal_id,
+            title: sortedProposals[0].content?.title || sortedProposals[0].title,
+            status: sortedProposals[0].status
           });
         }
         
-        setProposals(allProposals);
+        setProposals(sortedProposals);
+        setLastRefreshTime(new Date());
         
         // Calculate stats
         const stats = {
@@ -217,6 +251,11 @@ function GovernanceContent() {
               <p className="text-lg text-gray-400">
                 Participate in Coreum on-chain governance
               </p>
+              {lastRefreshTime && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Last updated: {lastRefreshTime.toLocaleTimeString()} • Auto-refreshes every 2 hours
+                </p>
+              )}
             </div>
           </div>
 

@@ -108,3 +108,4 @@ export async function GET(request: NextRequest) {
  *    Example: "0.334" = if 33.4% vote "No with Veto", proposal is rejected
  */
 
+

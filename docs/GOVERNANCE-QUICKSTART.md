@@ -524,3 +524,4 @@ You're now in the same league as **Cosmostation** for governance features! 🎉
 
 **Ready to go?** Start with Step 1 above and you'll have a working governance dashboard in minutes!
 
+

@@ -119,7 +119,7 @@ export function getVoteOptionLabel(option: VoteOption): string {
  * Normalize v1 API proposal to internal format
  * v1 API has different structure than v1beta1
  */
-export function normalizeProposal(rawProposal: any): Proposal {
+export async function normalizeProposal(rawProposal: any, fetchRealTimeTally = false): Promise<Proposal> {
   // v1 API uses 'id' instead of 'proposal_id'
   const proposalId = rawProposal.id || rawProposal.proposal_id;
   
@@ -128,7 +128,21 @@ export function normalizeProposal(rawProposal: any): Proposal {
   const description = rawProposal.summary || rawProposal.content?.description || rawProposal.content?.summary || "";
   
   // v1 API uses yes_count, no_count, etc. v1beta1 uses yes, no, etc.
-  const tallyResult = rawProposal.final_tally_result || {};
+  let tallyResult = rawProposal.final_tally_result || {};
+  
+  // For active proposals, fetch real-time tally
+  if (fetchRealTimeTally && rawProposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD') {
+    try {
+      const tallyResponse = await fetchProposalTally(proposalId);
+      if (tallyResponse.tally) {
+        tallyResult = tallyResponse.tally;
+        console.log(`✅ [Governance] Fetched real-time tally for proposal ${proposalId}`);
+      }
+    } catch (error) {
+      console.warn(`⚠️ [Governance] Failed to fetch real-time tally for proposal ${proposalId}, using default`);
+    }
+  }
+  
   const normalizedTally = {
     yes: tallyResult.yes_count || tallyResult.yes || "0",
     no: tallyResult.no_count || tallyResult.no || "0",
@@ -293,8 +307,16 @@ export async function fetchProposals(
     const data: ProposalsResponse = await response.json();
 
     // Normalize v1 API proposals to internal format
+    // Fetch real-time tallies for active proposals if requested
     if (data.proposals) {
-      data.proposals = data.proposals.map(normalizeProposal);
+      // Process proposals sequentially for active ones to avoid rate limits
+      const normalizedProposals = [];
+      for (const proposal of data.proposals) {
+        const isActive = proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD';
+        const normalized = await normalizeProposal(proposal, isActive);
+        normalizedProposals.push(normalized);
+      }
+      data.proposals = normalizedProposals;
     }
 
     console.log(
@@ -332,7 +354,7 @@ export async function fetchProposal(
 
     // Normalize v1 API proposal to internal format
     if (data.proposal) {
-      data.proposal = normalizeProposal(data.proposal);
+      data.proposal = await normalizeProposal(data.proposal, false);
     }
 
     console.log(`✅ [Governance] Fetched proposal ${proposalId}`);
@@ -921,4 +943,5 @@ export async function submitProposal(params: {
     };
   }
 }
+
 

@@ -355,3 +355,5 @@ Users can now send tokens by dollar value, making the app more accessible and us
 **Feature Request:** User feedback  
 **Impact:** Improved UX for all token sends  
 
+
+
