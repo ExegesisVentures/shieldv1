@@ -691,14 +691,9 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
       {hasMultipleWallets && (
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <div 
-            className="flex items-center gap-2 cursor-pointer group p-2 -mx-2 rounded-lg transition-colors"
+            className="flex items-center justify-end gap-2 cursor-pointer group p-2 -mx-2 rounded-lg transition-colors"
             onClick={() => setShowBreakdown(!showBreakdown)}
           >
-            <ThreeArrowSpinner 
-              size="sm" 
-              variant="warning"
-              className="w-6 h-6"
-            />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Per Wallet Breakdown
             </h3>
