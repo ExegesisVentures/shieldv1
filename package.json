@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import-members": "tsx scripts/import-members.ts",
+    "query-users": "tsx scripts/query-all-users.ts",
+    "reset-admin": "tsx scripts/reset-admin-passwords.ts"
   },
   "dependencies": {
     "@cosmjs/amino": "^0.36.1",
