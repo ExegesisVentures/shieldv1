@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IoClose, IoCheckmarkCircle, IoCloseCircle, IoTimeOutline, IoCalendar, IoPerson } from "react-icons/io5";
+import { IoClose, IoCheckmarkCircle, IoCloseCircle, IoTimeOutline, IoCalendar, IoPerson, IoDocumentText, IoWallet, IoCash, IoInformationCircle } from "react-icons/io5";
 import { EnrichedProposal } from "@/types/governance";
 import VoteButton from "./VoteButton";
 
@@ -96,6 +96,21 @@ export default function ProposalDetailModal({
       .replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
+  const getProposalType = () => {
+    if (!proposal.content?.['@type']) return 'Unknown';
+    const type = proposal.content['@type'];
+    // Extract the type name after the last dot
+    const typeName = type.split('.').pop() || 'Unknown';
+    return typeName.replace(/([A-Z])/g, ' $1').trim();
+  };
+
+  const formatAmount = (coins: any[] | undefined) => {
+    if (!coins || coins.length === 0) return 'N/A';
+    const coin = coins[0];
+    const amount = parseInt(coin.amount) / 1000000; // Convert ucore to CORE
+    return `${amount.toLocaleString()} CORE`;
+  };
+
   const isVotingPeriod = proposal.status === 'PROPOSAL_STATUS_VOTING_PERIOD';
   const canVote = isVotingPeriod && userAddress && !userHasVoted;
 
@@ -136,6 +151,44 @@ export default function ProposalDetailModal({
         </div>
 
         <div className="p-6 space-y-6">
+          {/* Proposal Information Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Proposal Type */}
+            <div className="p-4 bg-gray-800/50 rounded-lg">
+              <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <IoDocumentText className="w-4 h-4" />
+                <span className="text-sm font-medium">Proposal Type</span>
+              </div>
+              <div className="text-white text-sm font-semibold">
+                {getProposalType()}
+              </div>
+            </div>
+
+            {/* Total Deposit */}
+            <div className="p-4 bg-gray-800/50 rounded-lg">
+              <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <IoCash className="w-4 h-4" />
+                <span className="text-sm font-medium">Total Deposit</span>
+              </div>
+              <div className="text-white text-sm font-semibold">
+                {formatAmount(proposal.total_deposit)}
+              </div>
+            </div>
+
+            {/* Proposer */}
+            {proposal.proposer && (
+              <div className="p-4 bg-gray-800/50 rounded-lg md:col-span-2">
+                <div className="flex items-center gap-2 text-gray-400 mb-2">
+                  <IoPerson className="w-4 h-4" />
+                  <span className="text-sm font-medium">Proposer</span>
+                </div>
+                <div className="text-white text-xs font-mono break-all">
+                  {proposal.proposer}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Description */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-3">Description</h3>
@@ -146,8 +199,59 @@ export default function ProposalDetailModal({
             </div>
           </div>
 
+          {/* Additional Details from Content */}
+          {proposal.content && Object.keys(proposal.content).length > 2 && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                <IoInformationCircle className="w-5 h-5 text-blue-400" />
+                Additional Details
+              </h3>
+              <div className="p-4 bg-gray-800/50 rounded-lg space-y-2">
+                {Object.entries(proposal.content).map(([key, value]) => {
+                  // Skip title, description, and @type as they're shown elsewhere
+                  if (key === 'title' || key === 'description' || key === '@type') return null;
+                  
+                  return (
+                    <div key={key} className="border-b border-gray-700/50 last:border-0 pb-2 last:pb-0">
+                      <span className="text-gray-400 text-sm font-medium capitalize">
+                        {key.replace(/_/g, ' ')}:
+                      </span>
+                      <div className="text-white text-sm mt-1 break-all">
+                        {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Timeline */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-800/50 rounded-lg">
+              <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <IoCalendar className="w-4 h-4" />
+                <span className="text-sm font-medium">Submit Time</span>
+              </div>
+              <div className="text-white text-sm">
+                {proposal.submit_time 
+                  ? formatDate(proposal.submit_time)
+                  : 'N/A'
+                }
+              </div>
+            </div>
+            <div className="p-4 bg-gray-800/50 rounded-lg">
+              <div className="flex items-center gap-2 text-gray-400 mb-2">
+                <IoCalendar className="w-4 h-4" />
+                <span className="text-sm font-medium">Deposit End Time</span>
+              </div>
+              <div className="text-white text-sm">
+                {proposal.deposit_end_time 
+                  ? formatDate(proposal.deposit_end_time)
+                  : 'N/A'
+                }
+              </div>
+            </div>
             <div className="p-4 bg-gray-800/50 rounded-lg">
               <div className="flex items-center gap-2 text-gray-400 mb-2">
                 <IoCalendar className="w-4 h-4" />
