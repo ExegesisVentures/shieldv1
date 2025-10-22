@@ -22,31 +22,31 @@ export default async function Header() {
         </Link>
 
         {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
           {user ? (
             <>
               <Link 
                 href="/dashboard" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Portfolio
               </Link>
               <Link 
                 href="/wallets" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Wallets
               </Link>
               <Link 
                 href="/liquidity" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Liquidity
               </Link>
-              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors" />
+              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap" />
               <Link 
                 href="/membership" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Membership
               </Link>
@@ -55,20 +55,20 @@ export default async function Header() {
             <>
               <Link 
                 href="/#features" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Features
               </Link>
               <Link 
                 href="/liquidity" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Liquidity
               </Link>
-              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors" />
+              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap" />
               <Link 
                 href="/membership" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
               >
                 Membership
               </Link>
@@ -78,8 +78,10 @@ export default async function Header() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
-          {/* Mobile Menu (visible on mobile only) */}
-          <MobileMenu isAuthenticated={!!user} />
+          {/* Mobile Menu (visible on tablet and mobile only) */}
+          <div className="lg:hidden">
+            <MobileMenu isAuthenticated={!!user} />
+          </div>
           
           <ThemeToggle />
           
