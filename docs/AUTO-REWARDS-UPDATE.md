@@ -1,7 +1,7 @@
 # Auto-Update Rewards System
 
 ## Overview
-The ShieldNest app now includes an automatic 48-hour update system for historical reward tracking. This ensures user wallet reward data stays current without requiring manual refreshes.
+The ShieldNest app includes an automatic 3-day (72-hour) update system for historical reward tracking. This ensures user wallet reward data stays current without requiring manual refreshes.
 
 ## How It Works
 
@@ -17,9 +17,9 @@ The ShieldNest app now includes an automatic 48-hour update system for historica
 - We do NOT scan blocks or find random addresses
 - Each query returns ONLY transactions where that wallet claimed rewards
 
-### 3. 48-Hour Auto-Update Schedule
-- Cron job runs every 48 hours via Vercel Cron
-- Checks `wallet_rewards_history` table for wallets older than 48 hours
+### 3. 72-Hour (3-Day) Auto-Update Schedule
+- Cron job runs every 72 hours (3 days) via Vercel Cron
+- Checks `wallet_rewards_history` table for wallets older than 72 hours
 - Only updates wallets that need updating (saves API calls)
 - Updates are tracked via `last_auto_update_at` timestamp
 
@@ -47,7 +47,7 @@ ADD COLUMN last_auto_update_at timestamptz DEFAULT NULL;
 - **URL**: `/api/cron/auto-update-rewards`
 - **Method**: GET
 - **Security**: Protected by `CRON_SECRET` environment variable
-- **Schedule**: Every 48 hours
+- **Schedule**: Every 72 hours (3 days)
 
 #### Process Flow:
 1. Verify cron secret authentication
@@ -62,14 +62,14 @@ ADD COLUMN last_auto_update_at timestamptz DEFAULT NULL;
 
 ### 3. Vercel Cron Configuration
 - **File**: `vercel.json`
-- Cron schedule: `0 */48 * * *` (every 48 hours)
+- Cron schedule: `0 0 */3 * *` (every 3 days at midnight)
 
 ```json
 {
   "crons": [
     {
       "path": "/api/cron/auto-update-rewards",
-      "schedule": "0 */48 * * *"
+      "schedule": "0 0 */3 * *"
     }
   ]
 }
@@ -77,7 +77,7 @@ ADD COLUMN last_auto_update_at timestamptz DEFAULT NULL;
 
 ### 4. Updated Utility Functions
 - **File**: `utils/coreum/rewards-history.ts`
-- Added `AUTO_UPDATE_THRESHOLD` constant (48 hours)
+- Added `AUTO_UPDATE_THRESHOLD` constant (72 hours / 3 days)
 - Enhanced documentation explaining address-specific queries
 
 ## Security
@@ -98,19 +98,22 @@ Authorization: Bearer your-secure-random-string
 - Must have an associated user profile
 - Only active wallets (not soft-deleted)
 
-## Manual Refresh Still Available
-Users can still manually refresh their rewards:
-- 24-hour rate limit for manual refreshes
-- 48-hour auto-update ensures data doesn't get too stale
-- Balance between fresh data and API rate limiting
+## First-Time "Calculate Rewards" Button
+Users see a one-time "Calculate Rewards" button when they first sign up:
+- Appears only if no rewards data exists for their wallets
+- One-time manual calculation to populate initial data
+- After initial calculation, auto-updates take over every 3 days
+- No manual refresh needed - system handles updates automatically
 
 ## Benefits
 
-1. **User Experience**: Reward data is always reasonably current (max 48 hours old)
-2. **No User Action Required**: Updates happen automatically in the background
-3. **Resource Efficient**: Only updates wallets that need it (not all wallets every time)
-4. **Accurate Data**: Only queries for user wallets, not random blockchain addresses
-5. **Scalable**: Works efficiently even with many users/wallets
+1. **User Experience**: Reward data is always reasonably current (max 3 days old)
+2. **One-Time Setup**: Users only need to click "Calculate Rewards" once
+3. **No Manual Maintenance**: Updates happen automatically in the background every 3 days
+4. **Resource Efficient**: Only updates wallets that need it (not all wallets every time)
+5. **Accurate Data**: Only queries for user wallets, not random blockchain addresses
+6. **Scalable**: Works efficiently even with many users/wallets
+7. **Admin Simplicity**: Admin panel shows current data without manual refresh needed
 
 ## Monitoring
 

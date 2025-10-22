@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { IoTrophy, IoCash, IoRefresh, IoChevronDown, IoAlertCircle, IoHelpCircle, IoCopy, IoCheckmark, IoChevronUp } from "react-icons/io5";
+import { IoTrophy, IoCash, IoRefresh, IoChevronDown, IoHelpCircle, IoCopy, IoCheckmark, IoChevronUp } from "react-icons/io5";
 import { ThreeArrowSpinner } from "@/components/ui/ThreeArrowSpinner";
 import { Card } from "@/components/ui/card";
 import CollapsibleWalletCard from "./CollapsibleWalletCard";
@@ -50,6 +50,7 @@ export default function PortfolioTotals({
   const rewardsCardRef = useRef<HTMLDivElement>(null);
   const [rateLimitMessage, setRateLimitMessage] = useState<string | null>(null);
   const [hoursUntilRefresh, setHoursUntilRefresh] = useState<number | null>(null);
+  const [hasRewardsData, setHasRewardsData] = useState<boolean>(false); // Track if user has calculated rewards before
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [longRunningQuery, setLongRunningQuery] = useState(false);
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
@@ -442,8 +443,13 @@ export default function PortfolioTotals({
         setWalletRewards(data.data.wallets || []);
         setIsStale(data.data.anyStale || false);
         
+        // Check if user has rewards data (any wallet has been calculated)
+        const hasData = data.data.wallets && data.data.wallets.length > 0 && 
+                        data.data.wallets.some((w: any) => w.rewards && w.rewards !== '0');
+        setHasRewardsData(hasData);
+        
         if (data.data.anyStale) {
-          console.log(`⚠️ [Historical Rewards] Some wallets have stale data (>36h old)`);
+          console.log(`⚠️ [Historical Rewards] Some wallets have stale data (>72h old)`);
         }
         
         // If this was a refresh and we got data, update the progress to 100% but keep modal open
@@ -671,14 +677,13 @@ export default function PortfolioTotals({
               Total Rewards Earned
             </p>
             
-            {/* Timer-based refresh button */}
-            <TimerRefreshButton
-              hoursUntilRefresh={hoursUntilRefresh}
-              isRefreshing={rewardsRefreshing}
-              isStale={isStale}
-              onRefresh={handleRefreshRewards}
-              disabled={walletAddresses.length === 0}
-            />
+            {/* Info icon to explain auto-updates */}
+            <div className="relative group">
+              <IoHelpCircle className="w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help" />
+              <div className="absolute left-1/2 -translate-x-1/2 top-6 w-64 p-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                Auto-updates every 3 days. Historical totals calculated automatically.
+              </div>
+            </div>
             
             {walletCount > 1 && (
               <IoChevronDown className={`w-3 h-3 text-gray-600 dark:text-gray-400 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
@@ -720,7 +725,7 @@ export default function PortfolioTotals({
           <div 
             className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-5 z-[999998] animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto"
             style={{
-              top: rewardsCardRef.current ? rewardsCardRef.current.getBoundingClientRect().bottom + 8 : '50%',
+              top: rewardsCardRef.current ? rewardsCardRef.current.getBoundingClientRect().bottom + 2 : '50%',
               left: rewardsCardRef.current ? rewardsCardRef.current.getBoundingClientRect().left : '50%',
               minWidth: '400px',
               maxWidth: '600px'
@@ -735,34 +740,24 @@ export default function PortfolioTotals({
             <div className="space-y-3">
               {walletRewards.map((wallet) => (
                 <div key={wallet.address} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                  <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-2 flex-1">
                     <img 
                       src="/tokens/CoreumLogo (3).svg" 
                       alt="CORE" 
                       className="w-8 h-8 rounded-lg"
                     />
-                    <div className="flex-1">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white block">
-                        {formatAddressSnippet(wallet.address)}
-                      </span>
-                      {wallet.isStale && (
-                        <div className="flex items-center gap-1 mt-1">
-                          <IoAlertCircle className="w-3 h-3 text-orange-500" />
-                          <span className="text-xs text-orange-600 dark:text-orange-400">
-                            Stale ({wallet.hoursSinceUpdate}h old)
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {formatAddressSnippet(wallet.address)}
+                    </span>
                     <button
                       onClick={() => handleCopyAddress(wallet.address)}
-                      className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                      className="p-1.5 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-lg transition-colors"
                       title="Copy address"
                     >
                       {copiedAddress === wallet.address ? (
-                        <IoCheckmark className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <IoCheckmark className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
                       ) : (
-                        <IoCopy className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        <IoCopy className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
                       )}
                     </button>
                   </div>

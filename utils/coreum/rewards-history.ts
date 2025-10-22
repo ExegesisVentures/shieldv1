@@ -7,9 +7,9 @@ import { createClient } from "@supabase/supabase-js";
 
 const COREUM_REST_ENDPOINT = process.env.NEXT_PUBLIC_COREUM_REST_ENDPOINT || "https://full-node.mainnet-1.coreum.dev:1317";
 const COREUM_RPC_ENDPOINT = process.env.NEXT_PUBLIC_COREUM_RPC_ENDPOINT || "https://full-node.mainnet-1.coreum.dev:26657";
-const MIN_REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours - minimum time between refreshes
-const STALENESS_THRESHOLD = 36 * 60 * 60 * 1000; // 36 hours - show reminder after this
-const AUTO_UPDATE_THRESHOLD = 48 * 60 * 60 * 1000; // 48 hours - auto-update if older than this
+const MIN_REFRESH_INTERVAL = 72 * 60 * 60 * 1000; // 72 hours (3 days) - minimum time between manual refreshes (only for first-time calculation)
+const STALENESS_THRESHOLD = 72 * 60 * 60 * 1000; // 72 hours (3 days) - show stale indicator after this
+const AUTO_UPDATE_THRESHOLD = 72 * 60 * 60 * 1000; // 72 hours (3 days) - auto-update if older than this
 
 // Supabase client with service role for database writes
 const getServiceSupabase = () => {
@@ -348,7 +348,7 @@ async function canRefresh(address: string): Promise<{ allowed: boolean; hoursUnt
 }
 
 /**
- * Check if cached data is stale (>36 hours old)
+ * Check if cached data is stale (>72 hours / 3 days old)
  */
 export async function isDataStale(address: string): Promise<{ isStale: boolean; hoursSinceUpdate?: number }> {
   const supabase = getServiceSupabase();

@@ -2,7 +2,7 @@
  * API Route: Automatic Rewards Update Cron Job
  * GET /api/cron/auto-update-rewards
  * 
- * This endpoint is called by a cron service (e.g., Vercel Cron) every 48 hours
+ * This endpoint is called by a cron service (e.g., Vercel Cron) every 72 hours (3 days)
  * to automatically refresh reward history for wallets that haven't been updated recently.
  * 
  * Security: Protected by CRON_SECRET environment variable
@@ -12,8 +12,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { queryRewardsTransactions, aggregateRewards } from "@/utils/coreum/rewards-history";
 
-// 48 hours in milliseconds - threshold for auto-updating
-const AUTO_UPDATE_THRESHOLD = 48 * 60 * 60 * 1000;
+// 72 hours in milliseconds - threshold for auto-updating (3 days)
+const AUTO_UPDATE_THRESHOLD = 72 * 60 * 60 * 1000;
 
 // Supabase client with service role for database writes
 const getServiceSupabase = () => {
@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
     console.log(`📊 [Cron] Found ${userWalletAddresses.length} user wallets in system`);
 
     // Get wallet_rewards_history for these user wallets that need updating
-    // Criteria: last_auto_update_at is NULL OR older than 48 hours
+    // Criteria: last_auto_update_at is NULL OR older than 72 hours (3 days)
     const cutoffTime = new Date(Date.now() - AUTO_UPDATE_THRESHOLD).toISOString();
     
     const { data: walletsToUpdate, error: fetchError } = await supabase
@@ -104,7 +104,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    console.log(`📊 [Cron] Found ${walletsToUpdate.length} user wallets to update (older than 48 hours)`);
+    console.log(`📊 [Cron] Found ${walletsToUpdate.length} user wallets to update (older than 72 hours)`);
 
     // Update each wallet
     const results = {

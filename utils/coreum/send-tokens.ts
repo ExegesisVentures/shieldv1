@@ -96,7 +96,12 @@ export async function sendTokens(params: SendTokensParams): Promise<SendTokensRe
 
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0) {
-      return { success: false, error: "Invalid amount" };
+      return { success: false, error: "Invalid amount. Please enter a positive number." };
+    }
+    
+    // Validate amount doesn't use scientific notation in string form
+    if (amount.toLowerCase().includes('e')) {
+      return { success: false, error: "Invalid amount format. Please use standard decimal notation." };
     }
 
     // Get wallet provider
@@ -125,7 +130,19 @@ export async function sendTokens(params: SendTokensParams): Promise<SendTokensRe
     );
 
     // Convert amount to base units (e.g., CORE -> ucore)
-    const baseAmount = BigInt(Math.floor(amountNum * Math.pow(10, decimals))).toString();
+    // Use parseTokenAmount to avoid scientific notation issues
+    const baseAmount = parseTokenAmount(amount, decimals);
+    
+    if (baseAmount === "0") {
+      return { success: false, error: "Amount is too small or invalid." };
+    }
+
+    console.log('[SendTokens] Converting amount:', {
+      humanAmount: amount,
+      decimals,
+      baseAmount,
+      denom
+    });
 
     // Create send message
     const msg = {
@@ -223,10 +240,37 @@ export function formatTokenAmount(amount: string, decimals: number = 6): string 
 
 /**
  * Parse human-readable amount to base units
+ * CRITICAL: Uses string manipulation to avoid scientific notation for large numbers
+ * This fixes the "math/big: cannot unmarshal 1e+22" error
  */
 export function parseTokenAmount(amount: string, decimals: number = 6): string {
   const num = parseFloat(amount);
-  if (isNaN(num)) return "0";
-  return BigInt(Math.floor(num * Math.pow(10, decimals))).toString();
+  if (isNaN(num) || num <= 0) return "0";
+  
+  // Convert to string and handle scientific notation manually
+  // This ensures we never pass scientific notation to BigInt
+  const amountStr = amount.toString();
+  
+  // Check if the input already has a decimal point
+  const parts = amountStr.split('.');
+  const integerPart = parts[0] || '0';
+  const decimalPart = parts[1] || '';
+  
+  // Pad or truncate decimal part to match required decimals
+  let paddedDecimal = decimalPart.padEnd(decimals, '0').slice(0, decimals);
+  
+  // Combine integer and decimal parts
+  const fullNumberStr = integerPart + paddedDecimal;
+  
+  // Remove leading zeros but keep at least one digit
+  const trimmed = fullNumberStr.replace(/^0+/, '') || '0';
+  
+  // Validate the result can be converted to BigInt
+  try {
+    return BigInt(trimmed).toString();
+  } catch (err) {
+    console.error('[parseTokenAmount] Failed to convert to BigInt:', trimmed, err);
+    return "0";
+  }
 }
 

@@ -4,13 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import { IoOpenOutline, IoTrendingUp, IoTrendingDown, IoCash, IoCopy, IoEyeOffOutline, IoSwapHorizontal, IoSend, IoFlame } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatTokenSymbol, formatTokenName, sortTokensWithCoreFirst } from "@/utils/token-display";
-import { formatAddressSnippet } from "@/utils/address-utils";
+import { formatAddressSnippet, showToast } from "@/utils/address-utils";
 import { getLpPairInfo } from "@/utils/coreum/token-images";
 import DualTokenLogo from "@/components/ui/DualTokenLogo";
 import ConfirmPopover from "@/components/ui/ConfirmPopover";
 import { hideToken } from "@/utils/hidden-tokens";
 import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
 import { useRouter } from "next/navigation";
+import { sendTokens, isValidCoreumAddress } from "@/utils/coreum/send-tokens";
+import { getTokenInfo } from "@/utils/coreum/rpc";
 
 interface Token {
   symbol: string;
@@ -48,6 +50,13 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
   const [showSendModal, setShowSendModal] = useState<{
     token: Token;
   } | null>(null);
+  
+  // Send form state
+  const [sendRecipient, setSendRecipient] = useState("");
+  const [sendAmount, setSendAmount] = useState("");
+  const [sendMemo, setSendMemo] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const handleCopyContractAddress = useCallback(async (fullAddress: string, tokenSymbol: string) => {
     try {
@@ -293,10 +302,10 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                           {!isCoreToken && token.denom && (
                             <button
                               onClick={() => handleCopyContractAddress(token.denom!, displaySymbol)}
-                              className="relative p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors duration-150"
-                              title={`IoCopy ${displaySymbol} contract address`}
+                              className="relative p-1 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded transition-colors duration-150"
+                              title={`Copy ${displaySymbol} contract address`}
                             >
-                              <IoCopy className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" />
+                              <IoCopy className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
                               {copiedToken === displaySymbol && (
                                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap z-[9999]">
                                   Address copied
@@ -349,10 +358,10 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                               <span className="text-xs text-gray-400">{formatAddressSnippet(w.address, 4)}</span>
                               <button
                                 onClick={() => handleCopyContractAddress(w.address, w.label || 'Wallet')}
-                                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors duration-150"
+                                className="p-1 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded transition-colors duration-150"
                                 title={`Copy ${w.label || 'wallet'} address`}
                               >
-                                <IoCopy className="w-3 h-3 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" />
+                                <IoCopy className="w-3 h-3 text-gray-600 dark:text-gray-400" />
                               </button>
                             </div>
                             <div className="text-gray-700 dark:text-gray-300 font-semibold">{w.balance}</div>
