@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   // Enable standalone output for Docker deployment (disable for Vercel)
   // output: 'standalone',
   
+  // Build ID for tracking deployments (updated: 2025-10-22)
+  generateBuildId: async () => {
+    return '04e921d-governance-restored'
+  },
+  
   eslint: {
     // Allow builds to proceed with ESLint warnings - fix them iteratively
     ignoreDuringBuilds: true,
