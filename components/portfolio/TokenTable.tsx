@@ -57,6 +57,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
   const [sendMemo, setSendMemo] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [sendAmountMode, setSendAmountMode] = useState<"token" | "usd">("token"); // Toggle between token amount or USD amount
 
   const handleCopyContractAddress = useCallback(async (fullAddress: string, tokenSymbol: string) => {
     try {
@@ -106,6 +107,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     setSendAmount("");
     setSendMemo("");
     setSendError(null);
+    setSendAmountMode("token"); // Default to token mode
   };
   
   const handleCloseSendModal = () => {
@@ -121,8 +123,40 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
     if (showSendModal) {
       // Parse balance to remove commas
       const balanceStr = showSendModal.token.balance.replace(/,/g, '');
-      setSendAmount(balanceStr);
+      
+      if (sendAmountMode === "usd") {
+        // Convert to USD
+        const tokenAmount = parseFloat(balanceStr);
+        const usdValue = tokenAmount * (showSendModal.token.valueUsd / parseFloat(showSendModal.token.balance.replace(/,/g, '')));
+        setSendAmount(usdValue.toFixed(2));
+      } else {
+        setSendAmount(balanceStr);
+      }
     }
+  };
+  
+  const toggleAmountMode = () => {
+    if (!showSendModal) return;
+    
+    const currentAmount = parseFloat(sendAmount);
+    if (!isNaN(currentAmount) && currentAmount > 0) {
+      // Convert the amount when toggling
+      if (sendAmountMode === "token") {
+        // Convert token to USD
+        const tokenBalance = parseFloat(showSendModal.token.balance.replace(/,/g, ''));
+        const tokenPrice = showSendModal.token.valueUsd / tokenBalance;
+        const usdValue = currentAmount * tokenPrice;
+        setSendAmount(usdValue.toFixed(2));
+      } else {
+        // Convert USD to token
+        const tokenBalance = parseFloat(showSendModal.token.balance.replace(/,/g, ''));
+        const tokenPrice = showSendModal.token.valueUsd / tokenBalance;
+        const tokenAmount = currentAmount / tokenPrice;
+        setSendAmount(tokenAmount.toString());
+      }
+    }
+    
+    setSendAmountMode(prev => prev === "token" ? "usd" : "token");
   };
   
   const handleSendSubmit = async (e: React.FormEvent) => {
@@ -147,7 +181,23 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
       return;
     }
     
-    const amountNum = parseFloat(sendAmount);
+    // Convert USD to token amount if in USD mode
+    let tokenAmountToSend = sendAmount;
+    if (sendAmountMode === "usd") {
+      const usdAmount = parseFloat(sendAmount);
+      const tokenBalance = parseFloat(showSendModal.token.balance.replace(/,/g, ''));
+      const tokenPrice = showSendModal.token.valueUsd / tokenBalance;
+      
+      if (tokenPrice <= 0) {
+        setSendError("Unable to determine token price. Please switch to token amount mode.");
+        return;
+      }
+      
+      const tokenAmount = usdAmount / tokenPrice;
+      tokenAmountToSend = tokenAmount.toString();
+    }
+    
+    const amountNum = parseFloat(tokenAmountToSend);
     const balanceNum = parseFloat(showSendModal.token.balance.replace(/,/g, ''));
     
     if (amountNum > balanceNum) {
@@ -185,7 +235,7 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
       const result = await sendTokens({
         fromAddress,
         toAddress: sendRecipient.trim(),
-        amount: sendAmount,
+        amount: tokenAmountToSend,
         denom,
         decimals,
         memo: sendMemo.trim()
@@ -640,17 +690,30 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Amount
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Amount
+                </label>
+                <button
+                  type="button"
+                  onClick={toggleAmountMode}
+                  disabled={sending}
+                  className="flex items-center gap-2 px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span>{sendAmountMode === "token" ? "💰 Token" : "💵 USD"}</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                </button>
+              </div>
               <div className="relative">
                 <input
                   type="text"
                   value={sendAmount}
                   onChange={(e) => setSendAmount(e.target.value)}
-                  placeholder="0.00"
+                  placeholder={sendAmountMode === "token" ? "0.00" : "$0.00"}
                   disabled={sending}
-                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 pr-20 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                   type="button"
@@ -661,6 +724,13 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
                   MAX
                 </button>
               </div>
+              {sendAmountMode === "usd" && showSendModal && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  ≈ {sendAmount && parseFloat(sendAmount) > 0 
+                    ? (parseFloat(sendAmount) / (showSendModal.token.valueUsd / parseFloat(showSendModal.token.balance.replace(/,/g, '')))).toFixed(6)
+                    : "0"} {formatTokenSymbol(showSendModal.token.symbol, showSendModal.token.denom || showSendModal.token.symbol)}
+                </p>
+              )}
             </div>
 
             <div>

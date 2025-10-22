@@ -1,0 +1,6 @@
+# Vercel Deployment Trigger
+# This file is used to force new deployments
+# Last update: 2025-10-22T06:30:00Z
+# Reason: Force rebuild after governance system restoration
+# Expected commit: 04e921d
+

@@ -17,10 +17,10 @@ import { fetchProposalVotes } from '@/utils/coreum/governance';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: proposalId } = await params;
+    const { id: proposalId } = await context.params;
     const { searchParams } = new URL(request.url);
     
     // Pagination parameters

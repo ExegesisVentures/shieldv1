@@ -303,6 +303,42 @@ export default function PortfolioTotals({
     }
   }, [showDropdown]);
 
+  // Close currency dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showCurrencyDropdown && totalValueCardRef.current && !totalValueCardRef.current.contains(event.target as Node)) {
+        const dropdownEl = document.querySelector('[data-currency-dropdown]');
+        if (!dropdownEl || !dropdownEl.contains(event.target as Node)) {
+          console.log("🖱️ Click outside currency dropdown, closing");
+          setShowCurrencyDropdown(false);
+        }
+      }
+    };
+
+    if (showCurrencyDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showCurrencyDropdown]);
+
+  // Close rewards dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showDropdown && rewardsCardRef.current && !rewardsCardRef.current.contains(event.target as Node)) {
+        const dropdownEl = document.querySelector('[data-rewards-dropdown]');
+        if (!dropdownEl || !dropdownEl.contains(event.target as Node)) {
+          console.log("🖱️ Click outside rewards dropdown, closing");
+          setShowDropdown(false);
+        }
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDropdown]);
+
   // Fetch rewards only when wallets are available AND user is authenticated
   useEffect(() => {
     if (isAuthenticated && walletAddresses.length > 0 && !rewardsLoading) {
@@ -520,6 +556,10 @@ export default function PortfolioTotals({
         ref={totalValueCardRef}
         variant="neo-purple" 
         className="pt-6 pb-8 px-8 group cursor-pointer relative z-0"
+        onClick={() => {
+          console.log('🖱️ Total Value card clicked (mobile/touch)');
+          setShowCurrencyDropdown(!showCurrencyDropdown);
+        }}
         onMouseEnter={() => {
           console.log('🖱️ Total Value card mouse enter');
           if (dropdownTimeoutRef.current) {
@@ -590,11 +630,12 @@ export default function PortfolioTotals({
         {/* Currency Dropdown */}
         {showCurrencyDropdown && createPortal(
           <div 
-            className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-4 z-[999998] animate-in slide-in-from-top-2 duration-200"
+            data-currency-dropdown
+            className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-4 z-[999998] animate-in slide-in-from-top-2 duration-200 max-w-[95vw]"
             style={{
               top: totalValueCardRef.current ? totalValueCardRef.current.getBoundingClientRect().bottom + 4 : '50%',
-              left: totalValueCardRef.current ? totalValueCardRef.current.getBoundingClientRect().left : '50%',
-              width: totalValueCardRef.current ? totalValueCardRef.current.getBoundingClientRect().width : '300px'
+              left: totalValueCardRef.current ? Math.max(8, totalValueCardRef.current.getBoundingClientRect().left) : '50%',
+              width: totalValueCardRef.current ? Math.min(totalValueCardRef.current.getBoundingClientRect().width, window.innerWidth - 16) : '300px'
             }}
             onMouseEnter={() => {
               console.log('🖱️ Currency dropdown mouse enter');
@@ -611,9 +652,8 @@ export default function PortfolioTotals({
               }, 100);
             }}
           >
-            <div className="flex items-center justify-between mb-3">
+            <div className="mb-3">
               <p className="text-sm font-bold text-gray-900 dark:text-white">Select Currency</p>
-              <span className="text-xs text-gray-500 dark:text-gray-400">Hover to switch</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {currencies.map((currency) => {
@@ -659,6 +699,12 @@ export default function PortfolioTotals({
           ref={rewardsCardRef}
           variant="neo-green" 
           className="pt-6 pb-8 px-8 group relative z-10"
+          onClick={() => {
+            console.log('🖱️ Rewards card clicked (mobile/touch)');
+            if (walletCount > 1) {
+              setShowDropdown(!showDropdown);
+            }
+          }}
           onMouseEnter={() => {
             console.log('🖱️ Mouse enter - walletCount:', walletCount, 'walletRewards.length:', walletRewards.length);
             if (walletCount > 1) {
@@ -723,12 +769,14 @@ export default function PortfolioTotals({
           return showDropdown && walletCount > 1 && walletRewards.length > 0;
         })() && createPortal(
           <div 
-            className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-5 z-[999998] animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto"
+            data-rewards-dropdown
+            className="fixed bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-green-200 dark:border-green-700 p-5 z-[999998] animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto max-w-[95vw]"
             style={{
               top: rewardsCardRef.current ? rewardsCardRef.current.getBoundingClientRect().bottom + 2 : '50%',
-              left: rewardsCardRef.current ? rewardsCardRef.current.getBoundingClientRect().left : '50%',
-              minWidth: '400px',
-              maxWidth: '600px'
+              left: rewardsCardRef.current ? Math.max(8, rewardsCardRef.current.getBoundingClientRect().left) : '50%',
+              minWidth: window.innerWidth < 640 ? 'auto' : '400px',
+              maxWidth: window.innerWidth < 640 ? 'calc(100vw - 16px)' : '600px',
+              width: window.innerWidth < 640 ? 'calc(100vw - 16px)' : 'auto'
             }}
             onMouseEnter={() => setShowDropdown(true)}
             onMouseLeave={() => setShowDropdown(false)}

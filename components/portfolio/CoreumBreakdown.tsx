@@ -8,6 +8,8 @@ import { claimAllRewardsClient, claimAndCompoundRewardsClient, type WalletProvid
 import { delegateTokensClient, undelegateTokensClient, redelegateTokensClient, fetchValidators, fetchDelegations, type StakingValidator } from "@/utils/coreum/stake";
 import { AnimatedCurrency, AnimatedPercentage, AnimatedBalance } from "@/components/ui/AnimatedNumber";
 import { ThreeArrowSpinner } from "@/components/ui/ThreeArrowSpinner";
+import { sendTokens, isValidCoreumAddress } from "@/utils/coreum/send-tokens";
+import { getTokenInfo } from "@/utils/coreum/rpc";
 
 interface CoreumToken {
   address: string;
@@ -109,6 +111,15 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const [redelegating, setRedelegating] = useState(false);
   const [redelegateAmount, setRedelegateAmount] = useState<string>("");
   const [redelegateSelectedWallet, setRedelegateSelectedWallet] = useState<string>(""); // Which wallet to redelegate from
+  
+  // Send modal state
+  const [showSendModal, setShowSendModal] = useState(false);
+  const [sendRecipient, setSendRecipient] = useState("");
+  const [sendAmount, setSendAmount] = useState("");
+  const [sendMemo, setSendMemo] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [sendAmountMode, setSendAmountMode] = useState<"token" | "usd">("token"); // Toggle between token amount or USD amount
   const [redelegateSrcValidator, setRedelegateSrcValidator] = useState<string>("");
   const [redelegateDstValidator, setRedelegateDstValidator] = useState<string>("");
 
@@ -447,6 +458,164 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
       setRedelegating(false);
     }
   };
+  
+  // Send handlers
+  const handleSendCore = () => {
+    setShowSendModal(true);
+    setSendRecipient("");
+    setSendAmount("");
+    setSendMemo("");
+    setSendError(null);
+    setSendAmountMode("token"); // Default to token mode
+  };
+  
+  const handleCloseSendModal = () => {
+    setShowSendModal(false);
+    setSendRecipient("");
+    setSendAmount("");
+    setSendMemo("");
+    setSendError(null);
+    setSending(false);
+  };
+  
+  const handleMaxAmount = () => {
+    const availableBalance = totals.available;
+    
+    if (sendAmountMode === "usd" && coreumPrice) {
+      // Convert to USD
+      const usdValue = availableBalance * coreumPrice;
+      setSendAmount(usdValue.toFixed(2));
+    } else {
+      setSendAmount(availableBalance.toString());
+    }
+  };
+  
+  const toggleAmountMode = () => {
+    const currentAmount = parseFloat(sendAmount);
+    if (!isNaN(currentAmount) && currentAmount > 0 && coreumPrice) {
+      // Convert the amount when toggling
+      if (sendAmountMode === "token") {
+        // Convert token to USD
+        const usdValue = currentAmount * coreumPrice;
+        setSendAmount(usdValue.toFixed(2));
+      } else {
+        // Convert USD to token
+        const tokenAmount = currentAmount / coreumPrice;
+        setSendAmount(tokenAmount.toString());
+      }
+    }
+    
+    setSendAmountMode(prev => prev === "token" ? "usd" : "token");
+  };
+  
+  const handleSendSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    setSendError(null);
+    
+    // Validation
+    if (!sendRecipient.trim()) {
+      setSendError("Please enter a recipient address");
+      return;
+    }
+    
+    if (!isValidCoreumAddress(sendRecipient.trim())) {
+      setSendError("Invalid Coreum address. Address must start with 'core1'");
+      return;
+    }
+    
+    if (!sendAmount || parseFloat(sendAmount) <= 0) {
+      setSendError("Please enter a valid amount");
+      return;
+    }
+    
+    // Convert USD to token amount if in USD mode
+    let tokenAmountToSend = sendAmount;
+    if (sendAmountMode === "usd") {
+      if (!coreumPrice || coreumPrice <= 0) {
+        setSendError("Unable to determine CORE price. Please switch to token amount mode.");
+        return;
+      }
+      
+      const usdAmount = parseFloat(sendAmount);
+      const tokenAmount = usdAmount / coreumPrice;
+      tokenAmountToSend = tokenAmount.toString();
+    }
+    
+    const amountNum = parseFloat(tokenAmountToSend);
+    const balanceNum = totals.available;
+    
+    if (amountNum > balanceNum) {
+      setSendError(`Insufficient balance. You have ${totals.available.toFixed(6)} CORE available`);
+      return;
+    }
+    
+    setSending(true);
+    
+    try {
+      // Get the primary wallet address
+      const fromAddress = primaryWallet?.address || "";
+      
+      if (!fromAddress) {
+        setSendError("No wallet connected. Please connect your wallet first.");
+        setSending(false);
+        return;
+      }
+      
+      const provider = walletProvider as "keplr" | "leap" | "cosmostation" | undefined;
+      if (!provider) {
+        setSendError("No wallet provider detected.");
+        setSending(false);
+        return;
+      }
+      
+      // Get token info for CORE
+      const tokenInfo = getTokenInfo("ucore");
+      const decimals = tokenInfo.decimals || 6;
+      
+      console.log('[CoreumBreakdown] Sending CORE:', {
+        fromAddress,
+        toAddress: sendRecipient.trim(),
+        amount: sendAmount,
+        denom: "ucore",
+        decimals,
+      });
+      
+      const result = await sendTokens({
+        fromAddress,
+        toAddress: sendRecipient.trim(),
+        amount: tokenAmountToSend,
+        denom: "ucore",
+        decimals,
+        memo: sendMemo.trim(),
+        explicitProvider: provider
+      });
+      
+      if (result.success) {
+        showToast(`✅ Successfully sent ${sendAmount} CORE!`, 'success');
+        if (result.txHash) {
+          console.log('[CoreumBreakdown] Transaction hash:', result.txHash);
+          showToast(`Transaction: ${result.txHash.substring(0, 10)}...`, 'success');
+        }
+        handleCloseSendModal();
+        
+        // Trigger a page reload after a short delay to refresh balances
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        setSendError(result.error || "Failed to send tokens");
+        showToast(`❌ ${result.error || "Failed to send tokens"}`, 'error');
+      }
+    } catch (error: any) {
+      console.error('[CoreumBreakdown] Send error:', error);
+      const errorMsg = error?.message || String(error);
+      setSendError(errorMsg);
+      showToast(`❌ ${errorMsg}`, 'error');
+    } finally {
+      setSending(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -515,7 +684,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </a>
            <button
-             onClick={() => showToast("Send feature coming soon!")}
+             onClick={handleSendCore}
              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
             style={{
               boxShadow: '0 4px 12px rgba(77, 156, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
@@ -1673,6 +1842,155 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Send CORE Modal */}
+      {showSendModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 border-2 border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Send CORE
+              </h3>
+              <button
+                onClick={handleCloseSendModal}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                disabled={sending}
+              >
+                <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl p-4 mb-6">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
+                <strong>Available Balance:</strong> {totals.available.toFixed(6)} CORE
+              </p>
+              {coreumPrice && (
+                <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                  ≈ ${(totals.available * coreumPrice).toFixed(2)} USD
+                </p>
+              )}
+            </div>
+
+            <form onSubmit={handleSendSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Recipient Address
+                </label>
+                <input
+                  type="text"
+                  value={sendRecipient}
+                  onChange={(e) => setSendRecipient(e.target.value)}
+                  placeholder="core1..."
+                  disabled={sending}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Amount
+                  </label>
+                  <button
+                    type="button"
+                    onClick={toggleAmountMode}
+                    disabled={sending}
+                    className="flex items-center gap-2 px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span>{sendAmountMode === "token" ? "💰 Token" : "💵 USD"}</span>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={sendAmount}
+                    onChange={(e) => setSendAmount(e.target.value)}
+                    placeholder={sendAmountMode === "token" ? "0.00" : "$0.00"}
+                    disabled={sending}
+                    className="w-full px-4 py-3 pr-20 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleMaxAmount}
+                    disabled={sending}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    MAX
+                  </button>
+                </div>
+                {sendAmountMode === "usd" && coreumPrice && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    ≈ {sendAmount && parseFloat(sendAmount) > 0 
+                      ? (parseFloat(sendAmount) / coreumPrice).toFixed(6)
+                      : "0"} CORE
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Memo (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={sendMemo}
+                  onChange={(e) => setSendMemo(e.target.value)}
+                  placeholder="Add a note..."
+                  disabled={sending}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+
+              {sendError && (
+                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl p-4">
+                  <p className="text-sm text-red-900 dark:text-red-100">
+                    <strong>❌ Error:</strong> {sendError}
+                  </p>
+                </div>
+              )}
+
+              <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl p-4">
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  <strong>💡 Tip:</strong> Make sure the recipient address is correct. Transactions are irreversible!
+                </p>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCloseSendModal}
+                  disabled={sending}
+                  className="flex-1 px-6 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={sending || !sendRecipient || !sendAmount}
+                  className="flex-1 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {sending ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    'Send CORE'
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

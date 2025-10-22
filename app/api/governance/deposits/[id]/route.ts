@@ -17,10 +17,10 @@ import { fetchProposalDeposits } from '@/utils/coreum/governance';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: proposalId } = await params;
+    const { id: proposalId } = await context.params;
     
     console.log(`📡 [API] GET /api/governance/deposits/${proposalId}`);
 
