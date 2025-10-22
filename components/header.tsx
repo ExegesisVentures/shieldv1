@@ -5,6 +5,7 @@ import HeaderClientWrapper from "@/components/header-client-wrapper";
 import ShieldNestLogo from "@/components/shieldnest-logo";
 import ThemeToggle from "@/components/theme-toggle";
 import MobileMenu from "@/components/mobile-menu";
+import ProposalsButton from "@/components/proposals-button";
 
 export default async function Header() {
   const client = await createSupabaseClient();
@@ -42,12 +43,7 @@ export default async function Header() {
               >
                 Liquidity
               </Link>
-              <Link 
-                href="/governance" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-              >
-                Governance
-              </Link>
+              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors" />
               <Link 
                 href="/membership" 
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
@@ -69,12 +65,7 @@ export default async function Header() {
               >
                 Liquidity
               </Link>
-              <Link 
-                href="/governance" 
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-              >
-                Governance
-              </Link>
+              <ProposalsButton className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors" />
               <Link 
                 href="/membership" 
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"

@@ -8,6 +8,7 @@ import { signOutAction } from "@/app/actions";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { isUserAdmin, isAdminWallet } from "@/utils/admin";
 import SignInModal from "@/components/auth/SignInModal";
+import { ProposalsButtonMobile } from "@/components/proposals-button";
 
 interface MobileMenuProps {
   isAuthenticated: boolean;
@@ -169,14 +170,7 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Liquidity</span>
                   </Link>
-                  <Link
-                    href="/governance"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <IoGitBranch className="w-5 h-5 text-gray-500" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Governance</span>
-                  </Link>
+                  <ProposalsButtonMobile onClick={() => setIsOpen(false)} />
                   <Link
                     href="/membership"
                     onClick={() => setIsOpen(false)}
@@ -204,14 +198,7 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Liquidity</span>
                   </Link>
-                  <Link
-                    href="/governance"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <IoGitBranch className="w-5 h-5 text-gray-500" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Governance</span>
-                  </Link>
+                  <ProposalsButtonMobile onClick={() => setIsOpen(false)} />
                   <Link
                     href="/membership"
                     onClick={() => setIsOpen(false)}
@@ -239,14 +226,7 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Liquidity</span>
                   </Link>
-                  <Link
-                    href="/governance"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <IoGitBranch className="w-5 h-5 text-gray-500" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Governance</span>
-                  </Link>
+                  <ProposalsButtonMobile onClick={() => setIsOpen(false)} />
                   <Link
                     href="/membership"
                     onClick={() => setIsOpen(false)}
