@@ -749,3 +749,88 @@ export async function fetchUserVotingPower(address: string): Promise<string> {
   }
 }
 
+// ============================================
+// PROPOSAL SUBMISSION
+// ============================================
+
+/**
+ * Submit a new governance proposal
+ */
+export async function submitProposal(params: {
+  title: string;
+  description: string;
+  proposer: string;
+  initialDeposit: string; // Amount in ucore (e.g., "10000000000" for 10000 CORE)
+  signer: any; // Wallet signer from Keplr/Leap/Cosmostation
+}): Promise<VoteTransactionResult> {
+  try {
+    const { title, description, proposer, initialDeposit, signer } = params;
+
+    console.log(`📡 [Governance] Submitting proposal: ${title}`);
+    console.log(`📡 [Governance] Proposer: ${proposer}`);
+    console.log(`📡 [Governance] Initial deposit: ${initialDeposit} ucore`);
+
+    // Connect to Coreum with signer
+    const client = await SigningStargateClient.connectWithSigner(
+      COREUM_RPC_ENDPOINT,
+      signer,
+      { gasPrice: COREUM_GAS_PRICE }
+    );
+
+    // Create the proposal message
+    const msg = {
+      typeUrl: "/cosmos.gov.v1beta1.MsgSubmitProposal",
+      value: {
+        content: {
+          typeUrl: "/cosmos.gov.v1beta1.TextProposal",
+          value: {
+            title: title,
+            description: description,
+          },
+        },
+        initialDeposit: [
+          {
+            denom: "ucore",
+            amount: initialDeposit,
+          },
+        ],
+        proposer: proposer,
+      },
+    };
+
+    // Calculate gas
+    const gasEstimate = await client.simulate(proposer, [msg], "");
+    const gas = Math.round(gasEstimate * 1.5); // 50% buffer
+
+    // Submit the transaction
+    const result = await client.signAndBroadcast(
+      proposer,
+      [msg],
+      {
+        amount: [{ denom: "ucore", amount: "5000" }],
+        gas: gas.toString(),
+      },
+      `Submit proposal: ${title}`
+    );
+
+    if (result.code !== 0) {
+      throw new Error(`Transaction failed: ${result.rawLog}`);
+    }
+
+    console.log(`✅ [Governance] Proposal submitted successfully`);
+    console.log(`📝 [Governance] Transaction hash: ${result.transactionHash}`);
+
+    return {
+      success: true,
+      transactionHash: result.transactionHash,
+      gasUsed: result.gasUsed.toString(),
+    };
+  } catch (error) {
+    console.error(`❌ [Governance] Error submitting proposal:`, error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+

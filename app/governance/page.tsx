@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IoGitBranch, IoFilter, IoSearch, IoRefresh, IoInformationCircle } from "react-icons/io5";
+import { IoGitBranch, IoFilter, IoSearch, IoRefresh, IoInformationCircle, IoAdd } from "react-icons/io5";
 import ProposalCard from "@/components/governance/ProposalCard";
 import ProposalDetailModal from "@/components/governance/ProposalDetailModal";
 import VotingHistory from "@/components/governance/VotingHistory";
+import CreateProposalModal from "@/components/governance/CreateProposalModal";
 import { EnrichedProposal } from "@/types/governance";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { createSupabaseClient } from "@/utils/supabase/client";
@@ -21,6 +22,7 @@ function GovernanceContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [showVotingHistory, setShowVotingHistory] = useState(false);
+  const [showCreateProposal, setShowCreateProposal] = useState(false);
   const [stats, setStats] = useState({
     total: 0,
     voting: 0,
@@ -259,6 +261,17 @@ function GovernanceContent() {
                   <IoRefresh className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                   <span className="hidden sm:inline">{refreshing ? 'Loading...' : 'Refresh'}</span>
                 </button>
+
+                {/* Create Proposal Button */}
+                <button
+                  onClick={() => setShowCreateProposal(true)}
+                  disabled={!userAddress}
+                  className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:shadow-lg hover:shadow-purple-500/50 text-white rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={userAddress ? "Create a new proposal" : "Connect wallet to create proposal"}
+                >
+                  <IoAdd className="w-5 h-5" />
+                  <span className="hidden sm:inline">Create Proposal</span>
+                </button>
               </div>
             </div>
 
@@ -321,6 +334,14 @@ function GovernanceContent() {
           onVoteSuccess={handleVoteSuccess}
         />
       )}
+
+      {/* Create Proposal Modal */}
+      <CreateProposalModal
+        isOpen={showCreateProposal}
+        onClose={() => setShowCreateProposal(false)}
+        userAddress={userAddress}
+        onSuccess={handleRefresh}
+      />
 
       {/* Add custom CSS for animations */}
       <style jsx global>{`
