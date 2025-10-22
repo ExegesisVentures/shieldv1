@@ -10,7 +10,7 @@
   "crons": [
     {
       "path": "/api/cron/auto-update-rewards",
-      "schedule": "0 */48 * * *"
+      "schedule": "0 0 */2 * *"
     }
   ]
 }
