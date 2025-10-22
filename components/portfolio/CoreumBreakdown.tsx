@@ -1,6 +1,6 @@
 "use client";
 
-import { IoCash, IoTrendingUp, IoGift, IoTime, IoCopy, IoDownload } from "react-icons/io5";
+import { IoCash, IoTrendingUp, IoGift, IoTime, IoCopy, IoDownload, IoSend } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { formatAddressSnippet, copyToClipboard, showToast } from "@/utils/address-utils";
 import { useCallback, useEffect, useState } from "react";
@@ -501,19 +501,30 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
 
       {/* Action Row aligned with summary cards: Buy above Available, Stake/Redelegate above Staked, Claim above Rewards, Unstake above Unbonding */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
-        {/* Buy CORE above Available (col 1) */}
-        <div className="col-start-1">
+        {/* Buy & Send above Available (col 1) */}
+        <div className="col-start-1 flex flex-row gap-2">
           <a
             href="/swap"
-            className="relative w-full flex items-center justify-center gap-2 px-5 py-3.5 border-2 border-blue-500 hover:border-blue-400 bg-gradient-to-br from-blue-500/25 via-blue-600/15 to-blue-700/10 hover:from-blue-500/35 hover:via-blue-600/25 hover:to-blue-700/15 text-blue-700 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-base font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-500 hover:border-blue-400 bg-gradient-to-br from-blue-500/25 via-blue-600/15 to-blue-700/10 hover:from-blue-500/35 hover:via-blue-600/25 hover:to-blue-700/15 text-blue-700 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
             style={{
               boxShadow: '0 4px 12px rgba(77, 156, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
             }}
           >
-            <span className="relative z-10">Buy CORE</span>
+            <span className="relative z-10">Buy</span>
             <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </a>
+          <button
+            onClick={() => showToast("Send feature coming soon!", "info")}
+            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+            style={{
+              boxShadow: '0 4px 12px rgba(77, 156, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+            }}
+          >
+            <span className="relative z-10">Send</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+          </button>
         </div>
         {/* Stake & Redelegate above Staked (col 2) */}
         <div className="col-start-2 md:col-start-2 flex flex-row gap-2">
@@ -544,22 +555,38 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             </button>
           )}
         </div>
-        {/* Claim above Rewards (col 3 on md+, fallback to col 2 on small) */}
-        <div className="col-start-2 md:col-start-3">
+        {/* Claim & Restake above Rewards (col 3 on md+, fallback to col 2 on small) */}
+        <div className="col-start-2 md:col-start-3 flex flex-row gap-2">
           {canClaim && (
-            <button
-              onClick={openClaimRewards}
-              disabled={!!claiming}
-              className="relative w-full flex items-center justify-center gap-2 px-5 py-3.5 border-2 border-green-500 hover:border-green-400 bg-gradient-to-br from-green-500/25 via-green-600/15 to-green-700/10 hover:from-green-500/35 hover:via-green-600/25 hover:to-green-700/15 text-green-700 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-base font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
-              style={{
-                boxShadow: '0 4px 12px rgba(37, 214, 149, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              <IoDownload className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">{claiming ? 'Claiming...' : 'Claim Rewards'}</span>
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-green-400/10 to-green-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
-            </button>
+            <>
+              <button
+                onClick={openClaimRewards}
+                disabled={!!claiming}
+                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-500 hover:border-green-400 bg-gradient-to-br from-green-500/25 via-green-600/15 to-green-700/10 hover:from-green-500/35 hover:via-green-600/25 hover:to-green-700/15 text-green-700 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
+                style={{
+                  boxShadow: '0 4px 12px rgba(37, 214, 149, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                <span className="relative z-10">{claiming ? 'Claiming...' : 'Claim'}</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-green-400/10 to-green-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              </button>
+              <button
+                onClick={() => {
+                  setClaimMode("compound");
+                  openClaimRewards();
+                }}
+                disabled={!!claiming}
+                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-400 hover:border-green-300 bg-gradient-to-br from-green-400/25 via-green-500/15 to-green-600/10 hover:from-green-400/35 hover:via-green-500/25 hover:to-green-600/15 text-green-600 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
+                style={{
+                  boxShadow: '0 4px 12px rgba(37, 214, 149, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                <span className="relative z-10">Restake</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-green-400/10 to-green-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              </button>
+            </>
           )}
         </div>
         {/* Unstake above Unbonding (col 4) */}
@@ -697,6 +724,11 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               Per Wallet Breakdown
             </h3>
+            <ThreeArrowSpinner 
+              size="sm" 
+              variant="warning"
+              className="w-6 h-6"
+            />
           </div>
           
           <div 
