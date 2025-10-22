@@ -209,10 +209,23 @@ export async function fetchProposals(
   pagination?: PaginationParams
 ): Promise<ProposalsResponse> {
   try {
-    let url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals`;
+    // Use gov/v1 API (not v1beta1) - Coreum uses newer Cosmos SDK
+    let url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals`;
 
     const params = new URLSearchParams();
-    if (status) params.append("proposal_status", status);
+    if (status) {
+      // Convert status to numeric value for v1 API
+      const statusMap: { [key: string]: string } = {
+        'PROPOSAL_STATUS_UNSPECIFIED': '0',
+        'PROPOSAL_STATUS_DEPOSIT_PERIOD': '1',
+        'PROPOSAL_STATUS_VOTING_PERIOD': '2',
+        'PROPOSAL_STATUS_PASSED': '3',
+        'PROPOSAL_STATUS_REJECTED': '4',
+        'PROPOSAL_STATUS_FAILED': '5',
+      };
+      const statusValue = statusMap[status] || status;
+      params.append("proposal_status", statusValue);
+    }
     if (pagination?.limit) params.append("pagination.limit", pagination.limit.toString());
     if (pagination?.offset) params.append("pagination.offset", pagination.offset.toString());
     if (pagination?.reverse) params.append("pagination.reverse", "true");
@@ -223,11 +236,13 @@ export async function fetchProposals(
       url += `?${params.toString()}`;
     }
 
-    console.log(`📡 [Governance] Fetching proposals: ${url}`);
+    console.log(`📡 [Governance] Fetching proposals from v1 API: ${url}`);
 
     const response = await fetchWithTimeout(url);
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ [Governance] API error: ${errorText}`);
       throw new Error(`Failed to fetch proposals: ${response.statusText}`);
     }
 
@@ -251,9 +266,10 @@ export async function fetchProposal(
   proposalId: string
 ): Promise<ProposalResponse> {
   try {
-    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals/${proposalId}`;
+    // Use gov/v1 API
+    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals/${proposalId}`;
 
-    console.log(`📡 [Governance] Fetching proposal ${proposalId}: ${url}`);
+    console.log(`📡 [Governance] Fetching proposal ${proposalId} from v1 API: ${url}`);
 
     const response = await fetchWithTimeout(url);
 
@@ -364,7 +380,8 @@ export async function fetchProposalVotes(
   pagination?: PaginationParams
 ): Promise<VotesResponse> {
   try {
-    let url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals/${proposalId}/votes`;
+    // Use gov/v1 API
+    let url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals/${proposalId}/votes`;
 
     const params = new URLSearchParams();
     if (pagination?.limit) params.append("pagination.limit", pagination.limit.toString());
@@ -375,7 +392,7 @@ export async function fetchProposalVotes(
     }
 
     console.log(
-      `📡 [Governance] Fetching votes for proposal ${proposalId}: ${url}`
+      `📡 [Governance] Fetching votes for proposal ${proposalId} from v1 API: ${url}`
     );
 
     const response = await fetchWithTimeout(url);
@@ -410,10 +427,11 @@ export async function fetchUserVote(
   voterAddress: string
 ): Promise<Vote | null> {
   try {
-    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals/${proposalId}/votes/${voterAddress}`;
+    // Use gov/v1 API
+    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals/${proposalId}/votes/${voterAddress}`;
 
     console.log(
-      `📡 [Governance] Fetching vote for ${voterAddress} on proposal ${proposalId}`
+      `📡 [Governance] Fetching vote for ${voterAddress} on proposal ${proposalId} from v1 API`
     );
 
     const response = await fetchWithTimeout(url);
@@ -432,7 +450,7 @@ export async function fetchUserVote(
     const data: VoteResponse = await response.json();
 
     console.log(
-      `✅ [Governance] User voted ${data.vote.option} on proposal ${proposalId}`
+      `✅ [Governance] User voted ${data.vote.options?.[0]?.option || data.vote.option} on proposal ${proposalId}`
     );
 
     return data.vote;
@@ -551,10 +569,11 @@ export async function fetchProposalTally(
   proposalId: string
 ): Promise<TallyResponse> {
   try {
-    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals/${proposalId}/tally`;
+    // Use gov/v1 API
+    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals/${proposalId}/tally`;
 
     console.log(
-      `📡 [Governance] Fetching tally for proposal ${proposalId}: ${url}`
+      `📡 [Governance] Fetching tally for proposal ${proposalId} from v1 API: ${url}`
     );
 
     const response = await fetchWithTimeout(url);
@@ -590,10 +609,11 @@ export async function fetchProposalDeposits(
   proposalId: string
 ): Promise<DepositsResponse> {
   try {
-    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/proposals/${proposalId}/deposits`;
+    // Use gov/v1 API
+    const url = `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/proposals/${proposalId}/deposits`;
 
     console.log(
-      `📡 [Governance] Fetching deposits for proposal ${proposalId}: ${url}`
+      `📡 [Governance] Fetching deposits for proposal ${proposalId} from v1 API: ${url}`
     );
 
     const response = await fetchWithTimeout(url);
@@ -629,15 +649,16 @@ export async function fetchProposalDeposits(
  */
 export async function fetchGovParams(): Promise<GovParams | null> {
   try {
+    // Use gov/v1 API
     const [votingParams, depositParams, tallyParams] = await Promise.all([
       fetchWithTimeout(
-        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/params/voting`
+        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/params/voting`
       ).then((r) => r.json()),
       fetchWithTimeout(
-        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/params/deposit`
+        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/params/deposit`
       ).then((r) => r.json()),
       fetchWithTimeout(
-        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1beta1/params/tallying`
+        `${COREUM_REST_ENDPOINT}/cosmos/gov/v1/params/tallying`
       ).then((r) => r.json()),
     ]);
 
