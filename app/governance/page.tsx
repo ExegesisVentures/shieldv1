@@ -63,15 +63,33 @@ function GovernanceContent() {
   const loadProposals = async () => {
     setLoading(true);
     try {
+      console.log('🔄 [Governance Page] Fetching proposals from API...');
       const response = await fetch('/api/governance/proposals?enriched=true');
       const data = await response.json();
       
+      console.log('📦 [Governance Page] API Response:', {
+        success: data.success,
+        proposalCount: data.data?.length || 0,
+        error: data.error
+      });
+      
       if (data.success) {
-        setProposals(data.data || []);
+        const allProposals = data.data || [];
+        console.log(`✅ [Governance Page] Setting ${allProposals.length} proposals`);
+        
+        // Log first proposal for debugging
+        if (allProposals.length > 0) {
+          console.log('📋 [Governance Page] Sample proposal:', {
+            id: allProposals[0].proposal_id,
+            title: allProposals[0].content?.title || allProposals[0].title,
+            status: allProposals[0].status
+          });
+        }
+        
+        setProposals(allProposals);
         
         // Calculate stats
-        const allProposals = data.data || [];
-        setStats({
+        const stats = {
           total: allProposals.length,
           voting: allProposals.filter((p: EnrichedProposal) => 
             p.status === 'PROPOSAL_STATUS_VOTING_PERIOD'
@@ -80,12 +98,18 @@ function GovernanceContent() {
             p.status === 'PROPOSAL_STATUS_PASSED'
           ).length,
           rejected: allProposals.filter((p: EnrichedProposal) => 
-            p.status === 'PROPOSAL_STATUS_REJECTED'
+            p.status === 'PROPOSAL_STATUS_REJECTED' ||
+            p.status === 'PROPOSAL_STATUS_FAILED'
           ).length,
-        });
+        };
+        
+        console.log('📊 [Governance Page] Stats calculated:', stats);
+        setStats(stats);
+      } else {
+        console.error('❌ [Governance Page] API returned error:', data.error);
       }
     } catch (error) {
-      console.error('Failed to load proposals:', error);
+      console.error('❌ [Governance Page] Failed to load proposals:', error);
     } finally {
       setLoading(false);
     }

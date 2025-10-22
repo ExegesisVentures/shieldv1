@@ -116,6 +116,49 @@ export function getVoteOptionLabel(option: VoteOption): string {
 }
 
 /**
+ * Normalize v1 API proposal to internal format
+ * v1 API has different structure than v1beta1
+ */
+export function normalizeProposal(rawProposal: any): Proposal {
+  // v1 API uses 'id' instead of 'proposal_id'
+  const proposalId = rawProposal.id || rawProposal.proposal_id;
+  
+  // v1 API has title/summary at top level, v1beta1 has them in content
+  const title = rawProposal.title || rawProposal.content?.title || "Untitled Proposal";
+  const description = rawProposal.summary || rawProposal.content?.description || rawProposal.content?.summary || "";
+  
+  // v1 API uses yes_count, no_count, etc. v1beta1 uses yes, no, etc.
+  const tallyResult = rawProposal.final_tally_result || {};
+  const normalizedTally = {
+    yes: tallyResult.yes_count || tallyResult.yes || "0",
+    no: tallyResult.no_count || tallyResult.no || "0",
+    abstain: tallyResult.abstain_count || tallyResult.abstain || "0",
+    no_with_veto: tallyResult.no_with_veto_count || tallyResult.no_with_veto || "0",
+  };
+
+  // Create normalized proposal
+  return {
+    proposal_id: proposalId,
+    content: {
+      "@type": rawProposal.messages?.[0]?.["@type"] || rawProposal.content?.["@type"] || "/cosmos.gov.v1.TextProposal",
+      title,
+      description,
+    },
+    status: rawProposal.status,
+    final_tally_result: normalizedTally,
+    submit_time: rawProposal.submit_time,
+    deposit_end_time: rawProposal.deposit_end_time,
+    total_deposit: rawProposal.total_deposit || [],
+    voting_start_time: rawProposal.voting_start_time,
+    voting_end_time: rawProposal.voting_end_time,
+    metadata: rawProposal.metadata,
+    title,
+    summary: description,
+    proposer: rawProposal.proposer,
+  };
+}
+
+/**
  * Determine proposal type from content
  */
 export function getProposalType(content: any): ProposalType {
@@ -131,6 +174,7 @@ export function getProposalType(content: any): ProposalType {
     return ProposalType.CANCEL_SOFTWARE_UPGRADE;
   if (typeStr.includes("ClientUpdate")) return ProposalType.CLIENT_UPDATE;
   if (typeStr.includes("Upgrade")) return ProposalType.UPGRADE;
+  if (typeStr.includes("MigrateContract")) return ProposalType.OTHER;
 
   return ProposalType.OTHER;
 }
@@ -248,6 +292,11 @@ export async function fetchProposals(
 
     const data: ProposalsResponse = await response.json();
 
+    // Normalize v1 API proposals to internal format
+    if (data.proposals) {
+      data.proposals = data.proposals.map(normalizeProposal);
+    }
+
     console.log(
       `✅ [Governance] Fetched ${data.proposals?.length || 0} proposals`
     );
@@ -280,6 +329,11 @@ export async function fetchProposal(
     }
 
     const data: ProposalResponse = await response.json();
+
+    // Normalize v1 API proposal to internal format
+    if (data.proposal) {
+      data.proposal = normalizeProposal(data.proposal);
+    }
 
     console.log(`✅ [Governance] Fetched proposal ${proposalId}`);
 
@@ -335,7 +389,20 @@ export async function fetchEnrichedProposals(
     const response = await fetchProposals(status);
     const proposals = response.proposals || [];
 
-    return proposals.map((proposal) => enrichProposal(proposal));
+    console.log(`🔍 [Governance] Enriching ${proposals.length} proposals`);
+    
+    const enriched = proposals.map((proposal) => {
+      try {
+        return enrichProposal(proposal);
+      } catch (err) {
+        console.error(`⚠️ [Governance] Failed to enrich proposal ${proposal.proposal_id}:`, err);
+        // Return basic proposal if enrichment fails
+        return { ...proposal } as EnrichedProposal;
+      }
+    });
+
+    console.log(`✅ [Governance] Successfully enriched ${enriched.length} proposals`);
+    return enriched;
   } catch (error) {
     console.error("❌ [Governance] Error fetching enriched proposals:", error);
     return [];
