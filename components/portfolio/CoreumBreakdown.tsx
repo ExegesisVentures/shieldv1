@@ -83,7 +83,6 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const [claimTargetValidators, setClaimTargetValidators] = useState<string[]>([]); // For compound: up to 3 validators to restake to
   const [displayTokens, setDisplayTokens] = useState<CoreumToken[]>(tokens);
   const [showBreakdown, setShowBreakdown] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [validatorSearch, setValidatorSearch] = useState<string>(""); // Search for validators
   const [showProportionalPopup, setShowProportionalPopup] = useState(false); // Show proportional distribution explanation popup
 
@@ -692,17 +691,17 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
       {hasMultipleWallets && (
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <div 
-            className="flex items-center gap-2 cursor-pointer group p-2 -mx-2 rounded-lg transition-colors inline-flex"
+            className="flex items-center gap-2 cursor-pointer group p-2 -mx-2 rounded-lg transition-colors"
             onClick={() => setShowBreakdown(!showBreakdown)}
           >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Per Wallet Breakdown
-            </h3>
             <ThreeArrowSpinner 
               size="sm" 
               variant="warning"
               className="w-6 h-6"
             />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Per Wallet Breakdown
+            </h3>
           </div>
           
           <div 
@@ -710,27 +709,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
               showBreakdown ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
             }`}
             onClick={() => setShowBreakdown(false)}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setMousePosition({
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-              });
-            }}
           >
-            {/* Mouse-following X button */}
-            {showBreakdown && (
-              <div 
-                className="pointer-events-none absolute z-50 flex items-center justify-center w-8 h-8 bg-red-500/90 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-opacity"
-                style={{
-                  left: `${mousePosition.x}px`,
-                  top: `${mousePosition.y}px`,
-                  transform: 'translate(-50%, -50%)'
-                }}
-              >
-                <span className="text-white font-bold text-xl">×</span>
-              </div>
-            )}
             
             {displayTokens.map((token, index) => (
               <div
