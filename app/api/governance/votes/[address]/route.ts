@@ -21,10 +21,10 @@ import {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { address: string } }
+  { params }: { params: Promise<{ address: string }> }
 ) {
   try {
-    const { address } = params;
+    const { address } = await params;
     const { searchParams } = new URL(request.url);
     
     // Get query parameters

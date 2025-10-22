@@ -101,6 +101,120 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
 
   const handleSendToken = (token: Token) => {
     setShowSendModal({ token });
+    // Reset form
+    setSendRecipient("");
+    setSendAmount("");
+    setSendMemo("");
+    setSendError(null);
+  };
+  
+  const handleCloseSendModal = () => {
+    setShowSendModal(null);
+    setSendRecipient("");
+    setSendAmount("");
+    setSendMemo("");
+    setSendError(null);
+    setSending(false);
+  };
+  
+  const handleMaxAmount = () => {
+    if (showSendModal) {
+      // Parse balance to remove commas
+      const balanceStr = showSendModal.token.balance.replace(/,/g, '');
+      setSendAmount(balanceStr);
+    }
+  };
+  
+  const handleSendSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!showSendModal) return;
+    
+    setSendError(null);
+    
+    // Validation
+    if (!sendRecipient.trim()) {
+      setSendError("Please enter a recipient address");
+      return;
+    }
+    
+    if (!isValidCoreumAddress(sendRecipient.trim())) {
+      setSendError("Invalid Coreum address. Address must start with 'core1'");
+      return;
+    }
+    
+    if (!sendAmount || parseFloat(sendAmount) <= 0) {
+      setSendError("Please enter a valid amount");
+      return;
+    }
+    
+    const amountNum = parseFloat(sendAmount);
+    const balanceNum = parseFloat(showSendModal.token.balance.replace(/,/g, ''));
+    
+    if (amountNum > balanceNum) {
+      setSendError(`Insufficient balance. You have ${showSendModal.token.balance} ${showSendModal.token.symbol}`);
+      return;
+    }
+    
+    setSending(true);
+    
+    try {
+      // Get connected wallet address from session storage or localStorage
+      const connectedWallets = JSON.parse(sessionStorage.getItem('connected_wallets') || '[]');
+      const fromAddress = connectedWallets[0]; // Use first connected wallet
+      
+      if (!fromAddress) {
+        setSendError("No wallet connected. Please connect your wallet first.");
+        setSending(false);
+        return;
+      }
+      
+      // Get token info for decimals
+      const tokenInfo = getTokenInfo(showSendModal.token.denom || showSendModal.token.symbol);
+      const decimals = tokenInfo.decimals || 6;
+      const denom = showSendModal.token.denom || tokenInfo.denom;
+      
+      console.log('[TokenTable] Sending tokens:', {
+        fromAddress,
+        toAddress: sendRecipient.trim(),
+        amount: sendAmount,
+        denom,
+        decimals,
+        symbol: showSendModal.token.symbol
+      });
+      
+      const result = await sendTokens({
+        fromAddress,
+        toAddress: sendRecipient.trim(),
+        amount: sendAmount,
+        denom,
+        decimals,
+        memo: sendMemo.trim()
+      });
+      
+      if (result.success) {
+        showToast(`✅ Successfully sent ${sendAmount} ${showSendModal.token.symbol}!`, 'success');
+        if (result.txHash) {
+          console.log('[TokenTable] Transaction hash:', result.txHash);
+          showToast(`Transaction: ${result.txHash.substring(0, 10)}...`, 'success');
+        }
+        handleCloseSendModal();
+        
+        // Trigger a page reload after a short delay to refresh balances
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        setSendError(result.error || "Failed to send tokens");
+        showToast(`❌ ${result.error || "Failed to send tokens"}`, 'error');
+      }
+    } catch (error: any) {
+      console.error('[TokenTable] Send error:', error);
+      const errorMsg = error?.message || String(error);
+      setSendError(errorMsg);
+      showToast(`❌ ${errorMsg}`, 'error');
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleSwapToken = (token: Token) => {
@@ -489,8 +603,9 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
               Send {formatTokenSymbol(showSendModal.token.symbol, showSendModal.token.denom || showSendModal.token.symbol)}
             </h3>
             <button
-              onClick={() => setShowSendModal(null)}
+              onClick={handleCloseSendModal}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              disabled={sending}
             >
               <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -509,15 +624,18 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
             )}
           </div>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSendSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Recipient Address
               </label>
               <input
                 type="text"
+                value={sendRecipient}
+                onChange={(e) => setSendRecipient(e.target.value)}
                 placeholder="core1..."
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={sending}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -527,14 +645,18 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
               </label>
               <div className="relative">
                 <input
-                  type="number"
-                  step="0.000001"
+                  type="text"
+                  value={sendAmount}
+                  onChange={(e) => setSendAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  disabled={sending}
+                  className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  onClick={handleMaxAmount}
+                  disabled={sending}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   MAX
                 </button>
@@ -547,31 +669,53 @@ export default function TokenTable({ tokens = [], loading = false }: TokenTableP
               </label>
               <input
                 type="text"
+                value={sendMemo}
+                onChange={(e) => setSendMemo(e.target.value)}
                 placeholder="Add a note..."
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={sending}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-700 rounded-xl p-4">
-              <p className="text-sm text-yellow-900 dark:text-yellow-100">
-                <strong>⚠️ Coming Soon:</strong> Send functionality will be available in the next update. For now, please use your wallet extension to send tokens.
+            {sendError && (
+              <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl p-4">
+                <p className="text-sm text-red-900 dark:text-red-100">
+                  <strong>❌ Error:</strong> {sendError}
+                </p>
+              </div>
+            )}
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100">
+                <strong>💡 Tip:</strong> Make sure the recipient address is correct. Transactions are irreversible!
               </p>
             </div>
 
             <div className="flex gap-3 pt-4">
               <button
                 type="button"
-                onClick={() => setShowSendModal(null)}
-                className="flex-1 px-6 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors"
+                onClick={handleCloseSendModal}
+                disabled={sending}
+                className="flex-1 px-6 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
-                type="button"
-                disabled
-                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                type="submit"
+                disabled={sending || !sendRecipient || !sendAmount}
+                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Send Tokens
+                {sending ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  'Send Tokens'
+                )}
               </button>
             </div>
           </form>
