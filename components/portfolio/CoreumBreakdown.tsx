@@ -514,9 +514,9 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             <span className="relative z-10">Buy</span>
             <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </a>
-          <button
-            onClick={() => showToast("Send feature coming soon!", "info")}
-            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+           <button
+             onClick={() => showToast("Send feature coming soon!")}
+             className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
             style={{
               boxShadow: '0 4px 12px rgba(77, 156, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
