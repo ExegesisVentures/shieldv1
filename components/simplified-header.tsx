@@ -3,6 +3,7 @@ import Image from "next/image";
 import { createSupabaseClient } from "@/utils/supabase/server";
 import SimplifiedHeaderUserMenu from "@/components/simplified-header-user-menu";
 import ThemeToggle from "@/components/theme-toggle";
+import ProposalsButton from "@/components/proposals-button";
 import { IoLogoGithub } from "react-icons/io5";
 
 export default async function SimplifiedHeader() {
@@ -96,20 +97,32 @@ export default async function SimplifiedHeader() {
         </div>
 
         {/* Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-6 text-xs lg:text-sm">
           <Link 
             href="/dashboard" 
-            className="text-sm font-medium text-gray-300 hover:text-[#25d695] transition-colors"
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
           >
             Portfolio
           </Link>
           <Link 
+            href="/wallets" 
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
+          >
+            Wallets
+          </Link>
+          <Link 
             href="/liquidity" 
-            className="text-sm font-medium text-gray-300 hover:text-[#25d695] transition-colors"
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
           >
             Liquidity
           </Link>
-          {/* Settings link removed from top nav; available in hamburger menu */}
+          <ProposalsButton className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap" />
+          <Link 
+            href="/membership" 
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
+          >
+            Membership
+          </Link>
         </nav>
 
         {/* Right Side Actions */}
