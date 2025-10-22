@@ -4,8 +4,8 @@ import { uiError } from "@/utils/errors";
 import { isUserAdmin } from "@/utils/admin";
 
 /**
- * Get all users with their wallets (admin only)
- * Supports search by email or wallet address
+ * Get all users with their wallets and roles (admin only)
+ * Supports search by email or wallet address, filtering by role, and pagination
  */
 export async function GET(req: Request) {
   try {
@@ -30,45 +30,133 @@ export async function GET(req: Request) {
       );
     }
 
-    // Get search query parameter
+    // Get query parameters
     const { searchParams } = new URL(req.url);
     const search = searchParams.get('search')?.toLowerCase() || '';
+    const roleFilter = searchParams.get('role') || 'all'; // all, admin, private, public, visitor
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = (page - 1) * limit;
 
-    // Query users with their wallets
-    let query = supabase
-      .from("public_users")
-      .select(`
-        id,
-        email,
-        created_at,
-        wallets (
-          id,
-          address,
-          label,
-          public_user_id,
-          deleted_at,
-          created_at,
-          updated_at
-        )
-      `)
-      .order("created_at", { ascending: false });
+    // Get all auth users using service role client
+    const { data: { users: authUsers }, error: authUsersError } = await supabase.auth.admin.listUsers({
+      page,
+      perPage: 1000, // Get a large batch, we'll filter client-side
+    });
 
-    const { data: users, error } = await query;
-    
-    if (error) {
-      console.error("Error fetching users:", error);
+    if (authUsersError) {
+      console.error("Error fetching auth users:", authUsersError);
       return NextResponse.json(
-        uiError("FETCH_FAILED", "Could not fetch users.", error.message),
+        uiError("FETCH_FAILED", "Could not fetch users.", authUsersError.message),
         { status: 500 }
       );
     }
 
-    // Filter by search term if provided
-    let filteredUsers = users || [];
+    // Get admin emails from env
+    const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+      .split(',')
+      .map(e => e.trim().toLowerCase())
+      .filter(Boolean);
+
+    const ADMIN_WALLET_ADDRESSES = (process.env.ADMIN_WALLET_ADDRESSES || '')
+      .split(',')
+      .map(a => a.trim().toLowerCase())
+      .filter(Boolean);
+
+    // Process each user
+    const usersData = await Promise.all(
+      authUsers.map(async (authUser) => {
+        // Get user profile mapping
+        const { data: userProfile } = await supabase
+          .from('user_profiles')
+          .select('public_user_id')
+          .eq('auth_user_id', authUser.id)
+          .maybeSingle();
+
+        // Get private user profile mapping
+        const { data: privateProfile } = await supabase
+          .from('private_user_profiles')
+          .select('private_user_id')
+          .eq('auth_user_id', authUser.id)
+          .maybeSingle();
+
+        // Get private user details if exists
+        let shieldNftVerified = false;
+        let pmaSigned = false;
+
+        if (privateProfile?.private_user_id) {
+          const { data: privateUser } = await supabase
+            .from('private_users')
+            .select('shield_nft_verified, pma_signed')
+            .eq('id', privateProfile.private_user_id)
+            .maybeSingle();
+
+          if (privateUser) {
+            shieldNftVerified = privateUser.shield_nft_verified || false;
+            pmaSigned = privateUser.pma_signed || false;
+          }
+        }
+
+        // Get wallets
+        const wallets: any[] = [];
+        if (userProfile?.public_user_id) {
+          const { data: userWallets } = await supabase
+            .from('wallets')
+            .select('id, address, label, deleted_at, created_at, updated_at, public_user_id')
+            .eq('public_user_id', userProfile.public_user_id)
+            .order('created_at', { ascending: false });
+
+          if (userWallets) {
+            wallets.push(...userWallets);
+          }
+        }
+
+        // Determine role
+        let role = 'visitor';
+        let roleLabel = 'Visitor';
+        
+        // Check admin status
+        const isEmailAdmin = authUser.email && ADMIN_EMAILS.includes(authUser.email.toLowerCase());
+        const isMetadataAdmin = authUser.user_metadata?.is_admin === true;
+        const isAppMetadataAdmin = authUser.app_metadata?.role === 'admin';
+        const hasAdminWallet = wallets.some(w => ADMIN_WALLET_ADDRESSES.includes(w.address.toLowerCase()));
+
+        if (isEmailAdmin || isMetadataAdmin || isAppMetadataAdmin || hasAdminWallet) {
+          role = 'admin';
+          roleLabel = 'Admin';
+        } else if (privateProfile?.private_user_id && shieldNftVerified && pmaSigned) {
+          role = 'private';
+          roleLabel = 'Private Member';
+        } else if (userProfile?.public_user_id) {
+          role = 'public';
+          roleLabel = 'Public User';
+        }
+
+        return {
+          auth_user_id: authUser.id,
+          user_id: userProfile?.public_user_id || authUser.id,
+          email: authUser.email || null,
+          email_confirmed: !!authUser.email_confirmed_at,
+          created_at: authUser.created_at,
+          public_user_id: userProfile?.public_user_id || null,
+          private_user_id: privateProfile?.private_user_id || null,
+          shield_nft_verified: shieldNftVerified,
+          pma_signed: pmaSigned,
+          role,
+          role_label: roleLabel,
+          wallets,
+          wallet_count: wallets.length,
+          active_wallet_count: wallets.filter((w: any) => !w.deleted_at).length,
+        };
+      })
+    );
+
+    // Filter by search term
+    let filteredUsers = usersData;
     if (search) {
       filteredUsers = filteredUsers.filter((u) => {
         const emailMatch = u.email?.toLowerCase().includes(search);
-        const walletMatch = u.wallets?.some((w: any) => 
+        const walletMatch = u.wallets.some((w: any) => 
           w.address.toLowerCase().includes(search) ||
           w.label?.toLowerCase().includes(search)
         );
@@ -76,20 +164,28 @@ export async function GET(req: Request) {
       });
     }
 
-    // Transform data for easier frontend consumption
-    const transformedUsers = filteredUsers.map(u => ({
-      user_id: u.id,
-      email: u.email,
-      created_at: u.created_at,
-      wallets: u.wallets || [],
-      wallet_count: u.wallets?.length || 0,
-      active_wallet_count: u.wallets?.filter((w: any) => !w.deleted_at).length || 0,
-    }));
+    // Filter by role
+    if (roleFilter !== 'all') {
+      filteredUsers = filteredUsers.filter((u) => u.role === roleFilter);
+    }
+
+    // Sort by created_at descending
+    filteredUsers.sort((a, b) => 
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    // Paginate
+    const total = filteredUsers.length;
+    const paginatedUsers = filteredUsers.slice(offset, offset + limit);
 
     return NextResponse.json({
       success: true,
-      data: transformedUsers,
-      count: transformedUsers.length,
+      data: paginatedUsers,
+      count: paginatedUsers.length,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (e) {
     console.error("Users fetch error:", e);

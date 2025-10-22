@@ -34,9 +34,17 @@ interface UserWallet {
 }
 
 interface UserData {
+  auth_user_id: string;
   user_id: string;
   email: string | null;
+  email_confirmed: boolean;
   created_at: string;
+  public_user_id: string | null;
+  private_user_id: string | null;
+  shield_nft_verified: boolean;
+  pma_signed: boolean;
+  role: string;
+  role_label: string;
   wallets: UserWallet[];
   wallet_count: number;
   active_wallet_count: number;
@@ -62,12 +70,15 @@ export default function AdminPage() {
     wallets: RewardsHistoryWallet[];
   } | null>(null);
   const [rewardsLoading, setRewardsLoading] = useState(false);
-  const [refreshingRewards, setRefreshingRewards] = useState(false);
 
   // User management state
   const [users, setUsers] = useState<UserData[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [showUserDetails, setShowUserDetails] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
@@ -77,6 +88,10 @@ export default function AdminPage() {
     loadRewardsData();
     loadUsers();
   }, []);
+
+  useEffect(() => {
+    loadUsers(1);
+  }, [roleFilter]);
 
   async function checkAdminAndLoadSettings() {
     try {
@@ -169,50 +184,32 @@ export default function AdminPage() {
     }
   }
 
-  async function handleRefreshRewards() {
-    setRefreshingRewards(true);
-    setMessage(null);
-    
-    try {
-      const response = await fetch("/api/admin/rewards/refresh", {
-        method: "POST",
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMessage({ 
-          type: "success", 
-          text: `Refreshed ${data.data.success} of ${data.data.success + data.data.failed} wallets successfully!` 
-        });
-        // Reload rewards data
-        await loadRewardsData();
-      } else {
-        setMessage({ 
-          type: "error", 
-          text: data.error || "Failed to refresh rewards" 
-        });
-      }
-    } catch (error) {
-      console.error("Error refreshing rewards:", error);
-      setMessage({ type: "error", text: "An error occurred while refreshing" });
-    } finally {
-      setRefreshingRewards(false);
-    }
-  }
+  // Manual refresh removed - auto-updates every 3 days via cron job
 
-  async function loadUsers() {
+  async function loadUsers(page: number = currentPage) {
     setUsersLoading(true);
     try {
-      const url = searchTerm 
-        ? `/api/admin/users?search=${encodeURIComponent(searchTerm)}`
-        : "/api/admin/users";
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '50',
+      });
       
-      const response = await fetch(url);
+      if (searchTerm) {
+        params.append('search', searchTerm);
+      }
+      
+      if (roleFilter !== 'all') {
+        params.append('role', roleFilter);
+      }
+      
+      const response = await fetch(`/api/admin/users?${params}`);
       const data = await response.json();
       
       if (data.success) {
         setUsers(data.data || []);
+        setTotalPages(data.totalPages || 1);
+        setTotalUsers(data.total || 0);
+        setCurrentPage(page);
       }
     } catch (error) {
       console.error("Error loading users:", error);
@@ -324,7 +321,32 @@ export default function AdminPage() {
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
-    loadUsers();
+    setCurrentPage(1);
+    loadUsers(1);
+  }
+
+  function handleRoleFilterChange(role: string) {
+    setRoleFilter(role);
+    setCurrentPage(1);
+  }
+
+  function handlePageChange(page: number) {
+    loadUsers(page);
+  }
+
+  function getRoleBadgeColor(role: string) {
+    switch (role) {
+      case 'admin':
+        return 'bg-purple-500 text-white';
+      case 'private':
+        return 'bg-[#25d695] text-gray-900';
+      case 'public':
+        return 'bg-blue-500 text-white';
+      case 'visitor':
+        return 'bg-gray-400 text-white';
+      default:
+        return 'bg-gray-500 text-white';
+    }
   }
 
   function viewUserDetails(user: UserData) {
@@ -515,7 +537,7 @@ export default function AdminPage() {
 
         {/* Custodial Wallets Rewards Tracking */}
         <Card className="p-6 mb-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6">
             <div>
               <h2 className="text-2xl font-bold text-white">
                 Custodial Wallets - Rewards History
@@ -523,21 +545,10 @@ export default function AdminPage() {
               <p className="text-sm text-gray-400 mt-1">
                 Track total lifetime rewards earned by custodial wallets
               </p>
+              <p className="text-xs text-green-500 dark:text-green-400 mt-2">
+                ✓ Auto-updates every 3 days for all user wallets
+              </p>
             </div>
-            <Button 
-              onClick={handleRefreshRewards} 
-              disabled={refreshingRewards || isVisitorAdmin}
-              variant="outline"
-            >
-              {refreshingRewards ? (
-                <>
-                  <Spinner className="mr-2" />
-                  Refreshing...
-                </>
-              ) : (
-                "Refresh All"
-              )}
-            </Button>
           </div>
 
           {rewardsLoading ? (
@@ -619,7 +630,7 @@ export default function AdminPage() {
           </div>
 
           {/* Search Bar */}
-          <form onSubmit={handleSearchSubmit} className="mb-6">
+          <form onSubmit={handleSearchSubmit} className="mb-4">
             <div className="flex gap-2">
               <Input
                 type="text"
@@ -635,13 +646,64 @@ export default function AdminPage() {
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => { setSearchTerm(""); loadUsers(); }}
+                onClick={() => { setSearchTerm(""); setRoleFilter("all"); setCurrentPage(1); loadUsers(1); }}
                 disabled={usersLoading || isVisitorAdmin}
               >
-                Clear
+                Clear All
               </Button>
             </div>
           </form>
+
+          {/* Role Filter */}
+          <div className="mb-6">
+            <Label className="mb-2 block">Filter by Role</Label>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                variant={roleFilter === 'all' ? 'default' : 'outline'}
+                onClick={() => handleRoleFilterChange('all')}
+                disabled={usersLoading || isVisitorAdmin}
+              >
+                All Users ({totalUsers})
+              </Button>
+              <Button
+                size="sm"
+                variant={roleFilter === 'admin' ? 'default' : 'outline'}
+                onClick={() => handleRoleFilterChange('admin')}
+                disabled={usersLoading || isVisitorAdmin}
+                className={roleFilter === 'admin' ? 'bg-purple-500 hover:bg-purple-600' : ''}
+              >
+                Admins
+              </Button>
+              <Button
+                size="sm"
+                variant={roleFilter === 'private' ? 'default' : 'outline'}
+                onClick={() => handleRoleFilterChange('private')}
+                disabled={usersLoading || isVisitorAdmin}
+                className={roleFilter === 'private' ? 'bg-[#25d695] hover:bg-[#1fc182] text-gray-900' : ''}
+              >
+                Private Members
+              </Button>
+              <Button
+                size="sm"
+                variant={roleFilter === 'public' ? 'default' : 'outline'}
+                onClick={() => handleRoleFilterChange('public')}
+                disabled={usersLoading || isVisitorAdmin}
+                className={roleFilter === 'public' ? 'bg-blue-500 hover:bg-blue-600' : ''}
+              >
+                Public Users
+              </Button>
+              <Button
+                size="sm"
+                variant={roleFilter === 'visitor' ? 'default' : 'outline'}
+                onClick={() => handleRoleFilterChange('visitor')}
+                disabled={usersLoading || isVisitorAdmin}
+                className={roleFilter === 'visitor' ? 'bg-gray-400 hover:bg-gray-500' : ''}
+              >
+                Visitors
+              </Button>
+            </div>
+          </div>
 
           {/* Users List */}
           {usersLoading ? (
@@ -649,34 +711,60 @@ export default function AdminPage() {
               <Spinner />
             </div>
           ) : users.length > 0 ? (
-            <div className="space-y-3">
-              <div className="text-sm text-gray-400 mb-3">
-                Found {users.length} user{users.length !== 1 ? "s" : ""}
+            <div className="space-y-4">
+              <div className="text-sm text-gray-400">
+                Showing {users.length} of {totalUsers} user{totalUsers !== 1 ? "s" : ""}
+                {searchTerm && ` matching "${searchTerm}"`}
+                {roleFilter !== 'all' && ` (${roleFilter})`}
               </div>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <div className="space-y-3 max-h-[600px] overflow-y-auto">
                 {users.map((user) => (
                   <div
                     key={user.user_id}
-                    className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-l-4"
+                    style={{
+                      borderLeftColor: user.role === 'admin' ? '#a855f7' : 
+                                      user.role === 'private' ? '#25d695' : 
+                                      user.role === 'public' ? '#3b82f6' : '#9ca3af'
+                    }}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-2">
                           <p className="font-semibold text-white">
                             {user.email || "No Email"}
                           </p>
-                          {user.active_wallet_count > 0 && (
-                            <span className="px-2 py-0.5 text-xs bg-[#25d695] text-gray-900 rounded-full">
-                              {user.active_wallet_count} wallet{user.active_wallet_count !== 1 ? "s" : ""}
+                          {!user.email_confirmed && user.email && (
+                            <span className="px-2 py-0.5 text-xs bg-yellow-500 text-gray-900 rounded-full">
+                              Unconfirmed
+                            </span>
+                          )}
+                          <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${getRoleBadgeColor(user.role)}`}>
+                            {user.role_label}
+                          </span>
+                          {user.shield_nft_verified && (
+                            <span className="px-2 py-0.5 text-xs bg-green-500 text-white rounded-full">
+                              ✓ Shield NFT
+                            </span>
+                          )}
+                          {user.pma_signed && (
+                            <span className="px-2 py-0.5 text-xs bg-indigo-500 text-white rounded-full">
+                              ✓ PMA
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          User ID: {user.user_id}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Created: {new Date(user.created_at).toLocaleDateString()}
-                        </p>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2">
+                          <div>
+                            <span className="font-medium">Created:</span> {new Date(user.created_at).toLocaleDateString()}
+                          </div>
+                          <div>
+                            <span className="font-medium">Wallets:</span> {user.active_wallet_count} active
+                            {user.wallet_count > user.active_wallet_count && 
+                              <span className="ml-1">({user.wallet_count - user.active_wallet_count} deleted)</span>
+                            }
+                          </div>
+                        </div>
                         
                         {/* Show first wallet if exists */}
                         {user.wallets && user.wallets.length > 0 && (
@@ -694,32 +782,85 @@ export default function AdminPage() {
                         )}
                       </div>
                       
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 ml-4">
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => viewUserDetails(user)}
                           disabled={isVisitorAdmin}
                         >
-                          Details
+                          View Details
                         </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => handleGrantShieldAccess(user.user_id)}
-                          disabled={actionLoading || isVisitorAdmin}
-                          className="bg-[#25d695] hover:bg-[#1fc182] text-gray-900"
-                        >
-                          Grant Shield
-                        </Button>
+                        {user.role !== 'private' && (
+                          <Button
+                            size="sm"
+                            onClick={() => handleGrantShieldAccess(user.user_id)}
+                            disabled={actionLoading || isVisitorAdmin || user.role === 'admin'}
+                            className="bg-[#25d695] hover:bg-[#1fc182] text-gray-900"
+                          >
+                            Grant Shield
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1 || usersLoading || isVisitorAdmin}
+                  >
+                    Previous
+                  </Button>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      
+                      return (
+                        <Button
+                          key={pageNum}
+                          size="sm"
+                          variant={currentPage === pageNum ? 'default' : 'outline'}
+                          onClick={() => handlePageChange(pageNum)}
+                          disabled={usersLoading || isVisitorAdmin}
+                        >
+                          {pageNum}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages || usersLoading || isVisitorAdmin}
+                  >
+                    Next
+                  </Button>
+                  <span className="text-sm text-gray-400 ml-2">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              No users found. Try a different search term.
+              No users found. {searchTerm || roleFilter !== 'all' ? 'Try adjusting your filters.' : 'No users in the system yet.'}
             </div>
           )}
         </Card>
@@ -742,15 +883,54 @@ export default function AdminPage() {
                 {/* User Info */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-white mb-3">User Information</h3>
+                  
+                  {/* Role and Status Badges */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className={`px-3 py-1 text-sm rounded-full font-medium ${getRoleBadgeColor(selectedUser.role)}`}>
+                      {selectedUser.role_label}
+                    </span>
+                    {selectedUser.email_confirmed ? (
+                      <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-full">
+                        ✓ Email Confirmed
+                      </span>
+                    ) : selectedUser.email ? (
+                      <span className="px-3 py-1 text-sm bg-yellow-500 text-gray-900 rounded-full">
+                        ⏳ Email Unconfirmed
+                      </span>
+                    ) : null}
+                    {selectedUser.shield_nft_verified && (
+                      <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-full">
+                        ✓ Shield NFT Verified
+                      </span>
+                    )}
+                    {selectedUser.pma_signed && (
+                      <span className="px-3 py-1 text-sm bg-indigo-500 text-white rounded-full">
+                        ✓ PMA Signed
+                      </span>
+                    )}
+                  </div>
+                  
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Email:</span>
                       <span className="text-white font-mono">{selectedUser.email || "N/A"}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">User ID:</span>
-                      <span className="text-white font-mono text-xs">{selectedUser.user_id}</span>
+                      <span className="text-gray-400">Auth User ID:</span>
+                      <span className="text-white font-mono text-xs">{selectedUser.auth_user_id}</span>
                     </div>
+                    {selectedUser.public_user_id && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Public User ID:</span>
+                        <span className="text-white font-mono text-xs">{selectedUser.public_user_id}</span>
+                      </div>
+                    )}
+                    {selectedUser.private_user_id && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Private User ID:</span>
+                        <span className="text-white font-mono text-xs">{selectedUser.private_user_id}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-gray-400">Created:</span>
                       <span className="text-white">{new Date(selectedUser.created_at).toLocaleString()}</span>
@@ -763,6 +943,12 @@ export default function AdminPage() {
                       <span className="text-gray-400">Active Wallets:</span>
                       <span className="text-white">{selectedUser.active_wallet_count}</span>
                     </div>
+                    {selectedUser.wallet_count > selectedUser.active_wallet_count && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Deleted Wallets:</span>
+                        <span className="text-red-400">{selectedUser.wallet_count - selectedUser.active_wallet_count}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
