@@ -268,8 +268,13 @@ export default function SettingsPage() {
       
       if (error) {
         setMessage({ type: 'error', text: error });
-        // Reload the original image if upload failed
-        await loadUserData();
+        // Reset to original image if upload failed
+        if (profile) {
+          const publicUser = (profile as any).public_users as { profile_image_url?: string } | null;
+          if (publicUser?.profile_image_url) {
+            setProfileImage(publicUser.profile_image_url);
+          }
+        }
       } else {
         setProfileImage(url);
         setMessage({ type: 'success', text: 'Profile picture updated successfully!' });
@@ -278,8 +283,13 @@ export default function SettingsPage() {
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setMessage({ type: 'error', text: `Upload failed: ${errorMessage}` });
-      // Reload the original image
-      await loadUserData();
+      // Reset to original image if upload failed
+      if (profile) {
+        const publicUser = (profile as any).public_users as { profile_image_url?: string } | null;
+        if (publicUser?.profile_image_url) {
+          setProfileImage(publicUser.profile_image_url);
+        }
+      }
     } finally {
       setUploadingImage(false);
     }
