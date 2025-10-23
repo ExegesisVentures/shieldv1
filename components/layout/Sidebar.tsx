@@ -11,7 +11,9 @@ import {
   IoLogOut,
   IoChevronBack,
   IoMenu,
-  IoShield
+  IoShield,
+  IoStatsChart,
+  IoCalculator
 } from "react-icons/io5";
 import { useState } from "react";
 
@@ -29,6 +31,18 @@ export default function Sidebar({ userType = "public" }: SidebarProps) {
       name: "Dashboard",
       href: "/dashboard",
       icon: IoGridSharp,
+      forUsers: ["visitor", "public", "private"],
+    },
+    {
+      name: "Analytics",
+      href: "/analytics",
+      icon: IoStatsChart,
+      forUsers: ["visitor", "public", "private"],
+    },
+    {
+      name: "Restake Calculator",
+      href: "/restake-calculator",
+      icon: IoCalculator,
       forUsers: ["visitor", "public", "private"],
     },
     {

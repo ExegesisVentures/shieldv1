@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IoMenu, IoClose, IoWallet, IoPerson, IoSettings, IoLogOut, IoLogIn, IoShieldCheckmark as ShieldIcon, IoGitBranch } from "react-icons/io5";
+import { IoMenu, IoClose, IoWallet, IoPerson, IoSettings, IoLogOut, IoLogIn, IoShieldCheckmark as ShieldIcon, IoGitBranch, IoStatsChart, IoCalculator } from "react-icons/io5";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOutAction } from "@/app/actions";
@@ -155,6 +155,22 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <span className="text-sm text-gray-700 dark:text-gray-300">Portfolio</span>
                   </Link>
                   <Link
+                    href="/analytics"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoStatsChart className="w-5 h-5 text-cyan-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Analytics</span>
+                  </Link>
+                  <Link
+                    href="/restake-calculator"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoCalculator className="w-5 h-5 text-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Calculator</span>
+                  </Link>
+                  <Link
                     href="/wallets"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -191,6 +207,22 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <span className="text-sm text-gray-700 dark:text-gray-300">Portfolio</span>
                   </Link>
                   <Link
+                    href="/analytics"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoStatsChart className="w-5 h-5 text-cyan-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Analytics</span>
+                  </Link>
+                  <Link
+                    href="/restake-calculator"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoCalculator className="w-5 h-5 text-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Calculator</span>
+                  </Link>
+                  <Link
                     href="/liquidity"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -217,6 +249,22 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                   >
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Features</span>
+                  </Link>
+                  <Link
+                    href="/analytics"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoStatsChart className="w-5 h-5 text-cyan-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Analytics</span>
+                  </Link>
+                  <Link
+                    href="/restake-calculator"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <IoCalculator className="w-5 h-5 text-green-500" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Calculator</span>
                   </Link>
                   <Link
                     href="/liquidity"

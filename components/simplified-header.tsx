@@ -4,6 +4,7 @@ import { createSupabaseClient } from "@/utils/supabase/server";
 import SimplifiedHeaderUserMenu from "@/components/simplified-header-user-menu";
 import ThemeToggle from "@/components/theme-toggle";
 import ProposalsButton from "@/components/proposals-button";
+import MobileMenu from "@/components/mobile-menu";
 import { IoLogoGithub } from "react-icons/io5";
 
 export default async function SimplifiedHeader() {
@@ -105,6 +106,18 @@ export default async function SimplifiedHeader() {
             Portfolio
           </Link>
           <Link 
+            href="/analytics" 
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
+          >
+            Analytics
+          </Link>
+          <Link 
+            href="/restake-calculator" 
+            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
+          >
+            Calculator
+          </Link>
+          <Link 
             href="/wallets" 
             className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
           >
@@ -127,6 +140,7 @@ export default async function SimplifiedHeader() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
+          <MobileMenu isAuthenticated={!!user} />
           <ThemeToggle />
           <SimplifiedHeaderUserMenu user={user} />
         </div>
