@@ -90,6 +90,7 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       setError(null);
       setTransactionHash(result.transactionHash);
       
+      console.log('🎊 [Vote] Setting showSuccessModal to TRUE');
       // Show success modal with celebration
       setShowSuccessModal(true);
       
@@ -107,6 +108,7 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   };
 
   if (success) {
+    console.log('🎊 [Vote] Rendering success view. showSuccessModal:', showSuccessModal);
     return (
       <>
         <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
@@ -123,6 +125,7 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
         <VoteSuccessModal
           isOpen={showSuccessModal}
           onClose={() => {
+            console.log('🎊 [Vote] Closing success modal');
             setShowSuccessModal(false);
             setSuccess(false);
             setSelectedOption(null);

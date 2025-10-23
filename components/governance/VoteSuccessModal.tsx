@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { IoCheckmarkCircle, IoClose, IoSparkles, IoRocket } from "react-icons/io5";
 
 interface VoteSuccessModalProps {
@@ -19,6 +20,8 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
 
   useEffect(() => {
     if (isOpen) {
+      console.log('🎉 [VoteSuccessModal] Opening modal with confetti!');
+      
       // Generate confetti pieces
       const pieces = Array.from({ length: 50 }, (_, i) => ({
         id: i,
@@ -31,6 +34,7 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
 
       // Auto-close after 5 seconds
       const timer = setTimeout(() => {
+        console.log('🎉 [VoteSuccessModal] Auto-closing modal');
         onClose();
       }, 5000);
 
@@ -38,10 +42,16 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
     }
   }, [isOpen, onClose]);
 
-  if (!mounted || !isOpen) return null;
+  if (!mounted || !isOpen) {
+    if (!mounted) console.log('🎉 [VoteSuccessModal] Not mounted yet');
+    if (!isOpen) console.log('🎉 [VoteSuccessModal] Modal is closed');
+    return null;
+  }
 
-  return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+  console.log('🎉 [VoteSuccessModal] Rendering modal with portal');
+
+  const modalContent = (
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4" style={{ pointerEvents: 'auto' }}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -186,5 +196,7 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
       `}</style>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
