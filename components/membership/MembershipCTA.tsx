@@ -23,12 +23,12 @@ export default function MembershipCTA({ userType, shouldPulse = false, onPulseCo
         cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 100);
       
-      // Stop pulsing after 5 seconds
+      // Stop pulsing after 6 seconds (slowed down from 5)
       setTimeout(() => {
         if (onPulseComplete) {
           onPulseComplete();
         }
-      }, 5000);
+      }, 6000);
     }
   }, [shouldPulse, onPulseComplete]);
 
@@ -61,11 +61,11 @@ export default function MembershipCTA({ userType, shouldPulse = false, onPulseCo
   return (
     <Card 
       ref={cardRef}
-      className={`group border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-xl transition-all duration-300 hover:border-purple-400 dark:hover:border-purple-400 bg-gradient-to-br from-purple-900/20 via-blue-900/10 to-purple-900/20 backdrop-blur-xl shadow-2xl ${shouldPulse ? 'animate-pulse ring-4 ring-purple-500/50' : ''}`}
+      className="group border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-xl transition-all duration-300 hover:border-purple-400 dark:hover:border-purple-400 bg-gradient-to-br from-purple-900/20 via-blue-900/10 to-purple-900/20 backdrop-blur-xl shadow-2xl"
     >
       <div className="flex items-start gap-4 mb-6">
         <div className="neo-icon-glow-purple neo-transition relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 blur-xl opacity-50"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 blur-xl opacity-25"></div>
           <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-3 rounded-xl border border-gray-700/50 shadow-xl">
             <IoLockClosed className="w-8 h-8 text-purple-400" />
           </div>
@@ -103,7 +103,7 @@ export default function MembershipCTA({ userType, shouldPulse = false, onPulseCo
       {/* CTA */}
       <Button 
         size="lg" 
-        className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg ${shouldPulse ? 'ring-2 ring-purple-400' : ''}`}
+        className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-[0_8px_20px_rgba(168,85,247,0.4),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(168,85,247,0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.4)] transition-all duration-200 ${shouldPulse ? 'animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]' : ''}`}
         onClick={handleSignUpClick}
       >
         {userType === "visitor" ? "Sign Up to Request Membership" : "Request Membership"}

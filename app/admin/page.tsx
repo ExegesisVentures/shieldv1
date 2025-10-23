@@ -31,6 +31,8 @@ interface UserWallet {
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
+  is_custodial: boolean | null;
+  custodian_note: string | null;
 }
 
 interface UserData {
@@ -176,15 +178,44 @@ export default function AdminPage() {
       
       if (data.success && data.data) {
         setRewardsData(data.data);
+      } else {
+        setRewardsData({ total: '0', walletCount: 0, wallets: [] });
       }
     } catch (error) {
       console.error("Error loading rewards data:", error);
+      setRewardsData({ total: '0', walletCount: 0, wallets: [] });
     } finally {
       setRewardsLoading(false);
     }
   }
 
-  // Manual refresh removed - auto-updates every 3 days via cron job
+  async function handleRefreshRewards() {
+    if (!confirm("This will refresh rewards history for all custodial wallets. This may take a few minutes. Continue?")) return;
+    
+    setRewardsLoading(true);
+    setMessage(null);
+    
+    try {
+      const response = await fetch("/api/admin/rewards/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage({ type: "success", text: `Rewards refreshed! ${data.data.success} succeeded, ${data.data.failed} failed.` });
+        await loadRewardsData();
+      } else {
+        setMessage({ type: "error", text: data.error || "Failed to refresh rewards" });
+      }
+    } catch (error) {
+      console.error("Error refreshing rewards:", error);
+      setMessage({ type: "error", text: "An error occurred while refreshing rewards" });
+    } finally {
+      setRewardsLoading(false);
+    }
+  }
 
   async function loadUsers(page: number = currentPage) {
     setUsersLoading(true);
@@ -309,6 +340,51 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("Error deleting user:", error);
+      setMessage({ type: "error", text: "An error occurred" });
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleToggleCustodial(walletId: string, currentStatus: boolean | null, custodianNote?: string) {
+    const newStatus = !currentStatus;
+    const action = newStatus ? "mark as custodial" : "unmark as custodial";
+    
+    if (!confirm(`Are you sure you want to ${action} this wallet?`)) return;
+    
+    setActionLoading(true);
+    setMessage(null);
+    
+    try {
+      const response = await fetch("/api/admin/wallets/toggle-custodial", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          walletId, 
+          isCustodial: newStatus,
+          custodianNote: newStatus ? (custodianNote || "Admin marked as custodial") : null
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setMessage({ type: "success", text: data.message });
+        await loadUsers(); // Refresh user list
+        await loadRewardsData(); // Refresh rewards data
+        
+        // If user details modal is open, update the selected user
+        if (selectedUser) {
+          const updatedUser = users.find(u => u.user_id === selectedUser.user_id);
+          if (updatedUser) {
+            setSelectedUser(updatedUser);
+          }
+        }
+      } else {
+        setMessage({ type: "error", text: data.message || "Failed to update wallet" });
+      }
+    } catch (error) {
+      console.error("Error toggling custodial status:", error);
       setMessage({ type: "error", text: "An error occurred" });
     } finally {
       setActionLoading(false);
@@ -538,16 +614,29 @@ export default function AdminPage() {
         {/* Custodial Wallets Rewards Tracking */}
         <Card className="p-6 mb-6">
           <div className="mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-white">
-                Custodial Wallets - Rewards History
-              </h2>
-              <p className="text-sm text-gray-400 mt-1">
-                Track total lifetime rewards earned by custodial wallets
-              </p>
-              <p className="text-xs text-green-500 dark:text-green-400 mt-2">
-                ✓ Auto-updates every 3 days for all user wallets
-              </p>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white">
+                  Custodial Wallets - Rewards History
+                </h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  Track total lifetime rewards earned by custodial wallets
+                </p>
+                <p className="text-xs text-green-500 dark:text-green-400 mt-2">
+                  ✓ Auto-updates every 3 days for all user wallets
+                </p>
+              </div>
+              {rewardsData && rewardsData.walletCount > 0 && !rewardsLoading && (
+                <Button
+                  onClick={handleRefreshRewards}
+                  disabled={isVisitorAdmin}
+                  variant="outline"
+                  size="sm"
+                  className="ml-4"
+                >
+                  🔄 Refresh Now
+                </Button>
+              )}
             </div>
           </div>
 
@@ -555,7 +644,7 @@ export default function AdminPage() {
             <div className="flex items-center justify-center py-12">
               <Spinner />
             </div>
-          ) : rewardsData ? (
+          ) : rewardsData && rewardsData.walletCount > 0 ? (
             <div className="space-y-6">
               {/* Summary */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -612,14 +701,29 @@ export default function AdminPage() {
               </div>
             </div>
           ) : (
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              No rewards data available
+            <div className="text-center py-12">
+              <div className="text-gray-500 dark:text-gray-400 mb-4">
+                <p className="text-lg font-semibold mb-2">No custodial wallets found</p>
+                <p className="text-sm">
+                  Mark wallets as custodial in the User Management section to track their rewards here.
+                </p>
+              </div>
+              <Button
+                onClick={() => {
+                  // Scroll to user management section
+                  document.querySelector('.user-management-card')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                variant="outline"
+                className="mt-4"
+              >
+                Go to User Management
+              </Button>
             </div>
           )}
         </Card>
 
         {/* User Management Card */}
-        <Card className="p-6 mb-6">
+        <Card className="p-6 mb-6 user-management-card">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">
               User Management
@@ -772,10 +876,20 @@ export default function AdminPage() {
                             <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
                               {user.wallets[0].address.slice(0, 20)}...{user.wallets[0].address.slice(-8)}
                               {user.wallets[0].label && ` (${user.wallets[0].label})`}
+                              {user.wallets[0].is_custodial && (
+                                <span className="ml-2 px-2 py-0.5 text-xs bg-purple-500 text-white rounded-full">
+                                  Custodial
+                                </span>
+                              )}
                             </p>
                             {user.wallets.length > 1 && (
                               <p className="text-xs text-gray-400 mt-1">
                                 +{user.wallets.length - 1} more wallet{user.wallets.length - 1 !== 1 ? "s" : ""}
+                                {user.wallets.filter(w => w.is_custodial).length > 0 && (
+                                  <span className="ml-2 text-purple-400">
+                                    ({user.wallets.filter(w => w.is_custodial).length} custodial)
+                                  </span>
+                                )}
                               </p>
                             )}
                           </div>
@@ -963,22 +1077,47 @@ export default function AdminPage() {
                           className={`p-3 rounded-lg ${
                             wallet.deleted_at
                               ? "bg-red-50 dark:bg-red-900/20"
+                              : wallet.is_custodial
+                              ? "bg-purple-50 dark:bg-purple-900/20"
                               : "bg-gray-50 dark:bg-gray-800"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <p className="font-medium text-white">
-                              {wallet.label || "Unlabeled"}
-                            </p>
-                            {wallet.deleted_at && (
-                              <span className="px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                                Deleted
-                              </span>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-white">
+                                {wallet.label || "Unlabeled"}
+                              </p>
+                              {wallet.is_custodial && (
+                                <span className="px-2 py-0.5 text-xs bg-purple-500 text-white rounded-full">
+                                  Custodial
+                                </span>
+                              )}
+                              {wallet.deleted_at && (
+                                <span className="px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                                  Deleted
+                                </span>
+                              )}
+                            </div>
+                            {!wallet.deleted_at && (
+                              <Button
+                                size="sm"
+                                variant={wallet.is_custodial ? "outline" : "default"}
+                                onClick={() => handleToggleCustodial(wallet.id, wallet.is_custodial, wallet.custodian_note || undefined)}
+                                disabled={actionLoading || isVisitorAdmin}
+                                className={wallet.is_custodial ? "text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" : "bg-purple-500 hover:bg-purple-600"}
+                              >
+                                {wallet.is_custodial ? "Unmark Custodial" : "Mark Custodial"}
+                              </Button>
                             )}
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 font-mono break-all">
                             {wallet.address}
                           </p>
+                          {wallet.is_custodial && wallet.custodian_note && (
+                            <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">
+                              Note: {wallet.custodian_note}
+                            </p>
+                          )}
                           <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                             Added: {new Date(wallet.created_at).toLocaleDateString()}
                             {wallet.deleted_at && (
@@ -1032,6 +1171,8 @@ export default function AdminPage() {
             <li>• Shield NFT settings control the placeholder displayed to private members</li>
             <li>• User management allows you to search, view, and manage all users</li>
             <li>• Grant Shield access to give users private member privileges</li>
+            <li>• Mark individual wallets as custodial to track rewards separately</li>
+            <li>• Custodial rewards auto-update every 3 days via cron job</li>
             <li>• Soft delete marks wallets as deleted without removing data</li>
           </ul>
         </Card>

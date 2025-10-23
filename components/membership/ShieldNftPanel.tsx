@@ -28,15 +28,23 @@ export default function ShieldNftPanel({
 
   useEffect(() => {
     if (showPopup) {
-      // Auto-dismiss after 3.5 seconds
+      // Auto-dismiss after 6 seconds (increased from 3.5)
       const timer = setTimeout(() => {
         setShowPopup(false);
+        
+        // Flash the button
+        setPulseButton(true);
         
         // Notify parent to pulse the Request Membership button
         if (onRequestMembership) {
           onRequestMembership();
         }
-      }, 3500);
+        
+        // Stop flashing after 6 seconds (slowed down)
+        setTimeout(() => {
+          setPulseButton(false);
+        }, 6000);
+      }, 6000);
       
       return () => clearTimeout(timer);
     }
@@ -47,6 +55,24 @@ export default function ShieldNftPanel({
       setShowPopup(true);
     }
   };
+
+  const handleGotItClick = () => {
+    setShowPopup(false);
+    
+    // Flash the button even when "Got It" is pressed
+    setPulseButton(true);
+    
+    // Notify parent to pulse the Request Membership button
+    if (onRequestMembership) {
+      onRequestMembership();
+    }
+    
+    // Stop flashing after 6 seconds (slowed down)
+    setTimeout(() => {
+      setPulseButton(false);
+    }, 6000);
+  };
+
   if (loading) {
     return (
       <Card className="p-6">
@@ -76,8 +102,8 @@ export default function ShieldNftPanel({
                 You are not a ShieldNest member. You must request a membership to purchase the Shield NFT.
               </p>
               <button
-                onClick={() => setShowPopup(false)}
-                className="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-semibold transition-all duration-200"
+                onClick={handleGotItClick}
+                className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-[0_8px_20px_rgba(168,85,247,0.4),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(168,85,247,0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95"
               >
                 Got It
               </button>
@@ -135,7 +161,7 @@ export default function ShieldNftPanel({
           <div className="space-y-2">
             {!isOwner ? (
               <Button 
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg"
+                className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-[0_8px_20px_rgba(168,85,247,0.4),inset_0_2px_4px_rgba(255,255,255,0.3),inset_0_-4px_12px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_28px_rgba(168,85,247,0.6),inset_0_2px_4px_rgba(255,255,255,0.4),inset_0_-4px_12px_rgba(0,0,0,0.4)] transition-all duration-200 ${pulseButton ? 'animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]' : ''}`}
                 size="lg"
                 onClick={handleBuyClick}
               >

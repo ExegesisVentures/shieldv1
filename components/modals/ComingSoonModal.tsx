@@ -26,23 +26,39 @@ export default function ComingSoonModal({ isOpen, onClose, feature }: ComingSoon
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Only check auth when modal opens
+    if (!isOpen) return;
+    
     const checkAuth = async () => {
-      const supabase = createSupabaseClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      setIsAuthenticated(!!user);
-      setIsLoading(false);
+      try {
+        const supabase = createSupabaseClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        setIsAuthenticated(!!user);
+      } catch (error) {
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
     };
+    
     checkAuth();
-  }, []);
+  }, [isOpen]);
 
   const handleSignUp = () => {
     onClose();
-    router.push('/sign-up');
+    // Use setTimeout to ensure modal closes before navigation
+    setTimeout(() => {
+      router.push('/sign-up');
+    }, 0);
   };
 
   const handleGetNotified = () => {
     onClose();
-    router.push('/settings#notifications');
+    // Use setTimeout to ensure modal closes before navigation
+    setTimeout(() => {
+      router.push('/settings#notifications');
+    }, 0);
   };
 
   if (!isOpen) return null;

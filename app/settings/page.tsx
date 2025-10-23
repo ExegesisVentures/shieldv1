@@ -47,81 +47,95 @@ export default function SettingsPage() {
   const supabase = createSupabaseClient();
 
   useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = async () => {
-    try {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      
-      // Allow visitors too - they just won't have email/password features
-      if (authUser) {
-        setUser(authUser);
-        setEmail(authUser.email || "");
-
-        // Load profile data for authenticated users
-        const { data: profileData } = await supabase
-          .from("user_profiles")
-          .select(`
-            *,
-            public_users:public_user_id (
-              first_name,
-              last_name,
-              email,
-              profile_image_url
-            )
-          `)
-          .eq("auth_user_id", authUser.id)
-          .single();
-
-        if (profileData) {
-          setProfile(profileData);
-          const publicUser = profileData.public_users as { first_name?: string; last_name?: string; profile_image_url?: string } | null;
-          if (publicUser) {
-            setDisplayName(`${publicUser.first_name || ''} ${publicUser.last_name || ''}`.trim());
-            // Load profile image if available
-            if (publicUser.profile_image_url) {
-              setProfileImage(publicUser.profile_image_url);
+    // Load data in parallel and show page immediately
+    const initializePage = async () => {
+      try {
+        // Show page immediately with default values
+        setLoading(false);
+        
+        // Check if we need to scroll to notifications
+        if (window.location.hash === '#notifications') {
+          setTimeout(() => {
+            const element = document.getElementById('notifications');
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-          }
-        }
-
-        // Load notification preferences
-        const savedPrefs = localStorage.getItem(`notification_prefs_${authUser.id}`);
-        if (savedPrefs) {
-          const prefs = JSON.parse(savedPrefs);
-          setNotifyPortfolio(prefs.portfolio ?? true);
-          setNotifyPriceAlerts(prefs.priceAlerts ?? true);
-          setNotifyMembership(prefs.membership ?? true);
-          setNotifyLiquidityPools(prefs.liquidityPools ?? true);
-          setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
-          setNotifyNewFeatures(prefs.newFeatures ?? true);
-        }
-      } else {
-        // Visitor mode - load from localStorage if available
-        const savedName = localStorage.getItem('visitor_display_name');
-        if (savedName) {
-          setDisplayName(savedName);
+          }, 100);
         }
         
-        // Load visitor notification preferences
-        const savedPrefs = localStorage.getItem('notification_prefs_visitor');
-        if (savedPrefs) {
-          const prefs = JSON.parse(savedPrefs);
-          setNotifyPortfolio(prefs.portfolio ?? true);
-          setNotifyPriceAlerts(prefs.priceAlerts ?? true);
-          setNotifyMembership(prefs.membership ?? true);
-          setNotifyLiquidityPools(prefs.liquidityPools ?? true);
-          setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
-          setNotifyNewFeatures(prefs.newFeatures ?? true);
+        // Then load data in background
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        
+        if (authUser) {
+          setUser(authUser);
+          setEmail(authUser.email || "");
+
+          // Load profile and preferences in parallel
+          const [profileResult, savedPrefs] = await Promise.all([
+            supabase
+              .from("user_profiles")
+              .select(`
+                *,
+                public_users:public_user_id (
+                  first_name,
+                  last_name,
+                  email,
+                  profile_image_url
+                )
+              `)
+              .eq("auth_user_id", authUser.id)
+              .single(),
+            Promise.resolve(localStorage.getItem(`notification_prefs_${authUser.id}`))
+          ]);
+
+          if (profileResult.data) {
+            setProfile(profileResult.data);
+            const publicUser = profileResult.data.public_users as { first_name?: string; last_name?: string; profile_image_url?: string } | null;
+            if (publicUser) {
+              setDisplayName(`${publicUser.first_name || ''} ${publicUser.last_name || ''}`.trim());
+              if (publicUser.profile_image_url) {
+                setProfileImage(publicUser.profile_image_url);
+              }
+            }
+          }
+
+          // Load notification preferences
+          if (savedPrefs) {
+            const prefs = JSON.parse(savedPrefs);
+            setNotifyPortfolio(prefs.portfolio ?? true);
+            setNotifyPriceAlerts(prefs.priceAlerts ?? true);
+            setNotifyMembership(prefs.membership ?? true);
+            setNotifyLiquidityPools(prefs.liquidityPools ?? true);
+            setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
+            setNotifyNewFeatures(prefs.newFeatures ?? true);
+          }
+        } else {
+          // Visitor mode - load from localStorage
+          const savedName = localStorage.getItem('visitor_display_name');
+          if (savedName) {
+            setDisplayName(savedName);
+          }
+          
+          // Load visitor notification preferences
+          const savedPrefs = localStorage.getItem('notification_prefs_visitor');
+          if (savedPrefs) {
+            const prefs = JSON.parse(savedPrefs);
+            setNotifyPortfolio(prefs.portfolio ?? true);
+            setNotifyPriceAlerts(prefs.priceAlerts ?? true);
+            setNotifyMembership(prefs.membership ?? true);
+            setNotifyLiquidityPools(prefs.liquidityPools ?? true);
+            setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
+            setNotifyNewFeatures(prefs.newFeatures ?? true);
+          }
         }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error loading user data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    initializePage();
+  }, []);
 
   const handleProfileUpdate = async () => {
     setSaving(true);
@@ -342,10 +356,20 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <main className="p-6 max-w-7xl mx-auto">
-        <div className="animate-pulse space-y-6">
-          <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
-          <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+      <main className="p-6 max-w-4xl mx-auto">
+        {/* Show a minimal loading skeleton that displays quickly */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-700 rounded-xl">
+              <IoSettings className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white">
+              Settings
+            </h1>
+          </div>
+          <p className="text-gray-400">
+            Loading your preferences...
+          </p>
         </div>
       </main>
     );

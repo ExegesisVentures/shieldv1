@@ -102,7 +102,7 @@ export async function GET(req: Request) {
         if (userProfile?.public_user_id) {
           const { data: userWallets } = await supabase
             .from('wallets')
-            .select('id, address, label, deleted_at, created_at, updated_at, public_user_id')
+            .select('id, address, label, deleted_at, created_at, updated_at, public_user_id, is_custodial, custodian_note')
             .eq('public_user_id', userProfile.public_user_id)
             .order('created_at', { ascending: false });
 

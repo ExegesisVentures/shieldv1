@@ -120,7 +120,7 @@ export default function Membership() {
                 <div className="space-y-6">
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 blur-xl opacity-40"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 blur-xl opacity-20"></div>
                       <div className="relative w-12 h-12 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl flex items-center justify-center text-white font-bold text-lg border border-gray-700/50 shadow-xl">
                         1
                       </div>
@@ -139,7 +139,7 @@ export default function Membership() {
 
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 blur-xl opacity-40"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 blur-xl opacity-20"></div>
                       <div className="relative w-12 h-12 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl flex items-center justify-center text-white font-bold text-lg border border-gray-700/50 shadow-xl">
                         2
                       </div>
@@ -158,7 +158,7 @@ export default function Membership() {
 
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 blur-xl opacity-40"></div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 blur-xl opacity-20"></div>
                       <div className="relative w-12 h-12 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl flex items-center justify-center text-white font-bold text-lg border border-gray-700/50 shadow-xl">
                         3
                       </div>
@@ -215,7 +215,7 @@ export default function Membership() {
                 return (
                   <div key={benefit.title} className="text-center group">
                     <div className="relative inline-block mb-4">
-                      <div className={`absolute inset-0 bg-gradient-to-br ${benefit.gradient} blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-300 rounded-full`}></div>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${benefit.gradient} blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-300 rounded-full`}></div>
                       <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-2xl border border-gray-700/50 shadow-xl group-hover:scale-110 group-hover:shadow-2xl transition-all duration-300">
                         <div className={`bg-gradient-to-br ${benefit.gradient} bg-clip-text`}>
                           <IconComponent className="w-12 h-12 mx-auto text-transparent" style={{
