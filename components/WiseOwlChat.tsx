@@ -12,6 +12,162 @@ interface Message {
   suggestions?: string[];
 }
 
+// Helper function to parse markdown-style text
+const parseMarkdown = (text: string) => {
+  const lines = text.split('\n');
+  const elements: JSX.Element[] = [];
+  let currentParagraph: string[] = [];
+  let listItems: string[] = [];
+  let inList = false;
+
+  const flushParagraph = () => {
+    if (currentParagraph.length > 0) {
+      const content = currentParagraph.join(' ');
+      elements.push(
+        <p key={elements.length} className="mb-3 leading-relaxed last:mb-0">
+          {parseInlineFormatting(content)}
+        </p>
+      );
+      currentParagraph = [];
+    }
+  };
+
+  const flushList = () => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={elements.length} className="mb-4 pl-5 space-y-2 last:mb-0">
+          {listItems.map((item, idx) => (
+            <li key={idx} className="text-[rgba(255,255,255,0.9)] leading-relaxed">
+              <span className="text-[#25d695] mr-2">•</span>
+              {parseInlineFormatting(item)}
+            </li>
+          ))}
+        </ul>
+      );
+      listItems = [];
+      inList = false;
+    }
+  };
+
+  const parseInlineFormatting = (text: string): (string | JSX.Element)[] => {
+    const parts: (string | JSX.Element)[] = [];
+    let remaining = text;
+    let key = 0;
+
+    // Parse bold **text**
+    const boldRegex = /\*\*(.+?)\*\*/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = boldRegex.exec(remaining)) !== null) {
+      if (match.index > lastIndex) {
+        const before = remaining.substring(lastIndex, match.index);
+        parts.push(...parseItalicAndCode(before, key));
+        key += 100;
+      }
+      parts.push(
+        <strong key={`bold-${key++}`} className="font-semibold text-[#a78bfa]">
+          {match[1]}
+        </strong>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < remaining.length) {
+      parts.push(...parseItalicAndCode(remaining.substring(lastIndex), key));
+    }
+
+    return parts;
+  };
+
+  const parseItalicAndCode = (text: string, baseKey: number): (string | JSX.Element)[] => {
+    const parts: (string | JSX.Element)[] = [];
+    
+    // Parse code `text`
+    const codeRegex = /`(.+?)`/g;
+    let lastIndex = 0;
+    let match;
+    let key = baseKey;
+
+    while ((match = codeRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      parts.push(
+        <code key={`code-${key++}`} className="bg-[rgba(37,214,149,0.15)] text-[#25d695] px-2 py-0.5 rounded text-sm font-mono">
+          {match[1]}
+        </code>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : [text];
+  };
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+
+    // Headers
+    if (trimmed.startsWith('###')) {
+      flushParagraph();
+      flushList();
+      elements.push(
+        <h4 key={elements.length} className="text-base font-semibold text-[#25d695] mb-3 mt-2">
+          {trimmed.substring(3).trim()}
+        </h4>
+      );
+    } else if (trimmed.startsWith('##')) {
+      flushParagraph();
+      flushList();
+      elements.push(
+        <h3 key={elements.length} className="text-lg font-semibold text-[#25d695] mb-3 mt-3">
+          {trimmed.substring(2).trim()}
+        </h3>
+      );
+    } else if (trimmed.startsWith('#')) {
+      flushParagraph();
+      flushList();
+      elements.push(
+        <h2 key={elements.length} className="text-xl font-bold bg-gradient-to-r from-[#25d695] to-[#a78bfa] bg-clip-text text-transparent mb-4 mt-2">
+          {trimmed.substring(1).trim()}
+        </h2>
+      );
+    }
+    // List items
+    else if (trimmed.startsWith('•') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      flushParagraph();
+      inList = true;
+      const itemText = trimmed.substring(trimmed.startsWith('•') ? 1 : 2).trim();
+      listItems.push(itemText);
+    }
+    // Empty lines
+    else if (trimmed === '') {
+      if (inList) {
+        flushList();
+      } else {
+        flushParagraph();
+      }
+    }
+    // Regular text
+    else {
+      if (inList) {
+        flushList();
+      }
+      currentParagraph.push(trimmed);
+    }
+  });
+
+  // Flush any remaining content
+  flushParagraph();
+  flushList();
+
+  return elements.length > 0 ? elements : [<p key="0">{text}</p>];
+};
+
 const WiseOwlChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -349,9 +505,15 @@ const WiseOwlChat = () => {
                       msg.role === 'user'
                         ? 'bg-gradient-to-br from-[#25d695] to-[#179b69] text-white rounded-[16px_16px_4px_16px] shadow-[0_2px_8px_rgba(37,214,149,0.3)]'
                         : 'bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[rgba(255,255,255,0.9)] rounded-[16px_16px_16px_4px]'
-                    } p-3 px-4 leading-relaxed`}
+                    } p-4 px-5 leading-relaxed`}
                   >
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <div className="space-y-1">
+                        {parseMarkdown(msg.content)}
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                   {msg.canExpand && (
                     <div className="mt-2 flex gap-2">
