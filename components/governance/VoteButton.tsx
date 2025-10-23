@@ -4,6 +4,7 @@ import { useState } from "react";
 import { IoCheckmarkCircle, IoCloseCircle, IoRemoveCircle, IoWarning, IoWallet } from "react-icons/io5";
 import { voteOnProposal } from "@/utils/coreum/proposals";
 import { VoteOption } from "@/types/governance";
+import VoteSuccessModal from "./VoteSuccessModal";
 
 interface VoteButtonProps {
   proposalId: string;
@@ -19,6 +20,8 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [showWalletPrompt, setShowWalletPrompt] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [transactionHash, setTransactionHash] = useState<string | undefined>(undefined);
 
   const voteOptions = [
     { value: VoteOption.YES, label: 'Yes', icon: IoCheckmarkCircle, color: 'green' },
@@ -85,13 +88,15 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       console.log('✅ [Vote] Vote submitted successfully!', result.transactionHash);
       setSuccess(true);
       setError(null);
+      setTransactionHash(result.transactionHash);
       
-      // Call success callback after 1 second
-      setTimeout(() => {
-        if (onVoteSuccess) {
-          onVoteSuccess();
-        }
-      }, 1000);
+      // Show success modal with celebration
+      setShowSuccessModal(true);
+      
+      // Call success callback after modal is shown
+      if (onVoteSuccess) {
+        onVoteSuccess();
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to vote';
       setError(errorMessage);
@@ -183,6 +188,18 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       <div className="text-center text-xs text-gray-400">
         Voting requires Keplr, Leap, or Cosmostation wallet
       </div>
+
+      {/* Success Modal with Confetti */}
+      <VoteSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          setSuccess(false);
+          setSelectedOption(null);
+          setTransactionHash(undefined);
+        }}
+        transactionHash={transactionHash}
+      />
     </div>
   );
 }
