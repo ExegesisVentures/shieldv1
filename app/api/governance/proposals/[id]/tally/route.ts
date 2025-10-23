@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   fetchProposalTally,
   calculateVotePercentages,
-} from '@/utils/coreum/governance';
+} from '@/utils/coreum/proposals';
 
 // ============================================
 // GET /api/governance/proposals/[id]/tally

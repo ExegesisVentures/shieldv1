@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { voteOnProposal } from '@/utils/coreum/governance';
+import { voteOnProposal } from '@/utils/coreum/proposals';
 import { VoteOption } from '@/types/governance';
 
 // ============================================
@@ -83,9 +83,9 @@ export async function POST(request: NextRequest) {
       success: false,
       error: 'Voting requires client-side wallet signature. Use the governance utility functions directly from the frontend.',
       data: {
-        instructions: 'Import { voteOnProposal } from "@/utils/coreum/governance" and call it with wallet signer',
+        instructions: 'Import { voteOnProposal } from "@/utils/coreum/proposals" and call it with wallet signer',
         example: `
-          import { voteOnProposal } from '@/utils/coreum/governance';
+          import { voteOnProposal } from '@/utils/coreum/proposals';
           import { VoteOption } from '@/types/governance';
           
           // Get signer from wallet (e.g., Keplr, Leap)
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
  * 
  * Example (Frontend):
  * ```typescript
- * import { voteOnProposal } from '@/utils/coreum/governance';
+ * import { voteOnProposal } from '@/utils/coreum/proposals';
  * import { VoteOption } from '@/types/governance';
  * 
  * // Get wallet signer (Keplr example)

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IoClose, IoCheckmarkCircle, IoWarning, IoAdd, IoInformationCircle } from "react-icons/io5";
-import { submitProposal } from "@/utils/coreum/governance";
+import { submitProposal } from "@/utils/coreum/proposals";
 
 interface CreateProposalModalProps {
   isOpen: boolean;

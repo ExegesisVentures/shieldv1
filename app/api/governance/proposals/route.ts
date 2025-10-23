@@ -15,7 +15,7 @@ import {
   fetchActiveProposals,
   fetchDepositPeriodProposals,
   fetchProposalStats,
-} from '@/utils/coreum/governance';
+} from '@/utils/coreum/proposals';
 import { ProposalStatus } from '@/types/governance';
 
 // ============================================

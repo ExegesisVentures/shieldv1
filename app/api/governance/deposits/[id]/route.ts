@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchProposalDeposits } from '@/utils/coreum/governance';
+import { fetchProposalDeposits } from '@/utils/coreum/proposals';
 
 // ============================================
 // GET /api/governance/deposits/[id]

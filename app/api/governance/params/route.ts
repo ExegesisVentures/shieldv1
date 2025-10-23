@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchGovParams } from '@/utils/coreum/governance';
+import { fetchGovParams } from '@/utils/coreum/proposals';
 
 // ============================================
 // GET /api/governance/params

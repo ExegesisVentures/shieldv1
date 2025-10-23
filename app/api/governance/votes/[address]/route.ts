@@ -13,7 +13,7 @@ import {
   fetchUserVotingHistory,
   fetchUserVote,
   fetchUserVotingPower,
-} from '@/utils/coreum/governance';
+} from '@/utils/coreum/proposals';
 
 // ============================================
 // GET /api/governance/votes/[address]

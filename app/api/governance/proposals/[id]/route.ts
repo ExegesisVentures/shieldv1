@@ -13,7 +13,7 @@ import {
   fetchProposal,
   enrichProposal,
   fetchUserVote,
-} from '@/utils/coreum/governance';
+} from '@/utils/coreum/proposals';
 
 // ============================================
 // GET /api/governance/proposals/[id]

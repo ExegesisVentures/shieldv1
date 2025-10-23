@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { IoCheckmarkCircle, IoCloseCircle, IoRemoveCircle, IoWarning, IoWallet } from "react-icons/io5";
+import { voteOnProposal } from "@/utils/coreum/proposals";
+import { VoteOption } from "@/types/governance";
 
 interface VoteButtonProps {
   proposalId: string;
@@ -11,8 +13,6 @@ interface VoteButtonProps {
   onConnectWallet?: () => void; // Callback to trigger wallet connection
 }
 
-type VoteOption = 'VOTE_OPTION_YES' | 'VOTE_OPTION_NO' | 'VOTE_OPTION_ABSTAIN' | 'VOTE_OPTION_NO_WITH_VETO';
-
 export default function VoteButton({ proposalId, userAddress, onVoteSuccess, disabled, onConnectWallet }: VoteButtonProps) {
   const [selectedOption, setSelectedOption] = useState<VoteOption | null>(null);
   const [voting, setVoting] = useState(false);
@@ -21,24 +21,18 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   const [showWalletPrompt, setShowWalletPrompt] = useState(false);
 
   const voteOptions = [
-    { value: 'VOTE_OPTION_YES', label: 'Yes', icon: IoCheckmarkCircle, color: 'green' },
-    { value: 'VOTE_OPTION_NO', label: 'No', icon: IoCloseCircle, color: 'red' },
-    { value: 'VOTE_OPTION_ABSTAIN', label: 'Abstain', icon: IoRemoveCircle, color: 'gray' },
-    { value: 'VOTE_OPTION_NO_WITH_VETO', label: 'No with Veto', icon: IoWarning, color: 'orange' },
+    { value: VoteOption.YES, label: 'Yes', icon: IoCheckmarkCircle, color: 'green' },
+    { value: VoteOption.NO, label: 'No', icon: IoCloseCircle, color: 'red' },
+    { value: VoteOption.ABSTAIN, label: 'Abstain', icon: IoRemoveCircle, color: 'gray' },
+    { value: VoteOption.NO_WITH_VETO, label: 'No with Veto', icon: IoWarning, color: 'orange' },
   ];
 
   const handleVoteAttempt = async () => {
     if (!selectedOption || voting || disabled) return;
 
-    // Check if wallet is connected first
-    if (!userAddress) {
-      setShowWalletPrompt(true);
-      return;
-    }
-
     // Check if Keplr is available
     if (!window.keplr) {
-      setError('Please install Keplr wallet to vote');
+      setError('Please install Keplr wallet extension to vote');
       return;
     }
 
@@ -46,34 +40,49 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   };
 
   const submitVote = async () => {
-    if (!selectedOption || !userAddress) return;
+    if (!selectedOption) return;
 
     setVoting(true);
     setError(null);
     setSuccess(false);
 
     try {
-      const chainId = 'coreum-mainnet-1';
-      await window.keplr.enable(chainId);
-      const offlineSigner = window.keplr.getOfflineSigner(chainId);
+      console.log('🗳️ [Vote] Starting vote submission...');
       
-      // Send vote transaction
-      const response = await fetch('/api/governance/vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const chainId = 'coreum-mainnet-1';
+      
+      // Enable Keplr and get signer
+      await window.keplr.enable(chainId);
+      const offlineSigner = await window.keplr.getOfflineSigner(chainId);
+      
+      // Get accounts to get the voter address
+      const accounts = await offlineSigner.getAccounts();
+      if (!accounts || accounts.length === 0) {
+        throw new Error('No wallet accounts found');
+      }
+      
+      const voterAddress = accounts[0].address;
+      console.log('🗳️ [Vote] Voter address:', voterAddress);
+      console.log('🗳️ [Vote] Proposal ID:', proposalId);
+      console.log('🗳️ [Vote] Option:', selectedOption);
+      
+      // Use the governance utility to submit vote directly
+      const result = await voteOnProposal(
+        {
           proposalId,
-          voter: userAddress,  // API expects 'voter', not 'voterAddress'
+          voter: voterAddress,
           option: selectedOption,
-        }),
-      });
+        },
+        offlineSigner
+      );
 
-      const data = await response.json();
+      console.log('🗳️ [Vote] Result:', result);
 
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to submit vote');
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit vote');
       }
 
+      console.log('✅ [Vote] Vote submitted successfully!', result.transactionHash);
       setSuccess(true);
       setError(null);
       
@@ -86,7 +95,7 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to vote';
       setError(errorMessage);
-      console.error('Vote error:', err);
+      console.error('❌ [Vote] Error:', err);
     } finally {
       setVoting(false);
     }
@@ -106,51 +115,6 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
     );
   }
 
-  // Show wallet connection prompt if no wallet is connected
-  if (showWalletPrompt || !userAddress) {
-    return (
-      <div className="space-y-4">
-        <div className="p-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-center">
-          <IoWallet className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
-          <h3 className="text-lg font-semibold text-yellow-400 mb-2">
-            Wallet Connection Required
-          </h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Please connect your Keplr, Leap, or Cosmostation wallet to vote on this proposal
-          </p>
-          <div className="text-xs text-gray-500 mb-4">
-            Your vote choice: <span className="font-semibold text-white">
-              {selectedOption ? voteOptions.find(opt => opt.value === selectedOption)?.label : 'Not selected'}
-            </span>
-          </div>
-          <button
-            onClick={() => {
-              // Try to open wallet connection
-              if (onConnectWallet) {
-                onConnectWallet();
-              } else {
-                // Fallback: show instruction
-                setError('Please use the Connect Wallet button in the header to connect your wallet, then try voting again.');
-              }
-              setShowWalletPrompt(false);
-            }}
-            className="w-full py-3 px-6 bg-gradient-to-r from-yellow-600 to-yellow-700 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-yellow-500/50 hover:scale-[1.02] transition-all"
-          >
-            Connect Wallet to Vote
-          </button>
-          {selectedOption && (
-            <button
-              onClick={() => setShowWalletPrompt(false)}
-              className="mt-2 text-sm text-gray-400 hover:text-white transition-colors"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
       {/* Vote Options */}
@@ -158,7 +122,7 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
         {voteOptions.map(({ value, label, icon: Icon, color }) => (
           <button
             key={value}
-            onClick={() => setSelectedOption(value as VoteOption)}
+            onClick={() => setSelectedOption(value)}
             disabled={voting || disabled}
             className={`p-4 rounded-xl border-2 transition-all duration-300 ${
               selectedOption === value
@@ -215,6 +179,10 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
           'Submit Vote'
         )}
       </button>
+
+      <div className="text-center text-xs text-gray-400">
+        Voting requires Keplr, Leap, or Cosmostation wallet
+      </div>
     </div>
   );
 }
