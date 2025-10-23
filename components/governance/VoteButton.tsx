@@ -108,15 +108,29 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
 
   if (success) {
     return (
-      <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
-        <div className="flex items-center gap-3">
-          <IoCheckmarkCircle className="w-6 h-6 text-green-400" />
-          <div>
-            <div className="text-green-400 font-semibold">Vote Submitted!</div>
-            <div className="text-sm text-gray-400">Your vote has been recorded on-chain</div>
+      <>
+        <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
+          <div className="flex items-center gap-3">
+            <IoCheckmarkCircle className="w-6 h-6 text-green-400" />
+            <div>
+              <div className="text-green-400 font-semibold">Vote Submitted!</div>
+              <div className="text-sm text-gray-400">Your vote has been recorded on-chain</div>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* Success Modal with Confetti */}
+        <VoteSuccessModal
+          isOpen={showSuccessModal}
+          onClose={() => {
+            setShowSuccessModal(false);
+            setSuccess(false);
+            setSelectedOption(null);
+            setTransactionHash(undefined);
+          }}
+          transactionHash={transactionHash}
+        />
+      </>
     );
   }
 
@@ -188,18 +202,6 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       <div className="text-center text-xs text-gray-400">
         Voting requires Keplr, Leap, or Cosmostation wallet
       </div>
-
-      {/* Success Modal with Confetti */}
-      <VoteSuccessModal
-        isOpen={showSuccessModal}
-        onClose={() => {
-          setShowSuccessModal(false);
-          setSuccess(false);
-          setSelectedOption(null);
-          setTransactionHash(undefined);
-        }}
-        transactionHash={transactionHash}
-      />
     </div>
   );
 }
