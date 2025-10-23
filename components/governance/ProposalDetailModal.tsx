@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { IoClose, IoCheckmarkCircle, IoCloseCircle, IoTimeOutline, IoCalendar, IoPerson, IoDocumentText, IoWallet, IoCash, IoInformationCircle } from "react-icons/io5";
 import { EnrichedProposal } from "@/types/governance";
 import VoteButton from "./VoteButton";
@@ -25,6 +25,7 @@ export default function ProposalDetailModal({
   const [userVoteOption, setUserVoteOption] = useState<string | null>(null);
   const [loadingVoteStatus, setLoadingVoteStatus] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -131,19 +132,20 @@ export default function ProposalDetailModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onWheel={(e) => e.stopPropagation()}
-      onTouchMove={(e) => e.stopPropagation()}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden"
     >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
+        onWheel={(e) => e.preventDefault()}
+        onTouchMove={(e) => e.preventDefault()}
       ></div>
 
       {/* Modal */}
       <div 
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto card-coreum animate-fade-in"
+        ref={modalRef}
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto card-coreum animate-fade-in scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-gray-800"
         onClick={(e) => e.stopPropagation()}
         onScroll={(e) => {
           const target = e.currentTarget;
@@ -151,6 +153,12 @@ export default function ProposalDetailModal({
             setShowScrollHint(false);
           }
         }}
+        style={{ 
+          overscrollBehavior: 'contain',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#9333ea #1f2937'
+        } as React.CSSProperties}
       >
         <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 p-6">
           <div className="flex items-start justify-between">
@@ -449,6 +457,25 @@ export default function ProposalDetailModal({
 
         .animate-fade-in {
           animation: fade-in 0.2s ease-out;
+        }
+
+        /* Custom scrollbar styles for webkit browsers */
+        :global(.scrollbar-thin::-webkit-scrollbar) {
+          width: 8px;
+        }
+
+        :global(.scrollbar-thin::-webkit-scrollbar-track) {
+          background: #1f2937;
+          border-radius: 4px;
+        }
+
+        :global(.scrollbar-thin::-webkit-scrollbar-thumb) {
+          background: #9333ea;
+          border-radius: 4px;
+        }
+
+        :global(.scrollbar-thin::-webkit-scrollbar-thumb:hover) {
+          background: #a855f7;
         }
       `}</style>
     </div>
