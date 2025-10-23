@@ -11,6 +11,7 @@ import { useCoreum } from '@/hooks/useCoreum';
 import { useBurnBalance } from '@/hooks/useBurnBalance';
 import { StatsGrid } from '@/components/analytics/StatsGrid';
 import { InflationTracker } from '@/components/analytics/InflationTracker';
+import { BondingSimulator } from '@/components/analytics/BondingSimulator';
 
 export default function AnalyticsPage() {
   const { stats, loading, error, refresh } = useCoreum();
@@ -24,6 +25,8 @@ export default function AnalyticsPage() {
   const currentAPR = stats?.currentAPR ? parseFloat(stats.currentAPR) : 26.04;
   const totalSupply = stats?.totalSupply ? parseFloat(stats.totalSupply) / 1_000_000 : 794_191_964;
   const bondedRatio = stats?.bondedRatio ? parseFloat(stats.bondedRatio) / 100 : 0.6723;
+  const bondedRatioPercent = bondedRatio * 100;
+  const totalBondedTokens = stats?.totalBonded ? parseFloat(stats.totalBonded) / 1_000_000 : totalSupply * bondedRatio;
   
   // Calculate daily inflation printed (annual inflation / 365)
   const dailyInflationPrinted = (totalSupply * (currentInflation / 100)) / 365;
@@ -97,6 +100,16 @@ export default function AnalyticsPage() {
           currentInflation={currentInflation}
           bondedRatio={bondedRatio}
           totalSupply={totalSupply}
+        />
+      </section>
+
+      {/* Bonding Acceleration Simulator */}
+      <section className="container mx-auto">
+        <BondingSimulator
+          currentBondedRatio={bondedRatioPercent}
+          currentInflation={currentInflation}
+          totalSupply={totalSupply}
+          totalBonded={totalBondedTokens}
         />
       </section>
 
