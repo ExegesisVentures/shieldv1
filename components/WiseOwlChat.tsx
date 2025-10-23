@@ -15,7 +15,7 @@ interface Message {
 // Helper function to parse markdown-style text
 const parseMarkdown = (text: string) => {
   const lines = text.split('\n');
-  const elements: JSX.Element[] = [];
+  const elements: React.ReactElement[] = [];
   let currentParagraph: string[] = [];
   let listItems: string[] = [];
   let inList = false;
@@ -49,8 +49,8 @@ const parseMarkdown = (text: string) => {
     }
   };
 
-  const parseInlineFormatting = (text: string): (string | JSX.Element)[] => {
-    const parts: (string | JSX.Element)[] = [];
+  const parseInlineFormatting = (text: string): (string | React.ReactElement)[] => {
+    const parts: (string | React.ReactElement)[] = [];
     let remaining = text;
     let key = 0;
 
@@ -80,8 +80,8 @@ const parseMarkdown = (text: string) => {
     return parts;
   };
 
-  const parseItalicAndCode = (text: string, baseKey: number): (string | JSX.Element)[] => {
-    const parts: (string | JSX.Element)[] = [];
+  const parseItalicAndCode = (text: string, baseKey: number): (string | React.ReactElement)[] => {
+    const parts: (string | React.ReactElement)[] = [];
     
     // Parse code `text`
     const codeRegex = /`(.+?)`/g;
