@@ -80,6 +80,14 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
       .replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
+  const getVoteOptionLabel = (option: string) => {
+    return option
+      .replace('VOTE_OPTION_', '')
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+  };
+
   const getVoteOptionColor = (option: string) => {
     if (option.includes('YES')) {
       return {
