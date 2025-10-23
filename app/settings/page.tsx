@@ -1,6 +1,6 @@
 "use client";
 
-import { IoSettings, IoPerson, IoNotifications, IoColorPalette, IoCamera, IoTrash, IoMail, IoLockClosed } from "react-icons/io5";
+import { IoSettings, IoPerson, IoNotifications, IoColorPalette, IoCamera, IoTrash, IoMail, IoLockClosed, IoTrendingUp } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,14 @@ export default function SettingsPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  
+  // Notification preferences
+  const [notifyPortfolio, setNotifyPortfolio] = useState(true);
+  const [notifyPriceAlerts, setNotifyPriceAlerts] = useState(true);
+  const [notifyMembership, setNotifyMembership] = useState(true);
+  const [notifyLiquidityPools, setNotifyLiquidityPools] = useState(true);
+  const [notifyTradingFeatures, setNotifyTradingFeatures] = useState(true);
+  const [notifyNewFeatures, setNotifyNewFeatures] = useState(true);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -77,11 +85,35 @@ export default function SettingsPage() {
             }
           }
         }
+
+        // Load notification preferences
+        const savedPrefs = localStorage.getItem(`notification_prefs_${authUser.id}`);
+        if (savedPrefs) {
+          const prefs = JSON.parse(savedPrefs);
+          setNotifyPortfolio(prefs.portfolio ?? true);
+          setNotifyPriceAlerts(prefs.priceAlerts ?? true);
+          setNotifyMembership(prefs.membership ?? true);
+          setNotifyLiquidityPools(prefs.liquidityPools ?? true);
+          setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
+          setNotifyNewFeatures(prefs.newFeatures ?? true);
+        }
       } else {
         // Visitor mode - load from localStorage if available
         const savedName = localStorage.getItem('visitor_display_name');
         if (savedName) {
           setDisplayName(savedName);
+        }
+        
+        // Load visitor notification preferences
+        const savedPrefs = localStorage.getItem('notification_prefs_visitor');
+        if (savedPrefs) {
+          const prefs = JSON.parse(savedPrefs);
+          setNotifyPortfolio(prefs.portfolio ?? true);
+          setNotifyPriceAlerts(prefs.priceAlerts ?? true);
+          setNotifyMembership(prefs.membership ?? true);
+          setNotifyLiquidityPools(prefs.liquidityPools ?? true);
+          setNotifyTradingFeatures(prefs.tradingFeatures ?? true);
+          setNotifyNewFeatures(prefs.newFeatures ?? true);
         }
       }
     } catch (error) {
@@ -285,6 +317,29 @@ export default function SettingsPage() {
     }
   };
 
+  const handleNotificationUpdate = () => {
+    const prefs = {
+      portfolio: notifyPortfolio,
+      priceAlerts: notifyPriceAlerts,
+      membership: notifyMembership,
+      liquidityPools: notifyLiquidityPools,
+      tradingFeatures: notifyTradingFeatures,
+      newFeatures: notifyNewFeatures,
+    };
+
+    const key = user ? `notification_prefs_${user.id}` : 'notification_prefs_visitor';
+    localStorage.setItem(key, JSON.stringify(prefs));
+    
+    setMessage({ 
+      type: 'success', 
+      text: user 
+        ? 'Notification preferences saved! We\'ll send you email updates based on your selections.' 
+        : 'Notification preferences saved locally! Sign up to receive email notifications.' 
+    });
+    
+    setTimeout(() => setMessage(null), 4000);
+  };
+
   if (loading) {
     return (
       <main className="p-6 max-w-7xl mx-auto">
@@ -462,7 +517,7 @@ export default function SettingsPage() {
         )}
 
         {/* Notifications */}
-        <Card className="p-6">
+        <Card id="notifications" className="p-6 scroll-mt-20">
           <div className="flex items-start gap-4 mb-6">
             <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl">
               <IoNotifications className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
@@ -472,30 +527,108 @@ export default function SettingsPage() {
                 Notifications
               </h2>
               <p className="text-sm text-gray-400">
-                Choose what updates you want to receive
+                Choose what updates you want to receive{user ? ' via email' : ''}
               </p>
             </div>
           </div>
-          <div className="space-y-3">
-            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg">
-              <span className="text-sm text-gray-300">
-                Portfolio updates
-              </span>
-              <input type="checkbox" disabled className="opacity-50" />
+          <div className="space-y-3 mb-4">
+            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+              <div>
+                <span className="text-sm font-medium text-gray-200">Portfolio updates</span>
+                <p className="text-xs text-gray-400 mt-0.5">Get notified about changes in your portfolio value</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={notifyPortfolio}
+                onChange={(e) => setNotifyPortfolio(e.target.checked)}
+                className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+              />
             </label>
-            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg">
-              <span className="text-sm text-gray-300">
-                Price alerts
-              </span>
-              <input type="checkbox" disabled className="opacity-50" />
+            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+              <div>
+                <span className="text-sm font-medium text-gray-200">Price alerts</span>
+                <p className="text-xs text-gray-400 mt-0.5">Receive alerts when token prices hit your targets</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={notifyPriceAlerts}
+                onChange={(e) => setNotifyPriceAlerts(e.target.checked)}
+                className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+              />
             </label>
-            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg">
-              <span className="text-sm text-gray-300">
-                Membership updates
-              </span>
-              <input type="checkbox" disabled className="opacity-50" />
+            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+              <div>
+                <span className="text-sm font-medium text-gray-200">Membership updates</span>
+                <p className="text-xs text-gray-400 mt-0.5">Updates about your Shield membership and benefits</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={notifyMembership}
+                onChange={(e) => setNotifyMembership(e.target.checked)}
+                className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+              />
+            </label>
+            
+            {/* Liquidity & Trading Features */}
+            <div className="pt-3 border-t border-gray-700">
+              <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                <IoTrendingUp className="w-4 h-4 text-[#25d695]" />
+                Liquidity & Trading (Coming Soon)
+              </h3>
+              <div className="space-y-3">
+                <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+                  <div>
+                    <span className="text-sm font-medium text-gray-200">Liquidity Pool launches</span>
+                    <p className="text-xs text-gray-400 mt-0.5">Be the first to know when new pools go live</p>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={notifyLiquidityPools}
+                    onChange={(e) => setNotifyLiquidityPools(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+                  />
+                </label>
+                <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+                  <div>
+                    <span className="text-sm font-medium text-gray-200">Trading features</span>
+                    <p className="text-xs text-gray-400 mt-0.5">Get early access to trading and DEX features</p>
+                  </div>
+                  <input 
+                    type="checkbox" 
+                    checked={notifyTradingFeatures}
+                    onChange={(e) => setNotifyTradingFeatures(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <label className="flex items-center justify-between p-3 border border-[#1b1d23] rounded-lg hover:bg-gray-800/50 cursor-pointer transition-colors">
+              <div>
+                <span className="text-sm font-medium text-gray-200">New features & updates</span>
+                <p className="text-xs text-gray-400 mt-0.5">Stay informed about new features and improvements</p>
+              </div>
+              <input 
+                type="checkbox" 
+                checked={notifyNewFeatures}
+                onChange={(e) => setNotifyNewFeatures(e.target.checked)}
+                className="w-5 h-5 rounded border-gray-600 text-[#25d695] focus:ring-[#25d695] focus:ring-offset-gray-900"
+              />
             </label>
           </div>
+          
+          <Button 
+            onClick={handleNotificationUpdate}
+            className="w-full bg-[#25d695] hover:bg-[#1fb881] text-white"
+          >
+            Save Notification Preferences
+          </Button>
+          
+          {!user && (
+            <p className="text-xs text-gray-400 mt-3 text-center">
+              💡 Sign up to receive email notifications when these features launch!
+            </p>
+          )}
         </Card>
 
         {/* Security / Password - Only for authenticated users */}

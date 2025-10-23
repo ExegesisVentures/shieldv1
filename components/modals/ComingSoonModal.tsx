@@ -40,6 +40,11 @@ export default function ComingSoonModal({ isOpen, onClose, feature }: ComingSoon
     router.push('/sign-up');
   };
 
+  const handleGetNotified = () => {
+    onClose();
+    router.push('/settings#notifications');
+  };
+
   if (!isOpen) return null;
 
   const featureTitle = feature === "add" ? "Add Liquidity" : "Trade";
@@ -136,15 +141,17 @@ export default function ComingSoonModal({ isOpen, onClose, feature }: ComingSoon
 
             {isAuthenticated && (
               <Button
-                onClick={onClose}
+                onClick={handleGetNotified}
                 className="w-full h-12 text-base font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
-                Got it, thanks!
+                🔔 Get Notified
               </Button>
             )}
 
             <p className="text-center text-xs text-gray-500 mt-4">
-              We&apos;ll notify you when this feature launches!
+              {isAuthenticated 
+                ? "Manage your notification preferences to stay updated!" 
+                : "We'll notify you when this feature launches!"}
             </p>
           </div>
         </div>
