@@ -27,8 +27,7 @@ export const BondingCurveTable = ({
   
   const tableData = generateBondingCurveTable(
     currentInflation,
-    targetInflation,
-    currentBondedRatio
+    targetInflation
   );
   
   return (
@@ -84,8 +83,8 @@ export const BondingCurveTable = ({
                       Annual Reduction = (1 - bonded_ratio/0.67) × 0.13 (13% max change)
                     </p>
                     <p className="mb-2">
-                      <strong className="text-blue-400">Baseline:</strong>{' '}
-                      Speed multiplier is compared to current {currentBondedRatio.toFixed(2)}% bonded ratio
+                      <strong className="text-blue-400">Current:</strong>{' '}
+                      {currentBondedRatio.toFixed(2)}% bonded ratio
                     </p>
                     <p>
                       <strong className="text-blue-400">Timeline:</strong>{' '}
@@ -110,9 +109,6 @@ export const BondingCurveTable = ({
                         Daily Reduction
                       </th>
                       <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
-                        Speed Multiplier
-                      </th>
-                      <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
                         Days to {targetInflation}%
                       </th>
                       <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
@@ -124,7 +120,7 @@ export const BondingCurveTable = ({
                     {tableData.map((row, index) => {
                       const isCurrent = Math.abs(row.bondedRatio - currentBondedRatio) < 0.01;
                       const isGoal = row.bondedRatio === 67.00;
-                      const isSignificant = row.speedMultiplier >= 10;
+                      const isSignificant = Math.abs(row.annualReduction) >= 1.0; // 1% or more annual reduction
                       
                       return (
                         <tr
@@ -167,22 +163,6 @@ export const BondingCurveTable = ({
                                 ? '0.000000%' 
                                 : `${formatBondingNumber(row.dailyReduction, 6)}%`}
                             </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex items-center gap-2">
-                              <span className={`font-bold ${
-                                isSignificant ? 'text-purple-400' : 
-                                isCurrent ? 'text-cyan-400' : 
-                                'text-white'
-                              }`}>
-                                {row.speedMultiplier === 0 
-                                  ? '0.0x' 
-                                  : `${formatBondingNumber(row.speedMultiplier, 1)}x`}
-                              </span>
-                              {isSignificant && !isCurrent && (
-                                <span className="text-xs text-purple-300">⚡ Fast</span>
-                              )}
-                            </div>
                           </td>
                           <td className="py-3 px-4">
                             <span className="text-white font-mono">
@@ -232,16 +212,16 @@ export const BondingCurveTable = ({
                 <h4 className="text-sm font-bold text-white mb-2">Understanding the Math:</h4>
                 <div className="space-y-2 text-sm text-gray-300">
                   <p>
-                    • <strong>Speed Multiplier:</strong> How much faster inflation reduces compared to {currentBondedRatio.toFixed(2)}% (baseline)
-                  </p>
-                  <p>
                     • <strong>Negative values = Good:</strong> Negative annual/daily reduction means inflation is going DOWN
                   </p>
                   <p>
-                    • <strong>Exponential effect:</strong> Each 1% increase above 67% compounds the reduction rate
+                    • <strong>Zero at 67%:</strong> At exactly 67% bonded ratio, inflation stays flat (neither increases nor decreases)
                   </p>
                   <p>
-                    • <strong>Example:</strong> At 75% bonded, inflation drops {formatBondingNumber(Math.abs(tableData.find(r => r.bondedRatio === 75)?.annualReduction || 0), 2)}% per year vs. {formatBondingNumber(Math.abs(tableData.find(r => Math.abs(r.bondedRatio - currentBondedRatio) < 0.1)?.annualReduction || 0), 2)}% at current
+                    • <strong>Exponential effect:</strong> Each 1% increase above 67% compounds the reduction rate significantly
+                  </p>
+                  <p>
+                    • <strong>Example:</strong> At 75% bonded, inflation drops {formatBondingNumber(Math.abs(tableData.find(r => r.bondedRatio === 75)?.annualReduction || 0), 2)}% per year vs. {formatBondingNumber(Math.abs(tableData.find(r => Math.abs(r.bondedRatio - currentBondedRatio) < 0.1)?.annualReduction || 0), 4)}% at current ({currentBondedRatio.toFixed(2)}%)
                   </p>
                 </div>
               </div>
