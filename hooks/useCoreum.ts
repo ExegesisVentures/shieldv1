@@ -30,7 +30,7 @@ export const useCoreum = () => {
   const [error, setError] = useState<string | null>(null);
   const [interpolatedStats, setInterpolatedStats] = useState<CoreumStats | null>(null);
   const previousStatsRef = useRef<CoreumStats | null>(null);
-  const interpolationFrameRef = useRef<number>();
+  const interpolationFrameRef = useRef<number | undefined>(undefined);
   
   // Interpolate between old and new values for smooth transitions
   const interpolateStats = (oldStats: CoreumStats, newStats: CoreumStats, progress: number) => {

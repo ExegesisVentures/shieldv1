@@ -19,7 +19,7 @@ export const AnimatedNumber = ({ value, className = '', duration = 600 }: Animat
   const [displayValue, setDisplayValue] = useState(value);
   const [rollingDigits, setRollingDigits] = useState<Set<number>>(new Set());
   const previousValueRef = useRef(value);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     // Handle initial render or placeholder values
