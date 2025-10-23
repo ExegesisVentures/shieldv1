@@ -32,6 +32,15 @@ import {
   ProposalStats,
   DelegationResponse,
 } from "@/types/governance";
+import {
+  isLikelyledgerSigner,
+  createLedgerFee,
+  getGasLimitForTxType,
+  validateLedgerMemo,
+  signAndBroadcastLedgerTx,
+  createLedgerClient,
+  getLedgerInstructions,
+} from "./ledger-support";
 
 // ============================================
 // CONFIGURATION
@@ -615,6 +624,7 @@ export async function fetchUserVotingHistory(
 
 /**
  * Cast a vote on a proposal (requires wallet signing)
+ * Now with Ledger hardware wallet support
  */
 export async function voteOnProposal(
   voteRequest: VoteRequest,
@@ -629,12 +639,21 @@ export async function voteOnProposal(
     const numericOption = voteOptionToNumber(voteRequest.option);
     console.log(`📡 [Governance] Numeric vote option: ${numericOption}`);
 
+    // Check if using Ledger
+    const isLedger = isLikelyledgerSigner(signer);
+    if (isLedger) {
+      console.log("🔐 [Governance] Detected Ledger device - using Ledger-compatible signing");
+      console.log(getLedgerInstructions());
+    }
+
     // Connect to Coreum with signer
-    const client = await SigningStargateClient.connectWithSigner(
-      COREUM_RPC_ENDPOINT,
-      signer,
-      { gasPrice: COREUM_GAS_PRICE }
-    );
+    const client = isLedger 
+      ? await createLedgerClient(signer)
+      : await SigningStargateClient.connectWithSigner(
+          COREUM_RPC_ENDPOINT,
+          signer,
+          { gasPrice: COREUM_GAS_PRICE }
+        );
 
     // Create vote message
     const voteMsg = {
@@ -646,7 +665,35 @@ export async function voteOnProposal(
       },
     };
 
-    // Broadcast transaction
+    // Use Ledger-compatible signing if detected
+    if (isLedger) {
+      const gasLimit = getGasLimitForTxType("vote");
+      const result = await signAndBroadcastLedgerTx(
+        client,
+        signer,
+        voteRequest.voter,
+        [voteMsg],
+        gasLimit,
+        "Vote on proposal"
+      );
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to submit vote");
+      }
+
+      console.log(
+        `✅ [Governance] Vote successful! TX: ${result.transactionHash}`
+      );
+
+      return {
+        success: true,
+        transactionHash: result.transactionHash,
+        blockHeight: result.height,
+        gasUsed: result.gasUsed,
+      };
+    }
+
+    // Standard signing for non-Ledger wallets
     const result = await client.signAndBroadcast(
       voteRequest.voter,
       [voteMsg],
@@ -670,9 +717,24 @@ export async function voteOnProposal(
     };
   } catch (error) {
     console.error(`❌ [Governance] Error voting on proposal:`, error);
+    
+    // Provide more helpful error messages
+    let errorMessage = error instanceof Error ? error.message : "Unknown error";
+    
+    // Check for common Ledger errors
+    if (errorMessage.includes("rejected")) {
+      errorMessage = "Transaction rejected on Ledger device. Please try again and approve the transaction.";
+    } else if (errorMessage.includes("timeout")) {
+      errorMessage = "Ledger signing timeout. Please ensure your Ledger is unlocked and the Coreum app is open.";
+    } else if (errorMessage.includes("locked")) {
+      errorMessage = "Ledger is locked. Please unlock your Ledger device and open the Coreum app.";
+    } else if (errorMessage.includes("not found")) {
+      errorMessage = "Ledger device not found. Please connect your Ledger and open the Coreum (or Cosmos) app.";
+    }
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: errorMessage,
     };
   }
 }
