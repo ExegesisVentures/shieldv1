@@ -624,7 +624,7 @@ export async function fetchUserVotingHistory(
 
 /**
  * Cast a vote on a proposal (requires wallet signing)
- * Now with Ledger hardware wallet support
+ * Uses Amino signing mode for maximum compatibility (Ledger + all wallets)
  */
 export async function voteOnProposal(
   voteRequest: VoteRequest,
@@ -639,21 +639,20 @@ export async function voteOnProposal(
     const numericOption = voteOptionToNumber(voteRequest.option);
     console.log(`📡 [Governance] Numeric vote option: ${numericOption}`);
 
-    // Check if using Ledger
+    // Check if using Ledger (Amino-only signer)
     const isLedger = isLikelyledgerSigner(signer);
     if (isLedger) {
-      console.log("🔐 [Governance] Detected Ledger device - using Ledger-compatible signing");
+      console.log("🔐 [Governance] Detected Ledger/Amino-only signer");
       console.log(getLedgerInstructions());
     }
 
-    // Connect to Coreum with signer
-    const client = isLedger 
-      ? await createLedgerClient(signer)
-      : await SigningStargateClient.connectWithSigner(
-          COREUM_RPC_ENDPOINT,
-          signer,
-          { gasPrice: COREUM_GAS_PRICE }
-        );
+    // Connect to Coreum with signer (will use Amino mode if that's all the signer supports)
+    console.log("🔐 [Governance] Connecting with Amino-compatible client...");
+    const client = await SigningStargateClient.connectWithSigner(
+      COREUM_RPC_ENDPOINT,
+      signer,
+      { gasPrice: COREUM_GAS_PRICE }
+    );
 
     // Create vote message
     const voteMsg = {
@@ -665,20 +664,29 @@ export async function voteOnProposal(
       },
     };
 
-    // Use Ledger-compatible signing if detected
+    // For Ledger users, use explicit gas (no "auto")
     if (isLedger) {
+      console.log("🔐 [Governance] Using explicit gas for Ledger compatibility");
       const gasLimit = getGasLimitForTxType("vote");
-      const result = await signAndBroadcastLedgerTx(
-        client,
-        signer,
+      const fee = createLedgerFee(gasLimit);
+      
+      console.log("🔐 [Governance] Ledger transaction details:", {
+        gasLimit,
+        fee,
+        voter: voteRequest.voter,
+        proposalId: voteRequest.proposalId,
+        option: numericOption
+      });
+      
+      const result = await client.signAndBroadcast(
         voteRequest.voter,
         [voteMsg],
-        gasLimit,
+        fee,
         "Vote on proposal"
       );
 
-      if (!result.success) {
-        throw new Error(result.error || "Failed to submit vote");
+      if (result.code !== 0) {
+        throw new Error(`Transaction failed: ${result.rawLog}`);
       }
 
       console.log(
@@ -689,11 +697,12 @@ export async function voteOnProposal(
         success: true,
         transactionHash: result.transactionHash,
         blockHeight: result.height,
-        gasUsed: result.gasUsed,
+        gasUsed: result.gasUsed?.toString(),
       };
     }
 
-    // Standard signing for non-Ledger wallets
+    // Standard signing for non-Ledger wallets (can use "auto" gas)
+    console.log("📡 [Governance] Using auto gas estimation for standard wallet");
     const result = await client.signAndBroadcast(
       voteRequest.voter,
       [voteMsg],
@@ -721,8 +730,10 @@ export async function voteOnProposal(
     // Provide more helpful error messages
     let errorMessage = error instanceof Error ? error.message : "Unknown error";
     
-    // Check for common Ledger errors
-    if (errorMessage.includes("rejected")) {
+    // Check for common Ledger/signing errors
+    if (errorMessage.includes("SIGN_MODE_DIRECT")) {
+      errorMessage = "Ledger detected but Direct signing attempted. This should not happen - please refresh and try again. If issue persists, contact support.";
+    } else if (errorMessage.includes("rejected")) {
       errorMessage = "Transaction rejected on Ledger device. Please try again and approve the transaction.";
     } else if (errorMessage.includes("timeout")) {
       errorMessage = "Ledger signing timeout. Please ensure your Ledger is unlocked and the Coreum app is open.";

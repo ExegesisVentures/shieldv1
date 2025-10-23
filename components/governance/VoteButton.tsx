@@ -51,9 +51,15 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       
       const chainId = 'coreum-mainnet-1';
       
-      // Enable Keplr and get signer
+      // Enable Keplr and get Amino signer (Ledger compatible)
       await window.keplr.enable(chainId);
-      const offlineSigner = await window.keplr.getOfflineSigner(chainId);
+      
+      // Use Amino-only signer for Ledger compatibility
+      // This works for both Ledger and non-Ledger users
+      console.log('🔐 [Vote] Using Amino signing mode for Ledger compatibility');
+      const offlineSigner = window.keplr.getOfflineSignerOnlyAmino 
+        ? await window.keplr.getOfflineSignerOnlyAmino(chainId)
+        : await window.keplr.getOfflineSigner(chainId);
       
       // Get accounts to get the voter address
       const accounts = await offlineSigner.getAccounts();
