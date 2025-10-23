@@ -63,8 +63,8 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           proposalId,
+          voter: userAddress,  // API expects 'voter', not 'voterAddress'
           option: selectedOption,
-          voterAddress: userAddress,
         }),
       });
 

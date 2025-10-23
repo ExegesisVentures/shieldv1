@@ -25,7 +25,9 @@ export default function ProposalDetailModal({
   const [userVoteOption, setUserVoteOption] = useState<string | null>(null);
   const [loadingVoteStatus, setLoadingVoteStatus] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [scrollHintFading, setScrollHintFading] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const scrollTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -46,6 +48,10 @@ export default function ProposalDetailModal({
     }
     return () => {
       document.body.style.overflow = 'unset';
+      // Clean up scroll timer
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+      }
     };
   }, [isOpen]);
 
@@ -189,6 +195,24 @@ export default function ProposalDetailModal({
             overflowY: 'auto',
             WebkitOverflowScrolling: 'touch',
             overscrollBehavior: 'contain'
+          }}
+          onScroll={(e) => {
+            const target = e.currentTarget;
+            if (target.scrollTop > 50 && showScrollHint) {
+              // Clear any existing timer
+              if (scrollTimerRef.current) {
+                clearTimeout(scrollTimerRef.current);
+              }
+              
+              // Start fading immediately
+              setScrollHintFading(true);
+              
+              // Hide completely after 1 second
+              scrollTimerRef.current = setTimeout(() => {
+                setShowScrollHint(false);
+                setScrollHintFading(false);
+              }, 1000);
+            }
           }}
         >
           {/* Proposal Information Grid */}
@@ -440,7 +464,11 @@ export default function ProposalDetailModal({
 
         {/* Scroll Hint Indicator */}
         {showScrollHint && (canVote || (!userAddress && isVotingPeriod)) && (
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none flex items-end justify-center pb-4">
+          <div 
+            className={`absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none flex items-end justify-center pb-4 transition-opacity duration-1000 ${
+              scrollHintFading ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
             <div className="animate-bounce text-purple-400 text-sm font-medium flex items-center gap-2">
               <span>Scroll down to vote</span>
               <span className="text-2xl">↓</span>
