@@ -24,6 +24,7 @@ export default function ProposalDetailModal({
   const [userHasVoted, setUserHasVoted] = useState(false);
   const [userVoteOption, setUserVoteOption] = useState<string | null>(null);
   const [loadingVoteStatus, setLoadingVoteStatus] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -34,6 +35,18 @@ export default function ProposalDetailModal({
       checkUserVoteStatus();
     }
   }, [userAddress, proposal.proposal_id]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const checkUserVoteStatus = async () => {
     if (!userAddress) return;
@@ -117,7 +130,11 @@ export default function ProposalDetailModal({
   if (!mounted || !isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onWheel={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -125,7 +142,16 @@ export default function ProposalDetailModal({
       ></div>
 
       {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto card-coreum animate-fade-in">
+      <div 
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto card-coreum animate-fade-in"
+        onClick={(e) => e.stopPropagation()}
+        onScroll={(e) => {
+          const target = e.currentTarget;
+          if (target.scrollTop > 50) {
+            setShowScrollHint(false);
+          }
+        }}
+      >
         <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 p-6">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
@@ -397,6 +423,16 @@ export default function ProposalDetailModal({
             </div>
           )}
         </div>
+
+        {/* Scroll Hint Indicator */}
+        {showScrollHint && (canVote || (!userAddress && isVotingPeriod)) && (
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none flex items-end justify-center pb-4">
+            <div className="animate-bounce text-purple-400 text-sm font-medium flex items-center gap-2">
+              <span>Scroll down to vote</span>
+              <span className="text-2xl">↓</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <style jsx>{`
