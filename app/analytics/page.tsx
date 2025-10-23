@@ -156,13 +156,19 @@ export default function AnalyticsPage() {
               increase bonded ratio (numerator ↑)
             </p>
           </div>
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5">
+          <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5 relative overflow-hidden">
+            <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+              COMING SOON 🔥
+            </div>
             <div className="text-3xl mb-3">🔥</div>
             <h3 className="text-lg font-bold text-white mb-2">Burning Path</h3>
             <p className="text-gray-400 text-sm">
               Reduce total supply permanently + 
               increase bonded ratio (denominator ↓) + help all stakers
             </p>
+            <div className="mt-3 text-xs text-orange-400 font-semibold">
+              🚀 We're cooking up something BIG!
+            </div>
           </div>
           <div className="bg-slate-800/50 rounded-xl p-6 border border-white/5">
             <div className="text-3xl mb-3">🚀</div>

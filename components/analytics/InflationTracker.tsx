@@ -174,11 +174,18 @@ export const InflationTracker = ({
               
               {/* Burning Option */}
               <motion.div 
-                className="relative bg-gradient-to-br from-orange-900/30 to-red-800/10 rounded-xl p-6 border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300"
+                className="relative bg-gradient-to-br from-orange-900/30 to-red-800/10 rounded-xl p-6 border border-orange-500/20 hover:border-orange-500/40 transition-all duration-300 opacity-75"
                 whileHover={{ scale: 1.02 }}
               >
+                {/* Coming Soon Badge */}
+                <div className="absolute top-4 right-4 z-10">
+                  <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse shadow-lg">
+                    🔥 COMING SOON
+                  </div>
+                </div>
+                
                 {burnIsMoreEfficient && (
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  <div className="absolute top-16 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold opacity-50">
                     ✓ Most Efficient
                   </div>
                 )}
@@ -204,6 +211,13 @@ export const InflationTracker = ({
                     Plus permanently deflationary - benefits EVERYONE long-term!
                   </span>
                 </p>
+                
+                {/* Coming Soon Message */}
+                <div className="mt-4 p-4 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
+                  <p className="text-orange-300 text-sm font-bold text-center">
+                    🚀 We're cooking up something BIG! Stay tuned...
+                  </p>
+                </div>
                 <div className="bg-orange-900/30 p-3 rounded-lg text-sm text-gray-300">
                   ✅ Reduces supply FOREVER<br/>
                   ✅ Benefits all holders<br/>
