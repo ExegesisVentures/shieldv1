@@ -31,16 +31,8 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
         rotation: Math.random() * 360,
       }));
       setConfettiPieces(pieces);
-
-      // Auto-close after 5 seconds
-      const timer = setTimeout(() => {
-        console.log('🎉 [VoteSuccessModal] Auto-closing modal');
-        onClose();
-      }, 5000);
-
-      return () => clearTimeout(timer);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!mounted || !isOpen) {
     if (!mounted) console.log('🎉 [VoteSuccessModal] Not mounted yet');
@@ -144,10 +136,6 @@ export default function VoteSuccessModal({ isOpen, onClose, transactionHash }: V
           >
             Continue Exploring
           </button>
-
-          <p className="text-xs text-gray-500">
-            This window will close automatically in 5 seconds
-          </p>
         </div>
       </div>
 
