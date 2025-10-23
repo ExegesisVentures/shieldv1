@@ -4,12 +4,11 @@ import { useState } from "react";
 import { IoCheckmarkCircle, IoCloseCircle, IoRemoveCircle, IoWarning, IoWallet } from "react-icons/io5";
 import { voteOnProposal } from "@/utils/coreum/proposals";
 import { VoteOption } from "@/types/governance";
-import VoteSuccessModal from "./VoteSuccessModal";
 
 interface VoteButtonProps {
   proposalId: string;
   userAddress: string;
-  onVoteSuccess?: () => void;
+  onVoteSuccess?: (transactionHash?: string) => void;
   disabled?: boolean;
   onConnectWallet?: () => void; // Callback to trigger wallet connection
 }
@@ -20,8 +19,6 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [showWalletPrompt, setShowWalletPrompt] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [transactionHash, setTransactionHash] = useState<string | undefined>(undefined);
 
   const voteOptions = [
     { value: VoteOption.YES, label: 'Yes', icon: IoCheckmarkCircle, color: 'green' },
@@ -88,15 +85,11 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       console.log('✅ [Vote] Vote submitted successfully!', result.transactionHash);
       setSuccess(true);
       setError(null);
-      setTransactionHash(result.transactionHash);
       
-      console.log('🎊 [Vote] Setting showSuccessModal to TRUE');
-      // Show success modal with celebration
-      setShowSuccessModal(true);
-      
-      // Call success callback after modal is shown
+      console.log('🎊 [Vote] Calling onVoteSuccess with TX:', result.transactionHash);
+      // Call success callback with transaction hash
       if (onVoteSuccess) {
-        onVoteSuccess();
+        onVoteSuccess(result.transactionHash);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to vote';
@@ -108,32 +101,17 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
   };
 
   if (success) {
-    console.log('🎊 [Vote] Rendering success view. showSuccessModal:', showSuccessModal);
+    console.log('🎊 [Vote] Rendering success view');
     return (
-      <>
-        <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
-          <div className="flex items-center gap-3">
-            <IoCheckmarkCircle className="w-6 h-6 text-green-400" />
-            <div>
-              <div className="text-green-400 font-semibold">Vote Submitted!</div>
-              <div className="text-sm text-gray-400">Your vote has been recorded on-chain</div>
-            </div>
+      <div className="p-6 bg-green-500/10 border border-green-500/30 rounded-xl">
+        <div className="flex items-center gap-3">
+          <IoCheckmarkCircle className="w-6 h-6 text-green-400" />
+          <div>
+            <div className="text-green-400 font-semibold">Vote Submitted!</div>
+            <div className="text-sm text-gray-400">Your vote has been recorded on-chain</div>
           </div>
         </div>
-
-        {/* Success Modal with Confetti */}
-        <VoteSuccessModal
-          isOpen={showSuccessModal}
-          onClose={() => {
-            console.log('🎊 [Vote] Closing success modal');
-            setShowSuccessModal(false);
-            setSuccess(false);
-            setSelectedOption(null);
-            setTransactionHash(undefined);
-          }}
-          transactionHash={transactionHash}
-        />
-      </>
+      </div>
     );
   }
 

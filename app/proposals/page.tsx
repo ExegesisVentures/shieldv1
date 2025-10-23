@@ -6,6 +6,7 @@ import ProposalCard from "@/components/governance/ProposalCard";
 import ProposalDetailModal from "@/components/governance/ProposalDetailModal";
 import VotingHistory from "@/components/governance/VotingHistory";
 import CreateProposalModal from "@/components/governance/CreateProposalModal";
+import VoteSuccessModal from "@/components/governance/VoteSuccessModal";
 import { EnrichedProposal } from "@/types/governance";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { createSupabaseClient } from "@/utils/supabase/client";
@@ -24,6 +25,8 @@ function ProposalsContent() {
   const [showVotingHistory, setShowVotingHistory] = useState(false);
   const [showCreateProposal, setShowCreateProposal] = useState(false);
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [voteTransactionHash, setVoteTransactionHash] = useState<string | undefined>(undefined);
   const [stats, setStats] = useState({
     total: 0,
     voting: 0,
@@ -190,10 +193,14 @@ function ProposalsContent() {
     setFilteredProposals(filtered);
   };
 
-  const handleVoteSuccess = () => {
-    // Refresh proposals after successful vote
+  const handleVoteSuccess = (transactionHash?: string) => {
+    console.log('🎊 [Proposals Page] Vote success! TX:', transactionHash);
+    // Show celebration modal
+    setVoteTransactionHash(transactionHash);
+    setShowSuccessModal(true);
+    // Refresh proposals in background
     handleRefresh();
-    // Close modal
+    // Close proposal modal
     setSelectedProposal(null);
   };
 
@@ -404,6 +411,17 @@ function ProposalsContent() {
         onClose={() => setShowCreateProposal(false)}
         userAddress={userAddress}
         onSuccess={handleRefresh}
+      />
+
+      {/* Vote Success Modal with Confetti */}
+      <VoteSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => {
+          console.log('🎊 [Proposals Page] Closing success modal');
+          setShowSuccessModal(false);
+          setVoteTransactionHash(undefined);
+        }}
+        transactionHash={voteTransactionHash}
       />
 
       {/* Add custom CSS for animations */}
