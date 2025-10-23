@@ -26,17 +26,29 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
     
     setLoading(true);
     try {
+      console.log(`🔍 [ProposalCard] Checking vote for proposal ${proposal.proposal_id}, user ${userAddress}`);
       const response = await fetch(
         `/api/governance/votes/${userAddress}?proposalId=${proposal.proposal_id}`
       );
       const data = await response.json();
       
+      console.log(`📦 [ProposalCard] API Response:`, data);
+      
       if (data.success && data.data.hasVoted) {
+        // Handle both formats: vote.option OR vote.options[0].option
+        const voteOption = data.data.vote?.options?.[0]?.option || data.data.vote?.option || null;
+        console.log(`✅ [ProposalCard] User HAS voted! Option:`, voteOption);
         setUserVoted(true);
-        setUserVoteOption(data.data.vote?.option || null);
+        setUserVoteOption(voteOption);
+      } else {
+        console.log(`ℹ️ [ProposalCard] User has NOT voted yet`);
+        setUserVoted(false);
+        setUserVoteOption(null);
       }
     } catch (error) {
-      console.error('Failed to check user vote:', error);
+      console.error('❌ [ProposalCard] Failed to check user vote:', error);
+      setUserVoted(false);
+      setUserVoteOption(null);
     } finally {
       setLoading(false);
     }
@@ -81,6 +93,23 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
   };
 
   const getVoteOptionLabel = (option: string) => {
+    // Handle numeric values (1, 2, 3, 4) from Cosmos SDK
+    const optionStr = String(option);
+    
+    if (optionStr === '1' || optionStr.includes('YES')) {
+      return 'Yes';
+    }
+    if (optionStr === '2' || optionStr.includes('ABSTAIN')) {
+      return 'Abstain';
+    }
+    if (optionStr === '3' || optionStr.includes('NO') && !optionStr.includes('VETO')) {
+      return 'No';
+    }
+    if (optionStr === '4' || optionStr.includes('NO_WITH_VETO')) {
+      return 'No With Veto';
+    }
+    
+    // Fallback to string processing
     return option
       .replace('VOTE_OPTION_', '')
       .replace(/_/g, ' ')
@@ -89,7 +118,10 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
   };
 
   const getVoteOptionColor = (option: string) => {
-    if (option.includes('YES')) {
+    // Handle both string format (VOTE_OPTION_YES) and numeric format (1, 2, 3, 4)
+    const optionStr = String(option);
+    
+    if (optionStr.includes('YES') || optionStr === '1') {
       return {
         border: 'border-green-500/50',
         bg: 'bg-green-500/10',
@@ -97,7 +129,7 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
         cardBorder: 'border-green-500'
       };
     }
-    if (option.includes('NO_WITH_VETO')) {
+    if (optionStr.includes('NO_WITH_VETO') || optionStr === '4') {
       return {
         border: 'border-orange-500/50',
         bg: 'bg-orange-500/10',
@@ -105,7 +137,7 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
         cardBorder: 'border-orange-500'
       };
     }
-    if (option.includes('NO')) {
+    if (optionStr.includes('NO') || optionStr === '3') {
       return {
         border: 'border-red-500/50',
         bg: 'bg-red-500/10',
@@ -113,7 +145,7 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
         cardBorder: 'border-red-500'
       };
     }
-    if (option.includes('ABSTAIN')) {
+    if (optionStr.includes('ABSTAIN') || optionStr === '2') {
       return {
         border: 'border-gray-500/50',
         bg: 'bg-gray-500/10',
