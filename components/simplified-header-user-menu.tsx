@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose, IoNotifications, IoHome, IoTrendingUp, IoWater } from "react-icons/io5";
+import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose } from "react-icons/io5";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions";
 import { createSupabaseClient } from "@/utils/supabase/client";
@@ -24,7 +24,6 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
   const [walletCount, setWalletCount] = useState(0);
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
     // Check if visitor has wallets and admin status
@@ -41,9 +40,6 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
             isAdminWallet(w.address)
           );
           setIsAdmin(hasAdminWallet);
-          
-          // For non-authenticated users, show default unread count
-          setUnreadNotifications(3);
         } else {
           // Check authenticated user admin status
           const supabase = createSupabaseClient();
@@ -65,15 +61,6 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
           if (publicUsers?.profile_image_url) {
             setProfileImage(publicUsers.profile_image_url);
           }
-          
-          // Load unread notification count
-          const { data: notifications } = await supabase
-            .from('user_notifications')
-            .select('id')
-            .eq('user_id', user.id)
-            .eq('read', false);
-          
-          setUnreadNotifications(notifications?.length || 0);
         }
       } catch (error) {
         console.error("Error checking status:", error);
@@ -144,59 +131,6 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
 
           {/* Menu Items */}
           <div className="p-2">
-            {/* Mobile Navigation Links - Only visible on mobile */}
-            <div className="md:hidden space-y-1 mb-2 pb-2 border-b border-gray-700">
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
-              >
-                <IoHome className="w-4 h-4" />
-                <span className="text-sm">Portfolio</span>
-              </Link>
-              <Link
-                href="/wallets"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
-              >
-                <WalletIcon className="w-4 h-4" />
-                <span className="text-sm">Wallets</span>
-              </Link>
-              <Link
-                href="/liquidity"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
-              >
-                <IoWater className="w-4 h-4" />
-                <span className="text-sm">Liquidity</span>
-              </Link>
-              <Link
-                href="/governance"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
-              >
-                <IoTrendingUp className="w-4 h-4" />
-                <span className="text-sm">Governance</span>
-              </Link>
-              <Link
-                href="/membership"
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
-              >
-                <ShieldIcon className="w-4 h-4" />
-                <span className="text-sm">Membership</span>
-              </Link>
-            </div>
-
-            {/* Notifications - NEW */}
-            <Link
-              href="/settings?tab=notifications"
-              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-900/20 transition-colors text-purple-400 hover:text-purple-300 relative"
-            >
-              <IoNotifications className="w-4 h-4" />
-              <span className="text-sm">Notifications</span>
-              {unreadNotifications > 0 && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-purple-600 rounded-full">
-                  {unreadNotifications}
-                </span>
-              )}
-            </Link>
-
             {/* Sign In / Sign Out - TOP */}
             {isVisitor && !user ? (
               <>
@@ -240,7 +174,7 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
             {/* Portfolio Link - SECOND */}
             <Link
               href="/dashboard"
-              className="hidden md:flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
             >
               <WalletIcon className="w-4 h-4" />
               <span className="text-sm">Portfolio</span>

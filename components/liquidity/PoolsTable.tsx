@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fetchLiquidityPools, type LiquidityPool } from "@/utils/coreum/liquidity-pools";
 import { AnimatedCurrency } from "@/components/ui/AnimatedNumber";
-import ComingSoonModal from "@/components/modals/ComingSoonModal";
 
 interface PoolsTableProps {
   pools?: LiquidityPool[];
@@ -19,7 +18,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setIoSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [apiPools, setApiPools] = useState<LiquidityPool[]>([]);
@@ -28,8 +27,6 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
   const [hasMore, setHasMore] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false); // Track if we've loaded once
   const [isBackgroundRefreshing, setIsBackgroundRefreshing] = useState(false);
-  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
-  const [comingSoonFeature, setComingSoonFeature] = useState<"add" | "trade">("add");
 
   // Mock data for fallback
   const mockPools: LiquidityPool[] = [
@@ -271,8 +268,8 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
     setIsRefreshing(false);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
+  const handleIoSearch = (query: string) => {
+    setIoSearchQuery(query);
     setCurrentPage(1); // Reset to first page when searching
   };
 
@@ -284,16 +281,6 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-  };
-
-  const handleAddClick = () => {
-    setComingSoonFeature("add");
-    setShowComingSoonModal(true);
-  };
-
-  const handleTradeClick = () => {
-    setComingSoonFeature("trade");
-    setShowComingSoonModal(true);
   };
 
   // Set client flag to prevent hydration mismatch
@@ -388,34 +375,34 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
   return (
     <Card className="overflow-hidden">
       {/* Header with search and controls */}
-      <div className="px-6 py-4 border-b border-gray-700 bg-gradient-to-r from-gray-800 to-gray-900">
+      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Liquidity Pools
             </h3>
             {isClient && lastUpdated && (
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
           </div>
           
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-            {/* Search Input */}
+            {/* IoSearch Input */}
             <div className="relative">
-              <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search pools..."
+                placeholder="IoSearch pools..."
                 value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 w-64 h-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-purple-500"
+                onChange={(e) => handleIoSearch(e.target.value)}
+                className="pl-10 w-64"
               />
             </div>
             
             {/* Items per page dropdown */}
             <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
-              <SelectTrigger className="w-20 h-10 bg-gray-800 border-gray-700">
+              <SelectTrigger className="w-20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -433,7 +420,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
               disabled={isRefreshing || isBackgroundRefreshing}
               size="sm"
               variant="outline"
-              className="relative h-10 border-gray-700 hover:bg-gray-800"
+              className="relative"
             >
               <IoRefresh className={`w-4 h-4 mr-2 ${isRefreshing || isBackgroundRefreshing ? 'animate-spin' : ''}`} />
               {isBackgroundRefreshing ? 'Updating...' : 'Refresh'}
@@ -446,17 +433,14 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
       </div>
       
       {/* Results info */}
-      <div className="px-6 py-3 bg-gradient-to-r from-gray-800/50 to-gray-900/50 border-b border-gray-700">
-        <div className="flex items-center justify-between text-sm font-medium text-gray-300">
-          <span className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 text-white text-xs font-bold shadow-lg">
-              {filteredPools.length}
-            </span>
+      <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+          <span>
             Showing {startItem}-{endItem} of {filteredPools.length} pools
             {searchQuery && ` matching "${searchQuery}"`}
           </span>
           {totalPages > 1 && (
-            <span className="text-purple-400 font-semibold">
+            <span>
               Page {currentPage} of {totalPages}
             </span>
           )}
@@ -470,15 +454,15 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
             {paginatedPools.map((pool) => (
               <Card
                 key={pool.id}
-                className="group relative overflow-hidden bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 border-2 border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/30 hover:-translate-y-1"
+                className="group relative overflow-hidden bg-gradient-to-br from-white via-white to-gray-50/50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900/50 border-2 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 dark:hover:shadow-purple-500/30 hover:-translate-y-1"
               >
                 {/* Animated gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-blue-500/0 to-emerald-500/0 group-hover:from-purple-500/10 group-hover:via-blue-500/10 group-hover:to-emerald-500/10 transition-all duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-blue-500/0 to-emerald-500/0 group-hover:from-purple-500/5 group-hover:via-blue-500/5 group-hover:to-emerald-500/5 transition-all duration-500 pointer-events-none" />
                 
                 {/* High APY Badge */}
                 {pool.apy >= 30 && (
-                  <div className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 z-10">
-                    <IoTrendingUp className="w-3.5 h-3.5" />
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1 animate-pulse">
+                    <IoTrendingUp className="w-3 h-3" />
                     Hot
                   </div>
                 )}
@@ -487,25 +471,18 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                   {/* Pool Header */}
                   <div className="flex items-center gap-4 mb-6">
                     <div className="relative flex -space-x-3">
-                      {/* 3D Token Icons with reduced glow */}
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full blur-md opacity-40" />
-                        <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-base shadow-xl ring-2 ring-gray-900 group-hover:scale-110 transition-transform duration-300">
-                          {pool.token0Symbol.charAt(0)}
-                        </div>
+                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 via-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-base shadow-lg ring-2 ring-white dark:ring-gray-800 group-hover:scale-110 transition-transform duration-300">
+                        {pool.token0Symbol.charAt(0)}
                       </div>
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-teal-600 rounded-full blur-md opacity-40" />
-                        <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-base shadow-xl ring-2 ring-gray-900 group-hover:scale-110 transition-transform duration-300">
-                          {pool.token1Symbol.charAt(0)}
-                        </div>
+                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-base shadow-lg ring-2 ring-white dark:ring-gray-800 group-hover:scale-110 transition-transform duration-300">
+                        {pool.token1Symbol.charAt(0)}
                       </div>
                     </div>
                     <div className="flex-1">
-                      <div className="font-bold text-xl text-white group-hover:text-purple-400 transition-colors">
+                      <div className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                         {pool.token0Symbol}/{pool.token1Symbol}
                       </div>
-                      <div className="text-xs text-gray-400 flex items-center gap-1.5 mt-1">
+                      <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mt-1">
                         <IoWater className="w-3.5 h-3.5" />
                         {pool.poolType} Pool
                       </div>
@@ -513,12 +490,12 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                   </div>
 
                   {/* APY Highlight */}
-                  <div className="mb-5 p-4 rounded-xl bg-gradient-to-r from-green-900/40 to-emerald-900/40 border border-green-500/30">
+                  <div className="mb-5 p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-green-300">Annual APY</span>
+                      <span className="text-sm font-medium text-green-700 dark:text-green-300">Annual APY</span>
                       <div className="flex items-center gap-2">
-                        <IoTrendingUp className="w-5 h-5 text-green-400" />
-                        <span className="text-2xl font-bold text-green-400">
+                        <IoTrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <span className="text-2xl font-bold text-green-600 dark:text-green-400">
                           {pool.apy.toFixed(1)}%
                         </span>
                       </div>
@@ -528,44 +505,46 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                   {/* Pool Stats */}
                   <div className="space-y-3 mb-5">
                     {/* TVL */}
-                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-800/50 transition-colors">
-                      <span className="text-sm font-medium text-gray-400">Total Value Locked</span>
-                      <span className="text-base font-bold text-white">
+                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Value Locked</span>
+                      <span className="text-base font-bold text-gray-900 dark:text-white">
                         <AnimatedCurrency value={pool.tvl} decimals={0} />
                       </span>
                     </div>
 
                     {/* 24h Volume */}
-                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-800/50 transition-colors">
-                      <span className="text-sm font-medium text-gray-400">24h Volume</span>
-                      <span className="text-base font-semibold text-purple-400">
+                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">24h Volume</span>
+                      <span className="text-base font-semibold text-purple-600 dark:text-purple-400">
                         <AnimatedCurrency value={pool.volume24h} decimals={0} />
                       </span>
                     </div>
 
                     {/* 24h Fees */}
-                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-800/50 transition-colors">
-                      <span className="text-sm font-medium text-gray-400">24h Fees Earned</span>
-                      <span className="text-base font-semibold text-blue-400">
+                    <div className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">24h Fees Earned</span>
+                      <span className="text-base font-semibold text-blue-600 dark:text-blue-400">
                         <AnimatedCurrency value={pool.fees24h} decimals={0} />
                       </span>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-3 pt-4 border-t-2 border-gray-700">
+                  <div className="flex gap-3 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
                     <Button
                       size="sm"
-                      onClick={handleAddClick}
-                      className="flex-1 h-11 font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                      variant="outline"
+                      disabled
+                      className="flex-1 h-10 font-semibold border-2 opacity-50 cursor-not-allowed group-hover:border-purple-300 dark:group-hover:border-purple-700 transition-colors"
                     >
                       <IoLockClosed className="w-4 h-4 mr-2" />
                       Add
                     </Button>
                     <Button
                       size="sm"
-                      onClick={handleTradeClick}
-                      className="flex-1 h-11 font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                      variant="outline"
+                      disabled
+                      className="flex-1 h-10 font-semibold border-2 opacity-50 cursor-not-allowed group-hover:border-blue-300 dark:group-hover:border-blue-700 transition-colors"
                     >
                       <IoLockClosed className="w-4 h-4 mr-2" />
                       Trade
@@ -598,9 +577,9 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="px-6 py-4 border-t border-gray-700 bg-gradient-to-r from-gray-800 to-gray-900">
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-400 font-medium">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               Showing {startItem}-{endItem} of {filteredPools.length} pools
             </div>
             
@@ -610,7 +589,6 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                 size="sm"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="border-gray-700 hover:bg-gray-800"
               >
                 <IoChevronBack className="w-4 h-4" />
                 Previous
@@ -635,11 +613,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                       variant={currentPage === pageNum ? "default" : "outline"}
                       size="sm"
                       onClick={() => handlePageChange(pageNum)}
-                      className={`w-9 h-9 p-0 ${
-                        currentPage === pageNum
-                          ? "bg-gradient-to-r from-purple-600 to-blue-600"
-                          : "border-gray-700 hover:bg-gray-800"
-                      }`}
+                      className="w-8 h-8 p-0"
                     >
                       {pageNum}
                     </Button>
@@ -652,7 +626,6 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                 size="sm"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="border-gray-700 hover:bg-gray-800"
               >
                 Next
                 <IoChevronForward className="w-4 h-4" />
@@ -661,13 +634,6 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
           </div>
         </div>
       )}
-
-      {/* Coming Soon Modal */}
-      <ComingSoonModal
-        isOpen={showComingSoonModal}
-        onClose={() => setShowComingSoonModal(false)}
-        feature={comingSoonFeature}
-      />
     </Card>
   );
 }
