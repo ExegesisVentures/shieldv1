@@ -80,15 +80,15 @@ export const BondingCurveTable = ({
                   <div className="text-sm text-gray-300">
                     <p className="mb-2">
                       <strong className="text-blue-400">Formula:</strong>{' '}
-                      Annual Reduction = (1 - bonded_ratio/0.67) × 0.13 (13% max change)
+                      Annual Reduction = (1 - bonded_ratio/0.67) × 0.13 | APR = inflation / bonded_ratio
                     </p>
                     <p className="mb-2">
-                      <strong className="text-blue-400">Current:</strong>{' '}
-                      {currentBondedRatio.toFixed(2)}% bonded ratio
+                      <strong className="text-blue-400">Real APR:</strong>{' '}
+                      What stakers actually earn (Staking APR - Inflation). As more stake, APR drops BUT inflation drops faster = Higher Real APR!
                     </p>
                     <p>
-                      <strong className="text-blue-400">Timeline:</strong>{' '}
-                      Days to reduce from {currentInflation.toFixed(2)}% to {targetInflation}% inflation
+                      <strong className="text-blue-400">Current:</strong>{' '}
+                      {currentBondedRatio.toFixed(2)}% bonded, {currentInflation.toFixed(2)}% inflation
                     </p>
                   </div>
                 </div>
@@ -96,11 +96,17 @@ export const BondingCurveTable = ({
               
               {/* Responsive Table Wrapper */}
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[800px]">
+                <table className="w-full min-w-[1000px]">
                   <thead>
                     <tr className="border-b-2 border-indigo-500/30">
                       <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
                         Bonded Ratio
+                      </th>
+                      <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
+                        Staking APR
+                      </th>
+                      <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
+                        Real APR
                       </th>
                       <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
                         Annual Reduction
@@ -110,9 +116,6 @@ export const BondingCurveTable = ({
                       </th>
                       <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
                         Days to {targetInflation}%
-                      </th>
-                      <th className="text-left py-4 px-4 text-indigo-300 font-bold text-sm">
-                        Years to {targetInflation}%
                       </th>
                     </tr>
                   </thead>
@@ -151,6 +154,16 @@ export const BondingCurveTable = ({
                             </div>
                           </td>
                           <td className="py-3 px-4">
+                            <span className="font-mono text-white">
+                              {row.apr.toFixed(2)}%
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className={`font-bold font-mono ${row.realAPR > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              {row.realAPR > 0 ? '+' : ''}{row.realAPR.toFixed(2)}%
+                            </span>
+                          </td>
+                          <td className="py-3 px-4">
                             <span className={`font-mono ${row.annualReduction < 0 ? 'text-green-400' : 'text-gray-400'}`}>
                               {row.annualReduction === 0 
                                 ? '0.0000%' 
@@ -170,13 +183,11 @@ export const BondingCurveTable = ({
                                 ? 'N/A' 
                                 : Math.ceil(row.daysToTarget).toLocaleString()}
                             </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <span className="text-gray-300 font-mono">
-                              {!isFinite(row.yearsToTarget) 
-                                ? 'N/A' 
-                                : `~${formatBondingNumber(row.yearsToTarget, 1)}`}
-                            </span>
+                            {isFinite(row.daysToTarget) && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                ~{formatBondingNumber(row.yearsToTarget, 1)} years
+                              </div>
+                            )}
                           </td>
                         </tr>
                       );
@@ -212,16 +223,18 @@ export const BondingCurveTable = ({
                 <h4 className="text-sm font-bold text-white mb-2">Understanding the Math:</h4>
                 <div className="space-y-2 text-sm text-gray-300">
                   <p>
-                    • <strong>Negative values = Good:</strong> Negative annual/daily reduction means inflation is going DOWN
+                    • <strong>Staking APR:</strong> Goes DOWN as more people stake (same rewards divided among more stakers)
                   </p>
                   <p>
-                    • <strong>Zero at 67%:</strong> At exactly 67% bonded ratio, inflation stays flat (neither increases nor decreases)
+                    • <strong>Real APR (Green = Good):</strong> What you ACTUALLY earn after inflation. This INCREASES as bonded ratio rises!
                   </p>
                   <p>
-                    • <strong>Exponential effect:</strong> Each 1% increase above 67% compounds the reduction rate significantly
+                    • <strong>The Magic:</strong> Even though APR drops from {tableData[0]?.apr.toFixed(2)}% to {tableData[tableData.length-1]?.apr.toFixed(2)}%, 
+                    Real APR goes from {tableData[0]?.realAPR.toFixed(2)}% to +{tableData[tableData.length-1]?.realAPR.toFixed(2)}%!
                   </p>
                   <p>
-                    • <strong>Example:</strong> At 75% bonded, inflation drops {formatBondingNumber(Math.abs(tableData.find(r => r.bondedRatio === 75)?.annualReduction || 0), 2)}% per year vs. {formatBondingNumber(Math.abs(tableData.find(r => Math.abs(r.bondedRatio - currentBondedRatio) < 0.1)?.annualReduction || 0), 4)}% at current ({currentBondedRatio.toFixed(2)}%)
+                    • <strong>Example at 75%:</strong> APR is {tableData.find(r => r.bondedRatio === 75)?.apr.toFixed(2)}%, 
+                    but Real APR is <span className="text-green-400 font-bold">+{tableData.find(r => r.bondedRatio === 75)?.realAPR.toFixed(2)}%</span> because inflation is only {currentInflation.toFixed(2)}%
                   </p>
                 </div>
               </div>

@@ -13,6 +13,9 @@ export interface BondingCurveRow {
   bondedRatio: number; // as percentage (67 for 67%)
   annualReduction: number; // annual inflation reduction % per year
   dailyReduction: number; // daily inflation reduction %
+  apr: number; // staking APR at this bonded ratio
+  inflationRate: number; // projected inflation rate (current - reduction over time)
+  realAPR: number; // apr - inflation (actual earnings)
   daysToTarget: number; // days to reduce from current to 15% inflation
   yearsToTarget: number; // years to reduce from current to 15% inflation
 }
@@ -64,15 +67,30 @@ export function generateBondingCurveTable(
   const ratios = [67.00, 67.24, 68.00, 69.00, 70.00, 71.00, 72.00, 73.00, 74.00, 75.00, 80.00, 85.00, 90.00, 95.00, 100.00];
   
   return ratios.map(ratio => {
-    const annualReduction = calculateAnnualInflationChange(ratio / 100);
+    const bondedRatioDecimal = ratio / 100;
+    const annualReduction = calculateAnnualInflationChange(bondedRatioDecimal);
     const dailyReduction = calculateDailyInflationChange(annualReduction);
     const daysToTarget = calculateDaysToTarget(currentInflation, targetInflation, dailyReduction);
     const yearsToTarget = daysToTarget / 365;
+    
+    // Calculate APR at this bonded ratio
+    // APR = inflation / bonded_ratio
+    const apr = (currentInflation / ratio) * 100;
+    
+    // For inflation rate, use current inflation as baseline
+    // (In reality, it would gradually decrease, but we show current state)
+    const inflationRate = currentInflation;
+    
+    // Real APR = APR - Inflation (what stakers actually earn)
+    const realAPR = apr - inflationRate;
     
     return {
       bondedRatio: ratio,
       annualReduction: annualReduction * 100, // Convert to percentage
       dailyReduction: dailyReduction * 100, // Convert to percentage
+      apr,
+      inflationRate,
+      realAPR,
       daysToTarget,
       yearsToTarget,
     };
