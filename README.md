@@ -1,128 +1,103 @@
-<a href="https://nextjs-supabase-stripe-update.vercel.app">
-  <img alt="Update – Vercel Next.js Template" src="https://images.update.dev/nextjs-supabase-stripe-update-template-thumbnail.png">
-  <h1 align="center">Update + Next.js Template</h1>
-</a>
+# ShieldNest
 
-<p align="center">
-  A full-featured SaaS starter with auth, billing, and entitlements—powered by <a href="https://update.dev">Update</a> and <a href="https://nextjs.org/">Next.js</a>.
-</p>
+A Coreum blockchain portfolio application for managing tokens, staking, governance, and NFTs.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#local-setup"><strong>Local Setup</strong></a> ·
-  <a href="#support"><strong>Support</strong></a>
-</p>
+---
+
+## 🚀 Quick Start
+
+New to ShieldNest? Start here:
+
+- **[Getting Started Guide](./docs/guides/START-HERE.md)** - Begin your ShieldNest journey
+- **[Quick Start](./docs/guides/QUICK-START.md)** - Fast setup instructions
+- **[Environment Setup](./docs/guides/ENVIRONMENT-SETUP.md)** - Configure your development environment
+
+---
+
+## 📚 Documentation
+
+All documentation has been organized into categorized folders. **[Browse the complete documentation →](./docs/README.md)**
+
+### Documentation Categories
+
+| Category | Description | Files |
+|----------|-------------|-------|
+| **[Admin](./docs/admin/)** | Administrative setup and user management | 7 files |
+| **[Authentication](./docs/authentication/)** | Wallet auth, email signin, sessions, and flows | 23 files |
+| **[Bonding Curve](./docs/bonding-curve/)** | Token bonding curve mechanics and simulations | 5 files |
+| **[Deployment](./docs/deployment/)** | Docker, VPS, and infrastructure setup | 10 files |
+| **[Features](./docs/features/)** | Feature implementations and guides | 21 files |
+| **[Fixes](./docs/fixes/)** | Bug fixes and corrections | 13 files |
+| **[Governance](./docs/governance/)** | Governance system and proposals | 14 files |
+| **[Guides](./docs/guides/)** | Developer guides and quick references | 14 files |
+| **[Performance](./docs/performance/)** | Performance optimizations and caching | 5 files |
+| **[Reports](./docs/reports/)** | Audit reports and summaries | 8 files |
+
+**Total Documentation Files: 120+**
 
 ---
 
 ## ⚡ Features
 
-- 💳 **Subscriptions** — Stripe billing with checkout, portals, trials, and failed payment recovery
-- 🔐 **Authentication** — Supabase auth with Update-powered extensions (e.g., magic links, redirects)
-- 🔓 **Entitlements** — Easy access control by plan, org, or user role
-- ⚙️ **Full-stack ready** — App Router, Middleware, Client, and Server usage supported
-- 🎨 **UI** — Built with [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com)
+- 🔐 **Multi-tier Authentication** — Visitor, Public, and Private member tiers
+- 💼 **Portfolio Management** — Track and manage Coreum tokens and assets
+- 🗳️ **Governance** — Participate in on-chain governance proposals
+- 💰 **Staking & Rewards** — Stake tokens and claim rewards
+- 🖼️ **Shield NFT** — Private membership access via NFT ownership
+- 📊 **Analytics** — Portfolio analytics and performance tracking
+- 🎨 **Modern UI** — Light/dark themes with beautiful animations
 
 ---
 
-## 🔗 Demo
+## 🛠️ Tech Stack
 
-Live demo: [nextjs-supabase-stripe-update.vercel.app](https://nextjs-supabase-stripe-update.vercel.app/)
-
----
-
-## 🚀 Deploy to Vercel
-
-Click the button below to instantly deploy the template and set up Update and Supabase:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fupdatedotdev%2Fnextjs-supabase-stripe-update&project-name=update-nextjs-template&repository-name=update-nextjs-template&demo-title=Update%20SaaS%20Starter&demo-description=A%20Next.js%20starter%20with%20Update%20for%20auth%2C%20billing%2C%20and%20orgs&demo-url=https%3A%2F%2Fvercel-update-template.vercel.app&external-id=https%3A%2F%2Fupdate.dev)
+- [Next.js](https://nextjs.org) - React framework with App Router
+- [Supabase](https://supabase.com) - Database and authentication
+- [Coreum](https://coreum.com) - Blockchain infrastructure
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
 
 ---
 
-## 🛠️ Local Setup
+## 🔑 Key Concepts
 
-### 1. Clone the project
+### User Tiers
+- **Visitor** - Connect wallet or paste address (not saved, local/session only)
+- **Public** - Email/password or wallet-bootstrap linked to email (data saved)
+- **Private** - PMA signed + Shield NFT ownership (member features unlocked)
 
-```bash
-git clone https://github.com/updatedotdev/nextjs-supabase-stripe-update.git cd nextjs-supabase-stripe-update
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-# or
-
-```bash
-pnpm install
-```
-
-### 3. Configure environment variables
-
-Create a `.env.local` file based on the provided example:
-
-```bash
-cp .env.example .env.local
-```
-
-Fill in values from:
-
-- [Update dashboard](https://update.dev)
-- [Supabase project settings](https://app.supabase.com/project/_/settings/api)
-
-```bash
-NEXT_PUBLIC_UPDATE_PUBLIC_KEY=...
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-```
-
-### 4. Run the dev server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+### v1 Limitations
+- No trading (DEX) in v1
+- Shield NFT is placeholder (image + $5k-$6k value from admin setting)
 
 ---
 
-## 📦 What's Included
+## 📖 Developer Resources
 
-- 🔌 **Update Client Setup**:
-  - `utils/update/client.ts` — for browser-side usage
-  - `utils/update/server.ts` — for server-side usage
-- 🧠 **Entitlements Checks**:
-  - Example usage of `client.entitlements.check()` to conditionally render UI
-- 💳 **Billing Integration**:
-  - Stripe Checkout & Customer Portal
-  - Cancel/reactivate subscriptions
-  - Usage-based plans (coming soon)
+- **[Developer Notes](./docs/guides/developer-notes.md)** - Development guidelines
+- **[Testing Guide](./docs/guides/TESTING-GUIDE.md)** - Testing strategies
+- **[Quick Commands](./docs/guides/QUICK-COMMANDS.md)** - Useful command reference
+- **[Senior Developer Guide](./docs/guides/senior-developer.md)** - Advanced patterns
+- **[UI Guidelines](./docs/guides/ui.md)** - UI component standards
+- **[UX Guidelines](./docs/guides/ux.md)** - User experience principles
 
 ---
 
-## 🧩 Tech Stack
+## 🚀 Deployment
 
-- [Next.js](https://nextjs.org)
-- [Update](https://update.dev)
-- [Supabase](https://supabase.com)
-- [Stripe](https://stripe.com)
-- [Tailwind CSS](https://tailwindcss.com)
-- [shadcn/ui](https://ui.shadcn.com)
+See the **[Deployment](./docs/deployment/)** category for comprehensive deployment guides:
 
----
-
-## 🤝 Support
-
-- 📚 [Full documentation](https://update.dev/docs)
-- 💬 [Join our Discord](https://discord.gg/Guege5tXFK)
-- 🐛 Found a bug? [Open an issue](https://github.com/updatedotdev/nextjs-supabase-stripe-update/issues)
+- [Docker Deployment](./docs/deployment/DOCKER-DEPLOYMENT.md)
+- [VPS Setup](./docs/deployment/COREDEX-VPS-INTEGRATION.md)
+- [Deployment Checklist](./docs/deployment/DEPLOYMENT-CHECKLIST.md)
+- [Vercel Deployment](./docs/deployment/VERCEL-DEPLOYMENT-GUIDE.md)
 
 ---
 
 ## 📄 License
 
 MIT
+
+---
+
+*For complete documentation, visit the **[docs/](./docs/)** directory.*

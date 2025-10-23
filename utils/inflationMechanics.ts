@@ -30,12 +30,12 @@ const BLOCK_TIME_SECONDS = 6; // ~6 seconds per block
 const BLOCKS_PER_DAY = (24 * 60 * 60) / BLOCK_TIME_SECONDS;
 const BLOCKS_PER_YEAR = BLOCKS_PER_DAY * 365;
 
-// Coreum inflation parameters
+// Coreum inflation parameters (CORRECTED VALUES)
 const MIN_INFLATION = 0.07; // 7% minimum inflation
 const MAX_INFLATION = 0.20; // 20% maximum inflation
 const GOAL_BONDED_RATIO = 0.67; // 67% target bonded ratio
 const INFLATION_RATE_CHANGE = 0.13; // 13% max annual change in inflation rate
-const BLOCKS_PER_YEAR_PARAM = 4360000; // Coreum parameter
+const BLOCKS_PER_YEAR_PARAM = 17900000; // ✅ CORRECT: Coreum parameter (17.9M blocks/year)
 
 /**
  * Calculate Coreum inflation rate based on bonded ratio

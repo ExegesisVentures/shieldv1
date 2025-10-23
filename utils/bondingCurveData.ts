@@ -63,8 +63,9 @@ export function generateBondingCurveTable(
   currentInflation: number = 17.51, // Current Coreum inflation %
   targetInflation: number = 15 // Target we're measuring to
 ): BondingCurveRow[] {
-  // Generate table for key bonded ratios
-  const ratios = [67.00, 67.24, 68.00, 69.00, 70.00, 71.00, 72.00, 73.00, 74.00, 75.00, 80.00, 85.00, 90.00, 95.00, 100.00];
+  // Generate table for key bonded ratios (REALISTIC - capped at 85%)
+  // ❌ REMOVED: 90%, 95%, 100% (IMPOSSIBLE - would freeze network)
+  const ratios = [67.00, 67.24, 68.00, 69.00, 70.00, 71.00, 72.00, 73.00, 74.00, 75.00, 80.00, 85.00];
   
   return ratios.map(ratio => {
     const bondedRatioDecimal = ratio / 100;
