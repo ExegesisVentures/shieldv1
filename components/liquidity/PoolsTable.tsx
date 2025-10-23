@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fetchLiquidityPools, type LiquidityPool } from "@/utils/coreum/liquidity-pools";
 import { AnimatedCurrency } from "@/components/ui/AnimatedNumber";
+import ComingSoonModal from "@/components/modals/ComingSoonModal";
 
 interface PoolsTableProps {
   pools?: LiquidityPool[];
@@ -18,7 +19,7 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [searchQuery, setIoSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [apiPools, setApiPools] = useState<LiquidityPool[]>([]);
@@ -27,6 +28,8 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
   const [hasMore, setHasMore] = useState(false);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false); // Track if we've loaded once
   const [isBackgroundRefreshing, setIsBackgroundRefreshing] = useState(false);
+  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
+  const [comingSoonFeature, setComingSoonFeature] = useState<"add" | "trade">("add");
 
   // Mock data for fallback
   const mockPools: LiquidityPool[] = [
@@ -268,8 +271,8 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
     setIsRefreshing(false);
   };
 
-  const handleIoSearch = (query: string) => {
-    setIoSearchQuery(query);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
     setCurrentPage(1); // Reset to first page when searching
   };
 
@@ -281,6 +284,16 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
+  };
+
+  const handleAddClick = () => {
+    setComingSoonFeature("add");
+    setShowComingSoonModal(true);
+  };
+
+  const handleTradeClick = () => {
+    setComingSoonFeature("trade");
+    setShowComingSoonModal(true);
   };
 
   // Set client flag to prevent hydration mismatch
@@ -389,13 +402,13 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
           </div>
           
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-            {/* IoSearch Input */}
+            {/* Search Input */}
             <div className="relative">
               <IoSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="IoSearch pools..."
+                placeholder="Search pools..."
                 value={searchQuery}
-                onChange={(e) => handleIoSearch(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10 w-64"
               />
             </div>
@@ -533,18 +546,16 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
                   <div className="flex gap-3 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
                     <Button
                       size="sm"
-                      variant="outline"
-                      disabled
-                      className="flex-1 h-10 font-semibold border-2 opacity-50 cursor-not-allowed group-hover:border-purple-300 dark:group-hover:border-purple-700 transition-colors"
+                      onClick={handleAddClick}
+                      className="flex-1 h-10 font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                     >
                       <IoLockClosed className="w-4 h-4 mr-2" />
                       Add
                     </Button>
                     <Button
                       size="sm"
-                      variant="outline"
-                      disabled
-                      className="flex-1 h-10 font-semibold border-2 opacity-50 cursor-not-allowed group-hover:border-blue-300 dark:group-hover:border-blue-700 transition-colors"
+                      onClick={handleTradeClick}
+                      className="flex-1 h-10 font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                     >
                       <IoLockClosed className="w-4 h-4 mr-2" />
                       Trade
@@ -634,6 +645,13 @@ export default function PoolsTable({ pools: propPools = [], loading = false }: P
           </div>
         </div>
       )}
+
+      {/* Coming Soon Modal */}
+      <ComingSoonModal
+        isOpen={showComingSoonModal}
+        onClose={() => setShowComingSoonModal(false)}
+        feature={comingSoonFeature}
+      />
     </Card>
   );
 }
