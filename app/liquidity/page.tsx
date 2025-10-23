@@ -91,9 +91,14 @@ export default function LiquidityPage() {
 
       {/* Pools Table */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-white mb-4">
-          Available Pools
-        </h2>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="neo-icon-glow-green" style={{ minWidth: '48px', minHeight: '48px' }}>
+            <IoWater className="w-6 h-6 text-white relative z-10" />
+          </div>
+          <h2 className="text-3xl font-bold text-white">
+            Available Pools
+          </h2>
+        </div>
         <PoolsTable />
       </div>
 
