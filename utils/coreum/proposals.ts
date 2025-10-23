@@ -116,6 +116,32 @@ export function getVoteOptionLabel(option: VoteOption): string {
 }
 
 /**
+ * Convert VoteOption enum to numeric value required by Cosmos SDK
+ * @see https://github.com/cosmos/cosmos-sdk/blob/main/proto/cosmos/gov/v1beta1/gov.proto
+ * 
+ * VoteOption enum:
+ * - VOTE_OPTION_UNSPECIFIED = 0
+ * - VOTE_OPTION_YES = 1
+ * - VOTE_OPTION_NO = 3
+ * - VOTE_OPTION_ABSTAIN = 2
+ * - VOTE_OPTION_NO_WITH_VETO = 4
+ */
+export function voteOptionToNumber(option: VoteOption): number {
+  switch (option) {
+    case VoteOption.YES:
+      return 1;
+    case VoteOption.ABSTAIN:
+      return 2;
+    case VoteOption.NO:
+      return 3;
+    case VoteOption.NO_WITH_VETO:
+      return 4;
+    default:
+      return 0; // UNSPECIFIED
+  }
+}
+
+/**
  * Normalize v1 API proposal to internal format
  * v1 API has different structure than v1beta1
  */
@@ -599,6 +625,10 @@ export async function voteOnProposal(
       `📡 [Governance] Voting ${voteRequest.option} on proposal ${voteRequest.proposalId}`
     );
 
+    // Convert vote option to numeric value
+    const numericOption = voteOptionToNumber(voteRequest.option);
+    console.log(`📡 [Governance] Numeric vote option: ${numericOption}`);
+
     // Connect to Coreum with signer
     const client = await SigningStargateClient.connectWithSigner(
       COREUM_RPC_ENDPOINT,
@@ -612,7 +642,7 @@ export async function voteOnProposal(
       value: {
         proposalId: voteRequest.proposalId,
         voter: voteRequest.voter,
-        option: voteRequest.option,
+        option: numericOption, // Use numeric value instead of string
       },
     };
 
