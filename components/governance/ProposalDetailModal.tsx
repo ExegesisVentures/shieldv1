@@ -145,7 +145,7 @@ export default function ProposalDetailModal({
       {/* Modal */}
       <div 
         ref={modalRef}
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto card-coreum animate-fade-in scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-gray-800"
+        className="relative w-full max-w-4xl bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
         onScroll={(e) => {
           const target = e.currentTarget;
@@ -154,13 +154,12 @@ export default function ProposalDetailModal({
           }
         }}
         style={{ 
-          overscrollBehavior: 'contain',
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#9333ea #1f2937'
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column'
         } as React.CSSProperties}
       >
-        <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 p-6">
+        <div className="flex-shrink-0 bg-gray-900 border-b border-gray-700 p-6 rounded-t-2xl">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
               <div className="flex items-center gap-3 mb-2">
@@ -184,7 +183,14 @@ export default function ProposalDetailModal({
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div 
+          className="flex-1 overflow-y-auto p-6 space-y-6 rounded-b-2xl"
+          style={{
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            overscrollBehavior: 'contain'
+          }}
+        >
           {/* Proposal Information Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Proposal Type */}
