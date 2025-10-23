@@ -17,6 +17,7 @@ import {
   calculateScenario,
 } from '@/utils/inflationMechanics';
 import { formatLargeNumber } from '@/utils/formatters';
+import { BondingCurveTable } from '@/components/analytics/BondingCurveTable';
 
 interface BondingSimulatorProps {
   currentBondedRatio: number; // as percentage (e.g., 67)
@@ -430,6 +431,13 @@ export const BondingSimulator = ({
               </div>
             </motion.div>
           )}
+
+          {/* Detailed Bonding Curve Table */}
+          <BondingCurveTable
+            currentInflation={currentInflation}
+            currentBondedRatio={currentBondedRatio}
+            targetInflation={15}
+          />
         </motion.div>
       </div>
     </section>
