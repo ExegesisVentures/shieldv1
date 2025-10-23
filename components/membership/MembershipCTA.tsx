@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoShieldCheckmark, IoLockClosed, IoSparkles, IoArrowForward } from "react-icons/io5";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,10 +8,29 @@ import GuidedOnboarding from "@/components/onboarding/GuidedOnboarding";
 
 interface MembershipCTAProps {
   userType: "visitor" | "public" | "private";
+  shouldPulse?: boolean;
+  onPulseComplete?: () => void;
 }
 
-export default function MembershipCTA({ userType }: MembershipCTAProps) {
+export default function MembershipCTA({ userType, shouldPulse = false, onPulseComplete }: MembershipCTAProps) {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (shouldPulse) {
+      // Scroll to this component
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+      
+      // Stop pulsing after 5 seconds
+      setTimeout(() => {
+        if (onPulseComplete) {
+          onPulseComplete();
+        }
+      }, 5000);
+    }
+  }, [shouldPulse, onPulseComplete]);
 
   const handleSignUpClick = () => {
     setShowOnboarding(true);
@@ -40,10 +59,16 @@ export default function MembershipCTA({ userType }: MembershipCTAProps) {
   }
 
   return (
-    <Card className="group border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-xl transition-all duration-300 hover:border-purple-400 dark:hover:border-purple-400">
+    <Card 
+      ref={cardRef}
+      className={`group border-2 border-purple-200 dark:border-purple-800 p-8 hover:shadow-xl transition-all duration-300 hover:border-purple-400 dark:hover:border-purple-400 bg-gradient-to-br from-purple-900/20 via-blue-900/10 to-purple-900/20 backdrop-blur-xl shadow-2xl ${shouldPulse ? 'animate-pulse ring-4 ring-purple-500/50' : ''}`}
+    >
       <div className="flex items-start gap-4 mb-6">
-        <div className="neo-icon-glow-purple neo-transition">
-          <IoLockClosed className="w-8 h-8" />
+        <div className="neo-icon-glow-purple neo-transition relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 blur-xl opacity-50"></div>
+          <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 p-3 rounded-xl border border-gray-700/50 shadow-xl">
+            <IoLockClosed className="w-8 h-8 text-purple-400" />
+          </div>
         </div>
         <div className="flex-1">
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -69,14 +94,18 @@ export default function MembershipCTA({ userType }: MembershipCTAProps) {
             key={benefit}
             className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-500 to-blue-500"></div>
             <span>{benefit}</span>
           </div>
         ))}
       </div>
 
       {/* CTA */}
-      <Button size="lg" className="w-full" onClick={handleSignUpClick}>
+      <Button 
+        size="lg" 
+        className={`w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg ${shouldPulse ? 'ring-2 ring-purple-400' : ''}`}
+        onClick={handleSignUpClick}
+      >
         {userType === "visitor" ? "Sign Up to Request Membership" : "Request Membership"}
         <IoArrowForward className="w-4 h-4 ml-2" />
       </Button>
