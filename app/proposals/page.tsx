@@ -224,35 +224,23 @@ function ProposalsContent() {
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl">
-              <IoGitBranch className="w-8 h-8 text-white" />
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-600/90 to-purple-800/90 backdrop-blur-sm border border-purple-500/30 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all duration-300"
+              style={{
+                transform: 'perspective(1000px) rotateX(2deg)',
+                boxShadow: '0 10px 40px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              }}
+            >
+              <IoGitBranch className="w-8 h-8 text-white drop-shadow-lg" />
             </div>
             <div>
               <h1 
-                className="text-4xl sm:text-5xl font-bold mb-2 relative"
+                className="text-4xl sm:text-5xl font-bold mb-2"
                 style={{
-                  textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3), 0 8px 16px rgba(168,85,247,0.2)',
-                  transform: 'perspective(1000px) translateZ(0)',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
                 }}
               >
-                <span 
-                  className="governance-animated inline-block bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent"
-                  style={{
-                    filter: 'drop-shadow(0 0 20px rgba(168,85,247,0.3))'
-                  }}
-                >
-                  {"Proposals".split("").map((char, index) => (
-                    <span
-                      key={index}
-                      className="governance-letter"
-                      style={{
-                        animationDelay: `${index * 0.05}s`,
-                        display: char === " " ? "inline" : "inline-block",
-                      }}
-                    >
-                      {char === " " ? "\u00A0" : char}
-                    </span>
-                  ))}
+                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                  Proposals
                 </span>
               </h1>
               <p className="text-lg text-gray-400">
@@ -312,9 +300,14 @@ function ProposalsContent() {
                     onClick={() => setStatusFilter(value as ProposalStatus)}
                     className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
                       statusFilter === value
-                        ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-500/50'
-                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                        ? 'bg-gradient-to-br from-purple-600/90 to-purple-800/90 text-white border border-purple-500/30 shadow-lg shadow-purple-500/20'
+                        : 'bg-gradient-to-br from-gray-800/90 to-gray-900/90 text-gray-300 border border-gray-700/30 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10'
                     }`}
+                    style={{
+                      boxShadow: statusFilter === value 
+                        ? '0 4px 12px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                        : '0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                    }}
                   >
                     <Icon className="w-4 h-4" />
                     <span className="hidden sm:inline">{label}</span>
@@ -325,8 +318,11 @@ function ProposalsContent() {
                 <button
                   onClick={handleRefresh}
                   disabled={refreshing}
-                  className="flex items-center gap-2 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg font-medium transition-all duration-300 disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 disabled:opacity-50 bg-gradient-to-br from-gray-800/90 to-gray-900/90 text-gray-300 border border-gray-700/30 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10"
                   title="Refresh proposals"
+                  style={{
+                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
                 >
                   <IoRefresh className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
                   <span className="hidden sm:inline">{refreshing ? 'Loading...' : 'Refresh'}</span>
@@ -336,8 +332,13 @@ function ProposalsContent() {
                 <button
                   onClick={() => setShowCreateProposal(true)}
                   disabled={!userAddress}
-                  className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:shadow-lg hover:shadow-purple-500/50 text-white rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-br from-purple-600/90 to-purple-800/90 text-white border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/40"
                   title={userAddress ? "Create a new proposal" : "Connect wallet to create proposal"}
+                  style={{
+                    boxShadow: !userAddress 
+                      ? '0 2px 6px rgba(0, 0, 0, 0.2)'
+                      : '0 4px 12px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                  }}
                 >
                   <IoAdd className="w-5 h-5" />
                   <span className="hidden sm:inline">Create Proposal</span>
