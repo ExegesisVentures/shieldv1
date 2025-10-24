@@ -87,12 +87,11 @@ export default function BuyCoreumModal({
   const handleOpenChangeNow = useCallback(() => {
     // Create ChangeNOW exchange URL with COREUM pre-filled
     const changeNowUrl = new URL('https://changenow.io/exchange');
-    changeNowUrl.searchParams.set('to', 'coreum');
-    changeNowUrl.searchParams.set('toNetwork', 'coreum');
-    changeNowUrl.searchParams.set('address', walletAddress);
+    changeNowUrl.searchParams.set('from', 'usd');  // Pre-fill USD
+    changeNowUrl.searchParams.set('to', 'coreum');  // Pre-fill COREUM
+    changeNowUrl.searchParams.set('address', walletAddress);  // Pre-fill wallet address
     
-    // Optional: can also prefill amount, from currency, etc.
-    // changeNowUrl.searchParams.set('from', 'usd');
+    // Optional: can also prefill amount
     // changeNowUrl.searchParams.set('amount', '100');
 
     console.log('🚀 Opening ChangeNOW:', changeNowUrl.toString());
