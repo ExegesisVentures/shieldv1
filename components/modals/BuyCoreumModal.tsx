@@ -86,19 +86,19 @@ export default function BuyCoreumModal({
   // Open ChangeNOW widget in popup
   const handleOpenChangeNow = useCallback(() => {
     // Create ChangeNOW exchange URL with COREUM pre-filled
-    // Try both query params AND hash routing for better compatibility
     const changeNowUrl = new URL('https://changenow.io/exchange');
     changeNowUrl.searchParams.set('from', 'usd');
     changeNowUrl.searchParams.set('to', 'coreum');
     changeNowUrl.searchParams.set('fiatMode', 'true');
     changeNowUrl.searchParams.set('address', walletAddress);
     
-    console.log('🚀 Opening ChangeNOW:', changeNowUrl.toString());
+    const fullUrl = changeNowUrl.toString();
+    console.log('🚀 Opening ChangeNOW:', fullUrl);
     console.log('📋 Wallet Address:', walletAddress);
 
-    // Open in popup with longer timeout to ensure page loads with params
+    // Open popup
     const popup = window.open(
-      changeNowUrl.toString(),
+      fullUrl,
       'ChangeNOW Exchange',
       'width=500,height=700,scrollbars=yes,resizable=yes,location=yes'
     );
@@ -107,6 +107,18 @@ export default function BuyCoreumModal({
       alert('Popup blocked! Please allow popups for this site, then try again.');
       return;
     }
+
+    // Try to reload the popup with parameters after a short delay
+    // This helps ensure the URL params are read by ChangeNOW's SPA
+    setTimeout(() => {
+      try {
+        if (popup && !popup.closed) {
+          popup.location.href = fullUrl;
+        }
+      } catch (error) {
+        console.log('⚠️ Could not reload popup (cross-origin restriction)');
+      }
+    }, 1000);
 
     setPopupWindow(popup);
 
