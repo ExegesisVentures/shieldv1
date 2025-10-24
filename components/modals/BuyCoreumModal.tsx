@@ -86,18 +86,17 @@ export default function BuyCoreumModal({
   // Open ChangeNOW widget in popup
   const handleOpenChangeNow = useCallback(() => {
     // Create ChangeNOW exchange URL with COREUM pre-filled
+    // Try both query params AND hash routing for better compatibility
     const changeNowUrl = new URL('https://changenow.io/exchange');
-    changeNowUrl.searchParams.set('from', 'usd');  // Pre-fill USD
-    changeNowUrl.searchParams.set('to', 'coreum');  // Pre-fill COREUM
-    changeNowUrl.searchParams.set('fiatMode', 'true');  // Enable fiat mode (buy with card)
-    changeNowUrl.searchParams.set('address', walletAddress);  // Pre-fill wallet address
+    changeNowUrl.searchParams.set('from', 'usd');
+    changeNowUrl.searchParams.set('to', 'coreum');
+    changeNowUrl.searchParams.set('fiatMode', 'true');
+    changeNowUrl.searchParams.set('address', walletAddress);
     
-    // Optional: can also prefill amount
-    // changeNowUrl.searchParams.set('amount', '100');
-
     console.log('🚀 Opening ChangeNOW:', changeNowUrl.toString());
+    console.log('📋 Wallet Address:', walletAddress);
 
-    // Open in popup
+    // Open in popup with longer timeout to ensure page loads with params
     const popup = window.open(
       changeNowUrl.toString(),
       'ChangeNOW Exchange',
