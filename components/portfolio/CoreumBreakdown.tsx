@@ -244,6 +244,21 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const handleCloseBuyModal = () => {
     setShowBuyModal(false);
     setBuyModalWallet(null);
+    
+    // Immediately refresh pending transactions count when modal closes
+    try {
+      const stored = localStorage.getItem('changenow_pending_transactions');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const recent = parsed.filter((tx: any) => Date.now() - tx.timestamp < 24 * 60 * 60 * 1000);
+        setPendingBuyTransactions(recent.length);
+      } else {
+        setPendingBuyTransactions(0);
+      }
+    } catch (error) {
+      console.error('Failed to refresh pending transactions:', error);
+      setPendingBuyTransactions(0);
+    }
   };
 
   // Handle transaction complete - refresh balances
