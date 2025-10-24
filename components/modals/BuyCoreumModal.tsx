@@ -89,6 +89,7 @@ export default function BuyCoreumModal({
     const changeNowUrl = new URL('https://changenow.io/exchange');
     changeNowUrl.searchParams.set('from', 'usd');  // Pre-fill USD
     changeNowUrl.searchParams.set('to', 'coreum');  // Pre-fill COREUM
+    changeNowUrl.searchParams.set('fiatMode', 'true');  // Enable fiat mode (buy with card)
     changeNowUrl.searchParams.set('address', walletAddress);  // Pre-fill wallet address
     
     // Optional: can also prefill amount
