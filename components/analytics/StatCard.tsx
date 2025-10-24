@@ -13,7 +13,7 @@ interface StatCardProps {
   value: string;
   icon: React.ReactNode;
   trend?: 'up' | 'down';
-  description?: string;
+  description?: React.ReactNode;
   loading?: boolean;
   highlight?: boolean;
   small?: boolean;

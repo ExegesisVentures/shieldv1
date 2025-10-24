@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { createSupabaseClient } from "@/utils/supabase/server";
 import SimplifiedHeaderUserMenu from "@/components/simplified-header-user-menu";
-import ThemeToggle from "@/components/theme-toggle";
 import ProposalsButton from "@/components/proposals-button";
 import MobileMenu from "@/components/mobile-menu";
 import { IoLogoGithub } from "react-icons/io5";
@@ -48,7 +47,7 @@ export default async function SimplifiedHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm">
-      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-visible">
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[88rem] mx-auto overflow-visible">
         {/* Logo & Brand with Social Icons - matching coreumdash style */}
         <div className="flex items-center gap-3">
           {/* Logo */}
@@ -56,9 +55,9 @@ export default async function SimplifiedHeader() {
             <Image
               src="/tokens/shld_dark.svg"
               alt="ShieldNest Logo"
-              width={40}
-              height={40}
-              className="object-contain w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-14 lg:h-14"
+              width={44}
+              height={44}
+              className="object-contain w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-16 lg:h-16"
               priority
             />
           </Link>
@@ -135,7 +134,6 @@ export default async function SimplifiedHeader() {
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
           <MobileMenu isAuthenticated={!!user} />
-          <ThemeToggle />
           <SimplifiedHeaderUserMenu user={user} />
         </div>
       </div>

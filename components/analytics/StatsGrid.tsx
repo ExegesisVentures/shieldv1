@@ -8,6 +8,7 @@
 import { motion } from 'framer-motion';
 import { IoTrendingUp, IoCash, IoFlash, IoStatsChart, IoTime, IoBarChart, IoFlame, IoSpeedometer } from 'react-icons/io5';
 import { StatCard } from './StatCard';
+import { CountdownPie } from './CountdownPie';
 
 interface StatsGridProps {
   stats: {
@@ -126,7 +127,20 @@ export const StatsGrid = ({ stats, loading, totalBurned = 0, dailyInflationPrint
         title="Total Burned"
         value={totalBurned > 0 ? totalBurned.toLocaleString(undefined, { maximumFractionDigits: 2 }) : '0'}
         icon={<IoFlame size={28} />}
-        description={totalBurned > 0 ? "Permanently removed from circulation" : "No tokens burned yet - be the first!"}
+        description={
+          <div className="flex flex-col gap-1">
+            <span>{totalBurned > 0 ? "Permanently removed from circulation" : "No tokens burned yet - be the first!"}</span>
+            <a 
+              href="https://github.com/CoreumFoundation/coreum/discussions/TBD" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-xs text-cyan-400 hover:text-cyan-300 underline underline-offset-2 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
+              📋 View Burn Feature Proposal
+            </a>
+          </div>
+        }
         loading={loading}
         trend="down"
         showLogo
@@ -144,9 +158,26 @@ export const StatsGrid = ({ stats, loading, totalBurned = 0, dailyInflationPrint
       
       <StatCard
         title="Last Updated"
-        value={stats?.lastUpdated ? new Date(stats.lastUpdated).toLocaleTimeString() : '--'}
+        value={
+          stats?.lastUpdated 
+            ? new Date(stats.lastUpdated).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+              }) 
+            : '--'
+        }
         icon={<IoTime size={28} />}
-        description="Data refresh time"
+        description={
+          <div className="flex items-center gap-2">
+            <span>Refreshes every 30s</span>
+            <CountdownPie 
+              duration={30000} 
+              size={18}
+              refreshKey={stats?.lastUpdated}
+            />
+          </div>
+        }
         loading={loading}
         small
       />

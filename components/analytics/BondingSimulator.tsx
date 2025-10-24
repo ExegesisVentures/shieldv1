@@ -236,7 +236,7 @@ export const BondingSimulator = ({
                 <div>
                   <div className="text-gray-400 text-sm mb-1">Inflation Reduction Per Day</div>
                   <div className="text-3xl font-bold text-cyan-400">
-                    {isAboveGoal ? `${(simulatedScenario.deflationSpeed * 0.01).toFixed(4)}%` : '0%'}
+                    {isAboveGoal ? `${simulatedScenario.inflationReductionPerDay.toFixed(6)}%` : '0%'}
                   </div>
                 </div>
                 {isAboveGoal && (

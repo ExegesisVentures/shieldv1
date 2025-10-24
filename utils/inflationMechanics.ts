@@ -14,6 +14,7 @@ export interface BondedRatioScenario {
   inflationPerDay: number; // CORE tokens minted per day
   inflationPerYear: number; // CORE tokens minted per year
   deflationSpeed: number; // how fast inflation reduces (multiplier compared to baseline)
+  inflationReductionPerDay: number; // inflation % reduced per day (as percentage)
   timeToNextInflationDrop: number; // days until inflation drops by 0.1%
 }
 
@@ -123,6 +124,7 @@ export function calculateScenario(
     inflationPerDay,
     inflationPerYear,
     deflationSpeed,
+    inflationReductionPerDay: reductionPerDay * 100, // convert to percentage
     timeToNextInflationDrop,
   };
 }

@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose } from "react-icons/io5";
+import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose, IoMoon, IoSunny } from "react-icons/io5";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { isUserAdmin, isAdminWallet } from "@/utils/admin";
 import WalletConnectModal from "@/components/wallet/WalletConnectModal";
+import { useTheme } from "next-themes";
 
 interface SimplifiedHeaderUserMenuProps {
   user?: {
@@ -18,12 +19,19 @@ interface SimplifiedHeaderUserMenuProps {
 
 export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserMenuProps) {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isVisitor, setIsVisitor] = useState(false);
   const [walletCount, setWalletCount] = useState(0);
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  // Prevent hydration mismatch for theme
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Check if visitor has wallets and admin status
@@ -188,6 +196,26 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
               <IoSettings className="w-4 h-4" />
               <span className="text-sm">Settings</span>
             </Link>
+
+            {/* Theme Toggle - FOURTH */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white"
+              >
+                {theme === "dark" ? (
+                  <>
+                    <IoSunny className="w-4 h-4 text-yellow-500" />
+                    <span className="text-sm">Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <IoMoon className="w-4 h-4 text-blue-400" />
+                    <span className="text-sm">Dark Mode</span>
+                  </>
+                )}
+              </button>
+            )}
 
             {/* Admin Link */}
             {isAdmin && (
