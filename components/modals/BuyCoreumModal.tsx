@@ -86,21 +86,28 @@ export default function BuyCoreumModal({
   // Open ChangeNOW widget in popup
   const handleOpenChangeNow = useCallback(() => {
     // Create ChangeNOW exchange URL with COREUM pre-filled
+    // NOTE: Don't include address parameter - it prevents pre-filling from working
     const changeNowUrl = new URL('https://changenow.io/exchange');
     changeNowUrl.searchParams.set('from', 'usd');
     changeNowUrl.searchParams.set('to', 'coreum');
     changeNowUrl.searchParams.set('fiatMode', 'true');
-    changeNowUrl.searchParams.set('address', walletAddress);
+    // NOT including address - user will copy/paste it from our modal
     
     const fullUrl = changeNowUrl.toString();
     console.log('🚀 Opening ChangeNOW:', fullUrl);
     console.log('📋 Wallet Address:', walletAddress);
 
-    // Open popup
+    // Calculate centered position
+    const width = 800;
+    const height = 700;
+    const left = (window.screen.width - width) / 2;
+    const top = (window.screen.height - height) / 2;
+
+    // Open popup with proper window features (matching working implementation)
     const popup = window.open(
       fullUrl,
       'ChangeNOW Exchange',
-      'width=500,height=700,scrollbars=yes,resizable=yes,location=yes'
+      `width=${width},height=${height},left=${left},top=${top},scrollbars=yes,resizable=yes,toolbar=no,menubar=no,location=no,status=no`
     );
 
     if (!popup) {
@@ -108,18 +115,7 @@ export default function BuyCoreumModal({
       return;
     }
 
-    // Try to reload the popup with parameters after a short delay
-    // This helps ensure the URL params are read by ChangeNOW's SPA
-    setTimeout(() => {
-      try {
-        if (popup && !popup.closed) {
-          popup.location.href = fullUrl;
-        }
-      } catch (error) {
-        console.log('⚠️ Could not reload popup (cross-origin restriction)');
-      }
-    }, 1000);
-
+    popup.focus();
     setPopupWindow(popup);
 
     // Track this transaction locally
@@ -258,14 +254,15 @@ export default function BuyCoreumModal({
             </h3>
             <ol className="text-xs text-blue-800 dark:text-blue-200 space-y-2 ml-4 list-decimal">
               <li>Click "Open ChangeNOW Exchange" above</li>
-              <li>Choose your payment method:
+              <li>On ChangeNOW, select:
                 <ul className="ml-4 mt-1 list-disc space-y-1">
-                  <li><strong>Credit/Debit Card</strong> - Buy with fiat currency</li>
-                  <li><strong>Crypto</strong> - Swap from BTC, ETH, USDT, etc.</li>
+                  <li><strong>"You Send"</strong> = USD (or another crypto)</li>
+                  <li><strong>"You Get"</strong> = COREUM</li>
                 </ul>
               </li>
-              <li>Your COREUM address is already filled in</li>
-              <li>Complete the transaction on ChangeNOW</li>
+              <li>Copy your wallet address above and paste it in the "Recipient Address" field</li>
+              <li>Choose payment method (Card or Crypto)</li>
+              <li>Complete the transaction</li>
               <li>COREUM will arrive in 5-30 minutes</li>
             </ol>
           </div>
