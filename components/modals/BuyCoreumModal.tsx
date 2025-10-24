@@ -185,14 +185,24 @@ export default function BuyCoreumModal({
                     <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
                       Opened {new Date(tx.timestamp).toLocaleTimeString()}
                     </p>
-                    <button
-                      onClick={() => handleClearTransaction(tx.id)}
-                      className="text-xs text-gray-500 hover:text-green-600 dark:hover:text-green-400 flex items-center gap-1"
-                      title="Mark as complete"
-                    >
-                      <IoCheckmarkCircle className="w-4 h-4" />
-                      Complete
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleClearTransaction(tx.id)}
+                        className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50 rounded flex items-center gap-1 transition-colors"
+                        title="Mark as complete"
+                      >
+                        <IoCheckmarkCircle className="w-3.5 h-3.5" />
+                        Complete
+                      </button>
+                      <button
+                        onClick={() => handleClearTransaction(tx.id)}
+                        className="text-xs px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 rounded flex items-center gap-1 transition-colors"
+                        title="Cancel/remove this transaction"
+                      >
+                        <IoClose className="w-3.5 h-3.5" />
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
                     To: {tx.walletAddress.slice(0, 20)}...

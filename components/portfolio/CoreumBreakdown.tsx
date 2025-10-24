@@ -785,17 +785,23 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           <button
             onClick={handleOpenBuyModal}
             className={`relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-500 hover:border-blue-400 bg-gradient-to-br from-blue-500/25 via-blue-600/15 to-blue-700/10 hover:from-blue-500/35 hover:via-blue-600/25 hover:to-blue-700/15 text-blue-700 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden ${
-              pendingBuyTransactions > 0 ? 'animate-pulse' : ''
+              pendingBuyTransactions > 0 ? '' : ''
             }`}
             style={{
               boxShadow: '0 4px 12px rgba(77, 156, 255, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+              animation: pendingBuyTransactions > 0 ? 'subtlePulse 3s ease-in-out infinite' : 'none',
             }}
           >
             {pendingBuyTransactions > 0 ? (
               <>
                 <IoTime className="w-4 h-4 animate-spin" />
-                <span className="relative z-10 text-green-600 dark:text-green-400 animate-pulse">
+                <span 
+                  className="relative z-10 text-green-600 dark:text-green-400"
+                  style={{
+                    animation: 'subtlePulse 3s ease-in-out infinite'
+                  }}
+                >
                   BUY ({pendingBuyTransactions})
                 </span>
               </>
