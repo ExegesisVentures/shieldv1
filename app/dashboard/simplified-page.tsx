@@ -9,7 +9,7 @@ import NftHoldings from "@/components/portfolio/NftHoldings";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { getAllWallets, getWalletCount } from "@/utils/wallet/simplified-operations";
 import { getMultiAddressBalances, EnrichedBalance, getTokenPrice, getTokenChange24h, loadTokenPricesInParallel, loadTokenPricesWithCacheStrategy } from "@/utils/coreum/rpc";
-import { getShieldNftHolding, ShieldNftHolding, fetchShieldSettings, hasShieldNft } from "@/utils/nft/shield";
+import { getShieldNftHolding, ShieldNftHolding, fetchShieldSettings, hasShieldNft, getShieldNftCount } from "@/utils/nft/shield";
 import { preloadTokenImages } from "@/utils/coreum/token-images";
 import { initializeDashboardSession, refreshSessionIfNeeded } from "@/utils/auth/session-refresh";
 import { isTokenHidden } from "@/utils/hidden-tokens";
@@ -145,16 +145,16 @@ export default function SimplifiedDashboard() {
           getTokenChange24h("CORE")
         ]);
 
-        // Check if user actually owns Shield NFT before showing it (only for authenticated users)
-        let userOwnsShieldNft = false;
+        // Get the number of Shield NFTs the user owns (from private_users table)
+        let nftCount = 0;
         if (profile?.public_user_id) {
-          userOwnsShieldNft = await hasShieldNft(supabase, profile.public_user_id, "public");
+          nftCount = await getShieldNftCount(supabase, profile.public_user_id);
         }
         
         let nftHolding: ShieldNftHolding | null = null;
-        if (userOwnsShieldNft) {
-          // Generate Shield NFT holding (only when user has wallets and owns NFT)
-          nftHolding = getShieldNftHolding(corePrice, coreChange, shieldSettings);
+        if (nftCount > 0) {
+          // Generate Shield NFT holding with correct count (only when user has wallets and owns NFT)
+          nftHolding = getShieldNftHolding(corePrice, coreChange, shieldSettings, undefined, nftCount);
           setShieldNft(nftHolding);
         } else {
           // User doesn't own Shield NFT, don't show it
@@ -169,9 +169,9 @@ export default function SimplifiedDashboard() {
         setTokensByAddress(byAddress);
         
         // Add NFT value to total (only if user owns it)
-        const totalWithNft = userOwnsShieldNft ? (nftHolding?.valueUsd || 0) : 0;
+        const totalWithNft = nftCount > 0 ? (nftHolding?.valueUsd || 0) : 0;
         setTotalValue(totalWithNft);
-        setChange24h(userOwnsShieldNft ? (nftHolding?.change24h || 0) : 0);
+        setChange24h(nftCount > 0 ? (nftHolding?.change24h || 0) : 0);
         
         // Load prices with cache strategy (instant cached prices + background fresh updates)
         console.log("🚀 [Portfolio] Starting optimized price loading...");

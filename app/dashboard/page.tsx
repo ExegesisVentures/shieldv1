@@ -13,7 +13,7 @@ import HiddenTokensList from "@/components/portfolio/HiddenTokensList";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { getAllWallets, getWalletCount } from "@/utils/wallet/simplified-operations";
 import { getMultiAddressBalances, EnrichedBalance, getTokenPrice, getTokenChange24h, loadTokenPricesInParallel, refreshTokenPrices, loadTokenPricesWithCacheStrategy } from "@/utils/coreum/rpc";
-import { getShieldNftHolding, ShieldNftHolding, ShieldSettings, fetchShieldSettings, hasShieldNft } from "@/utils/nft/shield";
+import { getShieldNftHolding, ShieldNftHolding, ShieldSettings, fetchShieldSettings, hasShieldNft, getShieldNftCount } from "@/utils/nft/shield";
 import { preloadTokenImages } from "@/utils/coreum/token-images";
 import { initializeDashboardSession, refreshSessionIfNeeded } from "@/utils/auth/session-refresh";
 // import { detectAvailableWalletProvider, WalletProvider } from "@/utils/wallet/detection";
@@ -357,16 +357,16 @@ function DashboardContent() {
         const { getStaticFallbackPrice } = await import('@/utils/coreum/price-oracle');
         const { price: staticCorePrice, change24h: staticCoreChange } = getStaticFallbackPrice("CORE");
         
-        // Check if user actually owns Shield NFT before showing it (only for authenticated users)
-        let userOwnsShieldNft = false;
+        // Get the number of Shield NFTs the user owns (from private_users table)
+        let nftCount = 0;
         if (profile?.public_user_id) {
-          userOwnsShieldNft = await hasShieldNft(supabase, profile.public_user_id, "public");
+          nftCount = await getShieldNftCount(supabase, profile.public_user_id);
         }
         
         let nftHolding: ShieldNftHolding | null = null;
-        if (userOwnsShieldNft) {
-          // Show Shield NFT immediately with static price
-          nftHolding = getShieldNftHolding(staticCorePrice, staticCoreChange, undefined, 8.5);
+        if (nftCount > 0) {
+          // Show Shield NFT(s) immediately with static price and correct count
+          nftHolding = getShieldNftHolding(staticCorePrice, staticCoreChange, undefined, 8.5, nftCount);
           setShieldNft(nftHolding);
         } else {
           // User doesn't own Shield NFT, don't show it
@@ -382,9 +382,9 @@ function DashboardContent() {
         setTokensByAddress(byAddress);
         
         // Add NFT value to total (only if user owns it)
-        const totalWithNft = userOwnsShieldNft ? (nftHolding?.valueUsd || 0) : 0;
+        const totalWithNft = nftCount > 0 ? (nftHolding?.valueUsd || 0) : 0;
         setTotalValue(totalWithNft);
-        setChange24h(userOwnsShieldNft ? (nftHolding?.change24h || 0) : 0);
+        setChange24h(nftCount > 0 ? (nftHolding?.change24h || 0) : 0);
         
         // BACKGROUND: Fetch real prices without blocking UI
         setTimeout(async () => {
@@ -402,9 +402,9 @@ function DashboardContent() {
 
             // Update Shield NFT with real prices (only if user owns it)
             let realNftHolding: ShieldNftHolding | null = null;
-            if (userOwnsShieldNft) {
+            if (nftCount > 0) {
               const coreChange30d = 8.5; // Placeholder: +8.5% over 30 days
-              realNftHolding = getShieldNftHolding(corePrice, coreChange, shieldSettings, coreChange30d);
+              realNftHolding = getShieldNftHolding(corePrice, coreChange, shieldSettings, coreChange30d, nftCount);
               setShieldNft(realNftHolding);
             }
             

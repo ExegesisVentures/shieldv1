@@ -94,10 +94,14 @@ export function getShieldNftHolding(
   corePrice: number,
   coreChange24h: number,
   shieldSettings?: ShieldSettings,
-  coreChange30d?: number
+  coreChange30d?: number,
+  nftCount: number = 1
 ): ShieldNftHolding {
   // Calculate NFT value based on CORE backing
-  const value = calculateShieldNftValue(corePrice);
+  const singleNftValue = calculateShieldNftValue(corePrice);
+  
+  // Total value = single NFT value × count
+  const totalValue = singleNftValue * nftCount;
   
   // NFT 24h change follows CORE exactly (since it's backed by CORE)
   const nftChange24h = coreChange24h;
@@ -108,8 +112,8 @@ export function getShieldNftHolding(
   return {
     symbol: 'SHLD',
     name: 'Shield NFT',
-    balance: '1',
-    valueUsd: value,
+    balance: nftCount.toString(),
+    valueUsd: totalValue,
     change24h: nftChange24h,
     change30d: nftChange30d,
     logoUrl: shieldSettings?.image_url || '/tokens/shld_dark.svg',
@@ -140,4 +144,64 @@ export async function hasShieldNft(
 
   return !!data;
 }
+
+/**
+ * Get the number of ShieldNest Member NFTs the user owns
+ * This is stored in the private_users table
+ * 
+ * @param supabase - Supabase client
+ * @param publicUserId - User's public_user_id
+ * @returns Number of Shield NFTs owned (0 if none)
+ */
+export async function getShieldNftCount(
+  supabase: SupabaseClient,
+  publicUserId: string
+): Promise<number> {
+  try {
+    // Get the auth_user_id from user_profiles
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('auth_user_id')
+      .eq('public_user_id', publicUserId)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      console.warn(`⚠️ [Shield NFT] Could not find profile for public_user_id: ${publicUserId}`);
+      return 0;
+    }
+
+    // Get the private_user_id from private_user_profiles
+    const { data: privateProfile, error: privateProfileError } = await supabase
+      .from('private_user_profiles')
+      .select('private_user_id')
+      .eq('auth_user_id', profile.auth_user_id)
+      .maybeSingle();
+
+    if (privateProfileError || !privateProfile) {
+      console.log(`ℹ️ [Shield NFT] User has no private profile: ${publicUserId}`);
+      return 0;
+    }
+
+    // Get the shieldnest_member_nft count from private_users
+    const { data: privateUser, error: privateUserError } = await supabase
+      .from('private_users')
+      .select('shieldnest_member_nft')
+      .eq('id', privateProfile.private_user_id)
+      .maybeSingle();
+
+    if (privateUserError || !privateUser) {
+      console.warn(`⚠️ [Shield NFT] Could not find private_users record: ${privateProfile.private_user_id}`);
+      return 0;
+    }
+
+    const nftCount = privateUser.shieldnest_member_nft || 0;
+    console.log(`✅ [Shield NFT] User ${publicUserId} owns ${nftCount} Shield NFT(s)`);
+    
+    return nftCount;
+  } catch (error) {
+    console.error(`❌ [Shield NFT] Error fetching NFT count:`, error);
+    return 0;
+  }
+}
+
 
