@@ -154,6 +154,13 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
     const fetchPendingTransactions = async () => {
       try {
         const response = await fetch('/api/changenow/user-transactions?filter=pending');
+        
+        // Skip if not authenticated (401 error)
+        if (response.status === 401) {
+          setPendingBuyTransactions(0);
+          return;
+        }
+
         const data = await response.json();
         
         if (data.success) {
@@ -172,15 +179,19 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   }, []);
 
   // Open Buy Modal handler
-  const handleOpenBuyModal = () => {
-    // Use first wallet as default
-    if (displayTokens.length > 0) {
-      setBuyModalWallet({
-        address: displayTokens[0].address,
-        label: displayTokens[0].label,
-      });
-      setShowBuyModal(true);
+  const handleOpenBuyModal = async () => {
+    // Check if user has wallets
+    if (displayTokens.length === 0) {
+      showToast('Please connect a wallet first', 'error');
+      return;
     }
+
+    // Use first wallet as default
+    setBuyModalWallet({
+      address: displayTokens[0].address,
+      label: displayTokens[0].label,
+    });
+    setShowBuyModal(true);
   };
 
   // Close Buy Modal handler

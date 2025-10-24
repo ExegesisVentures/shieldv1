@@ -4,6 +4,7 @@
  * ============================================
  * 
  * Gets minimum/maximum amounts and estimated exchange rate
+ * PUBLIC ENDPOINT - No authentication required (just getting rates)
  * 
  * File: /app/api/changenow/exchange-info/route.ts
  */
@@ -29,13 +30,29 @@ export async function GET(request: NextRequest) {
 
     console.log(`📡 [ChangeNOW API] Getting exchange info for ${fromCurrency}`);
 
+    // Check if API key is configured
+    const apiKey = process.env.CHANGENOW_API_KEY;
+    if (!apiKey) {
+      console.error('❌ [ChangeNOW API] API key not configured');
+      return NextResponse.json(
+        { 
+          error: 'ChangeNOW service not configured',
+          hint: 'Administrator needs to add CHANGENOW_API_KEY to environment variables'
+        },
+        { status: 503 }
+      );
+    }
+
     // Get minimal exchange amount
     const minimalAmount = await getMinimalExchangeAmount(fromCurrency, 'coreum');
 
     if (!minimalAmount) {
       console.error('❌ [ChangeNOW API] Failed to get minimal amount');
       return NextResponse.json(
-        { error: 'Failed to get exchange information' },
+        { 
+          error: 'Failed to get exchange information',
+          hint: 'Unable to connect to ChangeNOW API. Please try again later.'
+        },
         { status: 500 }
       );
     }

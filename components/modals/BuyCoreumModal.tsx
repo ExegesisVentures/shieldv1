@@ -62,6 +62,13 @@ export default function BuyCoreumModal({
   const fetchPendingTransactions = useCallback(async () => {
     try {
       const response = await fetch('/api/changenow/user-transactions?filter=pending');
+      
+      // If not authenticated, skip silently (user will see auth error when trying to buy)
+      if (response.status === 401) {
+        console.log('User not authenticated - skipping pending transactions fetch');
+        return;
+      }
+
       const data = await response.json();
 
       if (data.success) {
@@ -86,6 +93,14 @@ export default function BuyCoreumModal({
         const response = await fetch(`/api/changenow/exchange-info?${params}`);
         const data = await response.json();
 
+        if (!response.ok) {
+          // Show specific error if service not configured
+          if (response.status === 503) {
+            setError(data.hint || 'ChangeNOW service not available');
+          }
+          return;
+        }
+
         if (data.success) {
           setMinAmount(data.data.minAmount);
           if (data.data.estimatedAmount) {
@@ -94,6 +109,7 @@ export default function BuyCoreumModal({
         }
       } catch (error) {
         console.error('Failed to fetch exchange info:', error);
+        setError('Unable to load exchange rates. Please try again later.');
       }
     };
 
@@ -127,6 +143,11 @@ export default function BuyCoreumModal({
       });
 
       const data = await response.json();
+
+      // Handle authentication error
+      if (response.status === 401) {
+        throw new Error('Please sign in to buy COREUM. Click the user menu in the top right to sign in or sign up.');
+      }
 
       if (!data.success) {
         throw new Error(data.error || 'Failed to create exchange');
