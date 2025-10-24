@@ -298,7 +298,7 @@ export async function GET(request: NextRequest) {
 
     // Security: Rate limiting (only for authenticated users)
     let rateLimit: { allowed: boolean; remaining?: number; resetTime?: number } = { allowed: true };
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       const rateLimitAction = refresh ? 'refresh' : 'request';
       rateLimit = await checkRateLimit(user.id, rateLimitAction);
       
@@ -318,7 +318,7 @@ export async function GET(request: NextRequest) {
     let isShieldNestMemberWithUnpulledRewards = false;
     let shieldNestWalletsNeedingPull: string[] = [];
     
-    if (isAuthenticated && !refresh) {
+    if (isAuthenticated && !refresh && user) {
       try {
         const supabase = getServiceSupabase();
         
@@ -355,7 +355,7 @@ export async function GET(request: NextRequest) {
     }
 
     // NEW: Auto-pull rewards for ShieldNest members on first access
-    if (isShieldNestMemberWithUnpulledRewards && shieldNestWalletsNeedingPull.length > 0) {
+    if (isShieldNestMemberWithUnpulledRewards && shieldNestWalletsNeedingPull.length > 0 && user) {
       console.log(`🎁 [User Rewards API] Auto-pulling historical rewards for ${shieldNestWalletsNeedingPull.length} ShieldNest member wallet(s)...`);
       
       const autoPullResult = await processMultiWalletRefresh(shieldNestWalletsNeedingPull, user.id);
@@ -382,7 +382,7 @@ export async function GET(request: NextRequest) {
 
     // If refresh requested, use our enhanced blockchain query system
     if (refresh) {
-      if (isAuthenticated) {
+      if (isAuthenticated && user) {
         console.log(`🔄 [User Rewards API] Enhanced refresh for ${validAddresses.length} wallet(s) by user ${user.id}:`);
         validAddresses.forEach((addr, i) => console.log(`  ${i + 1}. ${addr}`));
         
@@ -461,7 +461,7 @@ export async function GET(request: NextRequest) {
     if (walletsWithNoData.length > 0 && !refresh) {
       console.log(`🆕 [User Rewards API] Detected ${walletsWithNoData.length} new wallet(s) with no data, auto-refreshing...`);
       
-      if (isAuthenticated) {
+      if (isAuthenticated && user) {
         // Auto-refresh new wallets for authenticated users
         const newWalletAddresses = walletsWithNoData.map(w => w.address);
         const autoRefreshResult = await processMultiWalletRefresh(newWalletAddresses, user.id);
