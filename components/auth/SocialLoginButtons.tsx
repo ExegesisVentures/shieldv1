@@ -52,12 +52,12 @@ export default function SocialLoginButtons() {
 
   const providers: Provider[] = [
     { id: "google", name: "Google", icon: <GoogleIcon />, enabled: false },
-    { id: "apple", name: "IoLogoApple", icon: <IoLogoApple className="w-5 h-5" />, enabled: false },
+    { id: "apple", name: "Apple", icon: <IoLogoApple className="w-5 h-5" />, enabled: false },
     { id: "discord", name: "Discord", icon: <DiscordIcon />, enabled: false },
     { id: "facebook", name: "Facebook", icon: <FacebookIcon />, enabled: false },
     { id: "github", name: "GitHub", icon: <IoLogoGithub className="w-5 h-5" />, enabled: false },
     { id: "linkedin_oidc", name: "LinkedIn", icon: <IoLogoLinkedin className="w-5 h-5" />, enabled: false },
-    { id: "twitter", name: "IoLogoTwitter", icon: <IoLogoTwitter className="w-5 h-5" />, enabled: false },
+    { id: "twitter", name: "Twitter", icon: <IoLogoTwitter className="w-5 h-5" />, enabled: false },
     // SAML requires custom implementation
     // { id: "saml", name: "SAML SSO", icon: <SAMLIcon />, enabled: false },
   ];
@@ -116,18 +116,18 @@ export default function SocialLoginButtons() {
 
   return (
     <div className="space-y-3">
-      {/* Magic Link */}
+      {/* Magic Link - Featured */}
       <button
         onClick={handleMagicLink}
         disabled={loading === "magic-link"}
-        className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-3 px-4 py-3 neo-float-purple rounded-lg hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading === "magic-link" ? (
-          <div className="w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-5 h-5 border-2 border-[#a855f7] border-t-transparent rounded-full animate-spin"></div>
         ) : (
-          <IoMail className="w-5 h-5" />
+          <IoMail className="w-5 h-5 text-[#a855f7]" />
         )}
-        <span className="font-medium">Magic Link</span>
+        <span className="font-semibold text-foreground">Magic Link (Email)</span>
       </button>
 
       {/* Social Providers Grid */}
@@ -137,15 +137,15 @@ export default function SocialLoginButtons() {
             key={provider.id}
             onClick={() => provider.enabled && handleSocialLogin(provider.id)}
             disabled={!provider.enabled || loading === provider.id}
-            className={`flex items-center justify-center gap-2 px-4 py-2.5 border rounded-lg transition-colors ${
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all ${
               provider.enabled
-                ? "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                : "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-60"
+                ? "neo-card hover:scale-[1.02] text-foreground"
+                : "neo-pressed cursor-not-allowed opacity-60 text-muted-foreground"
             }`}
             title={provider.enabled ? `Sign in with ${provider.name}` : `${provider.name} - Coming soon`}
           >
             {loading === provider.id ? (
-              <div className="w-5 h-5 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
             ) : (
               provider.icon
             )}
@@ -155,8 +155,8 @@ export default function SocialLoginButtons() {
       </div>
 
       {/* Info Note */}
-      <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
-        Social login providers will be enabled once configured
+      <p className="text-xs text-center text-muted-foreground pt-2">
+        Social providers will be enabled once configured
       </p>
     </div>
   );
