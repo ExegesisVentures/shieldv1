@@ -221,31 +221,46 @@ export default function BuyCoreumModal({
             </div>
           )}
 
-          {/* Wallet Info */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              COREUM will be sent to:
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={walletAddress}
-                disabled
-                className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm font-mono"
-              />
-              <button
-                onClick={handleCopyAddress}
-                className="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                title="Copy address"
-              >
-                <IoCopy className={`w-5 h-5 ${copiedAddress ? 'text-green-600' : 'text-gray-500'}`} />
-              </button>
+          {/* Wallet Info - PROMINENT with copy instruction */}
+          <div className="p-5 bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-2 border-yellow-400 dark:border-yellow-600 rounded-xl space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-10 h-10 bg-yellow-400 dark:bg-yellow-600 rounded-full flex items-center justify-center">
+                <span className="text-2xl">📋</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-yellow-900 dark:text-yellow-100 text-sm mb-1">
+                  ⚠️ IMPORTANT: Copy Your Wallet Address
+                </h3>
+                <p className="text-xs text-yellow-800 dark:text-yellow-200 mb-3">
+                  You'll need to paste this address into ChangeNOW's "Recipient Address" field
+                </p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={walletAddress}
+                    disabled
+                    className="flex-1 px-3 py-2.5 rounded-lg border-2 border-yellow-400 dark:border-yellow-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-mono font-bold"
+                  />
+                  <button
+                    onClick={handleCopyAddress}
+                    className={`px-4 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center gap-2 ${
+                      copiedAddress 
+                        ? 'bg-green-500 text-white' 
+                        : 'bg-yellow-400 hover:bg-yellow-500 text-yellow-900'
+                    }`}
+                    title="Copy address"
+                  >
+                    <IoCopy className="w-4 h-4" />
+                    {copiedAddress ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                {walletLabel && (
+                  <p className="text-xs text-yellow-700 dark:text-yellow-300 mt-2 font-medium">
+                    📍 Wallet: {walletLabel}
+                  </p>
+                )}
+              </div>
             </div>
-            {walletLabel && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Wallet: {walletLabel}
-              </p>
-            )}
           </div>
 
           {/* Main CTA */}
@@ -263,14 +278,19 @@ export default function BuyCoreumModal({
               💳 How it works:
             </h3>
             <ol className="text-xs text-blue-800 dark:text-blue-200 space-y-2 ml-4 list-decimal">
-              <li>Click "Open ChangeNOW Exchange" above</li>
+              <li className="font-bold text-yellow-700 dark:text-yellow-300">
+                <span className="font-bold">👆 Copy your wallet address above (yellow box)</span>
+              </li>
+              <li>Click "Open ChangeNOW Exchange" below</li>
               <li>On ChangeNOW, select:
                 <ul className="ml-4 mt-1 list-disc space-y-1">
                   <li><strong>"You Send"</strong> = USD (or another crypto)</li>
                   <li><strong>"You Get"</strong> = COREUM</li>
                 </ul>
               </li>
-              <li>Copy your wallet address above and paste it in the "Recipient Address" field</li>
+              <li className="font-bold">
+                <span className="font-bold">📋 Paste your copied address</span> in the "Recipient Address" field
+              </li>
               <li>Choose payment method (Card or Crypto)</li>
               <li>Complete the transaction</li>
               <li>COREUM will arrive in 5-30 minutes</li>

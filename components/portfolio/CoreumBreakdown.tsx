@@ -793,7 +793,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
       </div>
 
 
-      {/* Action Row aligned with summary cards: Buy above Available, Stake/Redelegate above Staked, Claim above Rewards, Unstake above Unbonding */}
+      {/* Action Row aligned with summary cards: Buy above Available, Stake/Unstake above Staked, Claim above Rewards, Redelegate above Unbonding */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
         {/* Buy & Swap above Available (col 1) */}
         <div className="col-start-1 flex flex-row gap-2">
@@ -841,7 +841,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </a>
         </div>
-        {/* Stake & Redelegate above Staked (col 2) */}
+        {/* Stake & Unstake above Staked (col 2) */}
         <div className="col-start-2 md:col-start-2 flex flex-row gap-2">
           {canStake && (
             <button
@@ -856,17 +856,17 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
               <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-400/10 to-purple-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
             </button>
           )}
-          {canRedelegate && (
+          {canUnstake && (
             <button
-              onClick={openRedelegate}
-              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-400 hover:border-purple-300 bg-gradient-to-br from-purple-400/25 via-purple-500/15 to-purple-600/10 hover:from-purple-400/35 hover:via-purple-500/25 hover:to-purple-600/15 text-purple-600 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+              onClick={openUnstake}
+              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-orange-500 hover:border-orange-400 bg-gradient-to-br from-orange-500/25 via-orange-600/15 to-orange-700/10 hover:from-orange-500/35 hover:via-orange-600/25 hover:to-orange-700/15 text-orange-700 dark:text-orange-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(255,140,66,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
               style={{
-                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                boxShadow: '0 4px 12px rgba(255, 140, 66, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <span className="relative z-10">Redelegate</span>
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-400/10 to-purple-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10">Unstake</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-orange-400/10 to-orange-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
             </button>
           )}
         </div>
@@ -904,19 +904,19 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
             </>
           )}
         </div>
-        {/* Unstake & Send above Unbonding (col 4) */}
+        {/* Redelegate & Send above Unbonding (col 4) */}
         <div className="col-start-1 md:col-start-4 flex flex-row gap-2">
-          {canUnstake && (
+          {canRedelegate && (
             <button
-              onClick={openUnstake}
-              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-orange-500 hover:border-orange-400 bg-gradient-to-br from-orange-500/25 via-orange-600/15 to-orange-700/10 hover:from-orange-500/35 hover:via-orange-600/25 hover:to-orange-700/15 text-orange-700 dark:text-orange-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(255,140,66,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+              onClick={openRedelegate}
+              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-400 hover:border-purple-300 bg-gradient-to-br from-purple-400/25 via-purple-500/15 to-purple-600/10 hover:from-purple-400/35 hover:via-purple-500/25 hover:to-purple-600/15 text-purple-600 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
               style={{
-                boxShadow: '0 4px 12px rgba(255, 140, 66, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <span className="relative z-10">Unstake</span>
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-orange-400/10 to-orange-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10">Redelegate</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-400/10 to-purple-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
             </button>
           )}
           <button
