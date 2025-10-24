@@ -49,15 +49,15 @@ export default async function SimplifiedHeader() {
     <header className="sticky top-0 z-40 w-full border-b border-gray-800 bg-gray-900/95 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 max-w-[88rem] mx-auto overflow-visible">
         {/* Logo & Brand with Social Icons - matching coreumdash style */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5">
           {/* Logo */}
           <Link href="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
             <Image
               src="/tokens/shld_dark.svg"
               alt="ShieldNest Logo"
-              width={44}
-              height={44}
-              className="object-contain w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-16 lg:h-16"
+              width={33}
+              height={33}
+              className="object-contain w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-12 lg:h-12"
               priority
             />
           </Link>
@@ -65,13 +65,13 @@ export default async function SimplifiedHeader() {
           {/* Brand Name & Social Icons */}
           <div className="flex flex-col">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="font-bold text-2xl text-white">
+              <h1 className="font-bold text-lg text-white">
                 ShieldNEST
               </h1>
             </Link>
             
             {/* Social Icons underneath the text */}
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-1.5 mt-0.5">
               <a
                 href="https://github.com/shieldnest"
                 target="_blank"
@@ -79,7 +79,7 @@ export default async function SimplifiedHeader() {
                 className="hover:opacity-80 transition-opacity"
                 aria-label="GitHub"
               >
-                <IoLogoGithub className="w-5 h-5 text-[#A855F7]" />
+                <IoLogoGithub className="w-4 h-4 text-[#A855F7]" />
               </a>
               <a
                 href="https://twitter.com/shieldnest"
@@ -88,7 +88,7 @@ export default async function SimplifiedHeader() {
                 className="hover:opacity-80 transition-opacity"
                 aria-label="X (Twitter)"
               >
-                <svg className="w-5 h-5 text-[#A855F7]" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="w-4 h-4 text-[#A855F7]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </a>
