@@ -52,12 +52,6 @@ export default function Sidebar({ userType = "public" }: SidebarProps) {
       forUsers: ["visitor", "public", "private"],
     },
     {
-      name: "Wallets",
-      href: "/wallets",
-      icon: IoWallet,
-      forUsers: ["public", "private"],
-    },
-    {
       name: "Liquidity",
       href: "/liquidity",
       icon: IoWater,

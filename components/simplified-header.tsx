@@ -118,12 +118,6 @@ export default async function SimplifiedHeader() {
             Calculator
           </Link>
           <Link 
-            href="/wallets" 
-            className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
-          >
-            Wallets
-          </Link>
-          <Link 
             href="/liquidity" 
             className="font-medium text-gray-300 hover:text-[#25d695] transition-colors whitespace-nowrap"
           >

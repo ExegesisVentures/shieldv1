@@ -171,14 +171,6 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <span className="text-sm text-gray-700 dark:text-gray-300">Calculator</span>
                   </Link>
                   <Link
-                    href="/wallets"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <IoWallet className="w-5 h-5 text-gray-500" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Wallets</span>
-                  </Link>
-                  <Link
                     href="/liquidity"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
