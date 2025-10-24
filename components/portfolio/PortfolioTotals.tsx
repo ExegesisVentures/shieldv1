@@ -488,6 +488,22 @@ export default function PortfolioTotals({
           console.log(`⚠️ [Historical Rewards] Some wallets have stale data (>72h old)`);
         }
         
+        // NEW: Check if this was a ShieldNest member auto-pull
+        if (data.shieldNestMemberAutoPull) {
+          console.log(`🛡️ [Historical Rewards] ShieldNest member auto-pull completed!`);
+          // Show welcome message in the UI
+          setRealTimeProgress(100);
+          setCurrentStep("Welcome, ShieldNest member! Your historical rewards have been calculated.");
+          setShowProgressModal(true);
+          setShowProgressInMainBox(false);
+          
+          // Auto-close after 5 seconds to not be intrusive
+          setTimeout(() => {
+            setShowProgressModal(false);
+            setLongRunningQuery(false);
+          }, 5000);
+        }
+        
         // If this was a refresh and we got data, update the progress to 100% but keep modal open
         if (forceRefresh && data.refreshed) {
           setRealTimeProgress(100);

@@ -417,6 +417,13 @@ export async function getHistoricalRewards(
     const transactions = await queryRewardsTransactions(address);
     const aggregated = aggregateRewards(transactions);
 
+    // Check if this is the first pull for this wallet
+    const { data: existing } = await supabase
+      .from('wallet_rewards_history')
+      .select('first_rewards_pull_at')
+      .eq('wallet_address', address)
+      .maybeSingle();
+
     const historyData: Partial<RewardsHistoryData> = {
       wallet_address: address,
       total_rewards_ucore: aggregated.total,
@@ -424,6 +431,8 @@ export async function getHistoricalRewards(
       first_reward_at: aggregated.firstReward,
       last_reward_at: aggregated.lastReward,
       last_updated_at: new Date().toISOString(),
+      // Set first_rewards_pull_at if this is the first time
+      ...((!existing || !existing.first_rewards_pull_at) && { first_rewards_pull_at: new Date().toISOString() }),
     };
 
     // Upsert to database

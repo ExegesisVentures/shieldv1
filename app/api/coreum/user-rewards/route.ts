@@ -250,6 +250,7 @@ async function processMultiWalletRefresh(addresses: string[], userId?: string): 
 /**
  * GET /api/coreum/user-rewards
  * Enhanced with blockchain query integration and security measures
+ * Auto-pulls rewards for ShieldNest members on first login
  */
 export async function GET(request: NextRequest) {
   try {
@@ -311,6 +312,72 @@ export async function GET(request: NextRequest) {
           message: `Too many requests. Try again after ${resetTime.toLocaleString()}.`
         }, { status: 429 });
       }
+    }
+
+    // NEW: Check if user is a ShieldNest member with unpulled rewards
+    let isShieldNestMemberWithUnpulledRewards = false;
+    let shieldNestWalletsNeedingPull: string[] = [];
+    
+    if (isAuthenticated && !refresh) {
+      try {
+        const supabase = getServiceSupabase();
+        
+        // Get user's public_user_id
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('public_user_id, has_signed_pma, has_shield_nft')
+          .eq('auth_user_id', user.id)
+          .maybeSingle();
+        
+        if (profileData && (profileData.has_signed_pma || profileData.has_shield_nft)) {
+          console.log(`🛡️ [User Rewards API] User is ShieldNest member, checking for unpulled rewards...`);
+          
+          // Check each wallet to see if rewards have been pulled before
+          for (const address of validAddresses) {
+            const { data: rewardsData } = await supabase
+              .from('wallet_rewards_history')
+              .select('first_rewards_pull_at, last_updated_at')
+              .eq('wallet_address', address)
+              .maybeSingle();
+            
+            // If no record exists OR first_rewards_pull_at is NULL, this wallet needs pulling
+            if (!rewardsData || !rewardsData.first_rewards_pull_at) {
+              console.log(`🆕 [User Rewards API] ShieldNest member wallet ${address} needs first-time pull`);
+              shieldNestWalletsNeedingPull.push(address);
+              isShieldNestMemberWithUnpulledRewards = true;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('[User Rewards API] Error checking ShieldNest member status:', error);
+        // Continue without auto-pull if check fails
+      }
+    }
+
+    // NEW: Auto-pull rewards for ShieldNest members on first access
+    if (isShieldNestMemberWithUnpulledRewards && shieldNestWalletsNeedingPull.length > 0) {
+      console.log(`🎁 [User Rewards API] Auto-pulling historical rewards for ${shieldNestWalletsNeedingPull.length} ShieldNest member wallet(s)...`);
+      
+      const autoPullResult = await processMultiWalletRefresh(shieldNestWalletsNeedingPull, user.id);
+      
+      console.log(`🔄 [User Rewards API] Auto-pull results:`, {
+        success: autoPullResult.success,
+        failed: autoPullResult.failed,
+        details: autoPullResult.results
+      });
+      
+      // Fetch updated data after auto-pull
+      const updatedData = await getUserWalletsRewards(validAddresses);
+      return NextResponse.json({
+        success: true,
+        data: updatedData,
+        refreshed: true,
+        autoRefreshed: true,
+        shieldNestMemberAutoPull: true,
+        message: `Welcome, ShieldNest member! Your historical rewards have been calculated.`,
+        rateLimitRemaining: rateLimit.remaining,
+        authenticated: isAuthenticated
+      });
     }
 
     // If refresh requested, use our enhanced blockchain query system
