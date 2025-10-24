@@ -3,12 +3,12 @@
  * BUY COREUM MODAL
  * ============================================
  * 
- * Modal for buying COREUM with fiat using ChangeNOW
+ * Modal for buying COREUM using ChangeNOW widget
  * Features:
- * - Shows pending transactions at top
- * - Opens payment in popup/iframe
- * - Tracks transaction status
- * - Updates when transaction completes
+ * - Opens ChangeNOW exchange in pop-up with COREUM pre-filled
+ * - No API key needed - uses ChangeNOW's public widget
+ * - Tracks local pending transactions
+ * - Users can buy with fiat/card or crypto
  * 
  * File: /components/modals/BuyCoreumModal.tsx
  */
@@ -16,18 +16,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { IoClose, IoCopy, IoTime, IoCheckmarkCircle, IoAlertCircle, IoOpenOutline } from 'react-icons/io5';
+import { IoClose, IoCopy, IoTime, IoOpenOutline, IoCheckmarkCircle } from 'react-icons/io5';
 
-interface PendingTransaction {
+interface LocalTransaction {
   id: string;
-  fromCurrency: string;
-  fromAmount: number;
-  toAmount: number | null;
-  expectedAmount: number | null;
-  status: string;
-  createdAt: string;
-  payoutHash?: string | null;
-  payinHash?: string | null;
+  walletAddress: string;
+  timestamp: number;
+  opened: boolean;
 }
 
 interface BuyCoreumModalProps {
@@ -47,176 +42,105 @@ export default function BuyCoreumModal({
   onTransactionComplete,
   isGuest = false,
 }: BuyCoreumModalProps) {
-  // Form state
-  const [fromCurrency, setFromCurrency] = useState('usd');
-  const [fromAmount, setFromAmount] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  
-  // UI state
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [estimatedAmount, setEstimatedAmount] = useState<number | null>(null);
-  const [minAmount, setMinAmount] = useState<number | null>(null);
-  const [pendingTransactions, setPendingTransactions] = useState<PendingTransaction[]>([]);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [pendingTransactions, setPendingTransactions] = useState<LocalTransaction[]>([]);
+  const [copiedAddress, setCopiedAddress] = useState(false);
+  const [popupWindow, setPopupWindow] = useState<Window | null>(null);
 
-  // Generate guest session ID if in guest mode
-  const [guestSessionId] = useState(() => 
-    isGuest ? `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : null
-  );
-
-  // Fetch pending transactions
-  const fetchPendingTransactions = useCallback(async () => {
-    try {
-      const response = await fetch('/api/changenow/user-transactions?filter=pending');
-      
-      // If not authenticated, skip silently (user will see auth error when trying to buy)
-      if (response.status === 401) {
-        console.log('User not authenticated - skipping pending transactions fetch');
-        return;
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        setPendingTransactions(data.data || []);
-      }
-    } catch (error) {
-      console.error('Failed to fetch pending transactions:', error);
-    }
-  }, []);
-
-  // Fetch exchange info when amount changes
+  // Load pending transactions from localStorage
   useEffect(() => {
     if (!isOpen) return;
-
-    const fetchExchangeInfo = async () => {
+    
+    const stored = localStorage.getItem('changenow_pending_transactions');
+    if (stored) {
       try {
-        const params = new URLSearchParams({
-          fromCurrency,
-          ...(fromAmount && { fromAmount }),
-        });
-
-        const response = await fetch(`/api/changenow/exchange-info?${params}`);
-        const data = await response.json();
-
-        if (!response.ok) {
-          // Show specific error if service not configured
-          if (response.status === 503) {
-            setError(data.hint || 'ChangeNOW service not available');
-          }
-          return;
-        }
-
-        if (data.success) {
-          setMinAmount(data.data.minAmount);
-          if (data.data.estimatedAmount) {
-            setEstimatedAmount(data.data.estimatedAmount);
-          }
+        const parsed = JSON.parse(stored) as LocalTransaction[];
+        // Filter out transactions older than 24 hours
+        const recent = parsed.filter(tx => Date.now() - tx.timestamp < 24 * 60 * 60 * 1000);
+        setPendingTransactions(recent);
+        if (recent.length !== parsed.length) {
+          localStorage.setItem('changenow_pending_transactions', JSON.stringify(recent));
         }
       } catch (error) {
-        console.error('Failed to fetch exchange info:', error);
-        setError('Unable to load exchange rates. Please try again later.');
+        console.error('Failed to parse pending transactions:', error);
       }
-    };
-
-    fetchExchangeInfo();
-  }, [isOpen, fromCurrency, fromAmount]);
-
-  // Fetch pending transactions on mount
-  useEffect(() => {
-    if (isOpen) {
-      fetchPendingTransactions();
     }
-  }, [isOpen, fetchPendingTransactions]);
+  }, [isOpen]);
 
-  // Handle create exchange
-  const handleCreateExchange = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  // Monitor popup window
+  useEffect(() => {
+    if (!popupWindow) return;
 
-    try {
-      const response = await fetch('/api/changenow/create-exchange', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fromCurrency,
-          fromAmount,
-          payoutAddress: walletAddress,
-          contactEmail,
-          walletLabel,
-          isGuest,
-          guestSessionId,
-        }),
-      });
-
-      const data = await response.json();
-
-      // Handle authentication error
-      if (response.status === 401) {
-        throw new Error('Please sign in to buy COREUM. Click the user menu in the top right to sign in or sign up.');
-      }
-
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to create exchange');
-      }
-
-      console.log('✅ Exchange created:', data.data);
-
-      // Open payment URL in popup
-      if (data.data.paymentUrl) {
-        const popup = window.open(
-          data.data.paymentUrl,
-          'ChangeNOW Payment',
-          'width=600,height=800,scrollbars=yes,resizable=yes'
-        );
-
-        if (!popup) {
-          // Popup blocked - show link instead
-          setError('Popup blocked. Please allow popups or click the link to continue payment.');
+    const checkInterval = setInterval(() => {
+      if (popupWindow.closed) {
+        console.log('✅ ChangeNOW popup closed - user may have completed transaction');
+        setPopupWindow(null);
+        if (onTransactionComplete) {
+          onTransactionComplete();
         }
       }
+    }, 1000);
 
-      // Refresh pending transactions
-      await fetchPendingTransactions();
+    return () => clearInterval(checkInterval);
+  }, [popupWindow, onTransactionComplete]);
 
-      // Reset form
-      setFromAmount('');
-      setEstimatedAmount(null);
+  // Open ChangeNOW widget in popup
+  const handleOpenChangeNow = useCallback(() => {
+    // Create ChangeNOW exchange URL with COREUM pre-filled
+    const changeNowUrl = new URL('https://changenow.io/exchange');
+    changeNowUrl.searchParams.set('to', 'coreum');
+    changeNowUrl.searchParams.set('toNetwork', 'coreum');
+    changeNowUrl.searchParams.set('address', walletAddress);
+    
+    // Optional: can also prefill amount, from currency, etc.
+    // changeNowUrl.searchParams.set('from', 'usd');
+    // changeNowUrl.searchParams.set('amount', '100');
 
-    } catch (error: any) {
-      console.error('Failed to create exchange:', error);
-      setError(error.message || 'Failed to create exchange');
-    } finally {
-      setLoading(false);
+    console.log('🚀 Opening ChangeNOW:', changeNowUrl.toString());
+
+    // Open in popup
+    const popup = window.open(
+      changeNowUrl.toString(),
+      'ChangeNOW Exchange',
+      'width=500,height=700,scrollbars=yes,resizable=yes,location=yes'
+    );
+
+    if (!popup) {
+      alert('Popup blocked! Please allow popups for this site, then try again.');
+      return;
     }
-  };
 
-  // Copy transaction ID
-  const handleCopyId = useCallback(async (id: string) => {
+    setPopupWindow(popup);
+
+    // Track this transaction locally
+    const newTransaction: LocalTransaction = {
+      id: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      walletAddress,
+      timestamp: Date.now(),
+      opened: true,
+    };
+
+    const updated = [...pendingTransactions, newTransaction];
+    setPendingTransactions(updated);
+    localStorage.setItem('changenow_pending_transactions', JSON.stringify(updated));
+  }, [walletAddress, pendingTransactions]);
+
+  // Copy wallet address
+  const handleCopyAddress = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(id);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
+      await navigator.clipboard.writeText(walletAddress);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
     } catch (error) {
       console.error('Failed to copy:', error);
     }
-  }, []);
+  }, [walletAddress]);
 
-  // Get status color
-  const getStatusColor = (status: string) => {
-    if (['finished'].includes(status)) return 'text-green-600 dark:text-green-400';
-    if (['failed', 'expired', 'refunded'].includes(status)) return 'text-red-600 dark:text-red-400';
-    return 'text-yellow-600 dark:text-yellow-400';
-  };
-
-  // Get status icon
-  const getStatusIcon = (status: string) => {
-    if (['finished'].includes(status)) return <IoCheckmarkCircle className="w-5 h-5" />;
-    if (['failed', 'expired', 'refunded'].includes(status)) return <IoAlertCircle className="w-5 h-5" />;
-    return <IoTime className="w-5 h-5 animate-spin" />;
-  };
+  // Clear completed transaction
+  const handleClearTransaction = useCallback((id: string) => {
+    const updated = pendingTransactions.filter(tx => tx.id !== id);
+    setPendingTransactions(updated);
+    localStorage.setItem('changenow_pending_transactions', JSON.stringify(updated));
+  }, [pendingTransactions]);
 
   if (!isOpen) return null;
 
@@ -241,7 +165,8 @@ export default function BuyCoreumModal({
           {/* Pending Transactions */}
           {pendingTransactions.length > 0 && (
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <IoTime className="w-5 h-5 text-yellow-500 animate-spin" />
                 Pending Transactions
               </h3>
               {pendingTransactions.map((tx) => (
@@ -249,30 +174,22 @@ export default function BuyCoreumModal({
                   key={tx.id}
                   className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-700 rounded-xl"
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      {getStatusIcon(tx.status)}
-                      <span className={`text-sm font-medium ${getStatusColor(tx.status)}`}>
-                        {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                      Opened {new Date(tx.timestamp).toLocaleTimeString()}
+                    </p>
                     <button
-                      onClick={() => handleCopyId(tx.id)}
-                      className="p-1 hover:bg-yellow-100 dark:hover:bg-yellow-800 rounded transition-colors"
-                      title="Copy transaction ID"
+                      onClick={() => handleClearTransaction(tx.id)}
+                      className="text-xs text-gray-500 hover:text-green-600 dark:hover:text-green-400 flex items-center gap-1"
+                      title="Mark as complete"
                     >
-                      <IoCopy className={`w-4 h-4 ${copiedId === tx.id ? 'text-green-600' : 'text-gray-500'}`} />
+                      <IoCheckmarkCircle className="w-4 h-4" />
+                      Complete
                     </button>
                   </div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">
-                    <p>
-                      <strong>{tx.fromAmount} {tx.fromCurrency.toUpperCase()}</strong> →{' '}
-                      <strong>{tx.expectedAmount?.toFixed(2) || '...'} COREUM</strong>
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      {new Date(tx.createdAt).toLocaleString()}
-                    </p>
-                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
+                    To: {tx.walletAddress.slice(0, 20)}...
+                  </p>
                   <a
                     href="https://changenow.io/support"
                     target="_blank"
@@ -280,144 +197,84 @@ export default function BuyCoreumModal({
                     className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline mt-2"
                   >
                     <IoOpenOutline className="w-3 h-3" />
-                    Contact ChangeNOW Support
+                    Need help? Contact ChangeNOW Support
                   </a>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Error */}
-          {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-700 rounded-xl">
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
-            </div>
-          )}
-
-          {/* Form */}
-          <form onSubmit={handleCreateExchange} className="space-y-4">
-            {/* Payout Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                COREUM Address
-              </label>
+          {/* Wallet Info */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              COREUM will be sent to:
+            </label>
+            <div className="flex items-center gap-2">
               <input
                 type="text"
                 value={walletAddress}
                 disabled
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-sm font-mono"
+                className="flex-1 px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm font-mono"
               />
-              {walletLabel && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Wallet: {walletLabel}
-                </p>
-              )}
-            </div>
-
-            {/* Currency */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Pay With
-              </label>
-              <select
-                value={fromCurrency}
-                onChange={(e) => setFromCurrency(e.target.value)}
-                disabled={loading}
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              <button
+                onClick={handleCopyAddress}
+                className="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                title="Copy address"
               >
-                <option value="usd">USD (US Dollar)</option>
-                <option value="eur">EUR (Euro)</option>
-                <option value="gbp">GBP (British Pound)</option>
-              </select>
+                <IoCopy className={`w-5 h-5 ${copiedAddress ? 'text-green-600' : 'text-gray-500'}`} />
+              </button>
             </div>
-
-            {/* Amount */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Amount
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={fromAmount}
-                onChange={(e) => setFromAmount(e.target.value)}
-                placeholder={minAmount ? `Min: ${minAmount}` : '0.00'}
-                disabled={loading}
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-              {minAmount && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Minimum: {minAmount} {fromCurrency.toUpperCase()}
-                </p>
-              )}
-            </div>
-
-            {/* Estimated Amount */}
-            {estimatedAmount && (
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl">
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  You will receive approximately:
-                </p>
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1">
-                  {estimatedAmount.toFixed(6)} COREUM
-                </p>
-              </div>
+            {walletLabel && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Wallet: {walletLabel}
+              </p>
             )}
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Contact Email {isGuest && <span className="text-red-500">*</span>}
-              </label>
-              <input
-                type="email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-                placeholder="your@email.com"
-                required={isGuest}
-                disabled={loading}
-                className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              />
-              {isGuest && (
-                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
-                  <strong>Required for guest checkout</strong> - We'll send your transaction details here
-                </p>
-              )}
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading || !fromAmount || !walletAddress || (isGuest && !contactEmail)}
-              className="w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <IoTime className="w-5 h-5 animate-spin" />
-                  Creating Exchange...
-                </>
-              ) : (
-                'Continue to Payment'
-              )}
-            </button>
-
-            {/* Guest Mode Notice */}
-            {isGuest && (
-              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                <p className="text-xs text-yellow-800 dark:text-yellow-200">
-                  💡 <strong>Guest Checkout</strong> - Save your transaction ID! You'll need it to check status or get support.
-                </p>
-              </div>
-            )}
-          </form>
-
-          {/* Info */}
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl text-xs text-gray-600 dark:text-gray-400 space-y-1">
-            <p>• Powered by ChangeNOW - secure cryptocurrency exchange</p>
-            <p>• You will be redirected to complete payment</p>
-            <p>• COREUM will be sent to your wallet address</p>
-            <p>• Transaction typically completes in 5-30 minutes</p>
           </div>
+
+          {/* Main CTA */}
+          <button
+            onClick={handleOpenChangeNow}
+            className="w-full px-6 py-5 rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-bold text-lg transition-all transform hover:scale-[1.02] active:scale-100 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+          >
+            <IoOpenOutline className="w-6 h-6" />
+            Open ChangeNOW Exchange
+          </button>
+
+          {/* Info Box */}
+          <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl space-y-3">
+            <h3 className="font-bold text-blue-900 dark:text-blue-100 text-sm">
+              💳 How it works:
+            </h3>
+            <ol className="text-xs text-blue-800 dark:text-blue-200 space-y-2 ml-4 list-decimal">
+              <li>Click "Open ChangeNOW Exchange" above</li>
+              <li>Choose your payment method:
+                <ul className="ml-4 mt-1 list-disc space-y-1">
+                  <li><strong>Credit/Debit Card</strong> - Buy with fiat currency</li>
+                  <li><strong>Crypto</strong> - Swap from BTC, ETH, USDT, etc.</li>
+                </ul>
+              </li>
+              <li>Your COREUM address is already filled in</li>
+              <li>Complete the transaction on ChangeNOW</li>
+              <li>COREUM will arrive in 5-30 minutes</li>
+            </ol>
+          </div>
+
+          {/* Security Notice */}
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl text-xs text-gray-600 dark:text-gray-400 space-y-1">
+            <p>🔒 <strong>Secure:</strong> Powered by ChangeNOW - trusted cryptocurrency exchange</p>
+            <p>📧 <strong>Support:</strong> If you have issues, use your transaction ID from ChangeNOW</p>
+            <p>⏱️ <strong>Timing:</strong> Transactions typically complete in 5-30 minutes</p>
+            <p>💰 <strong>No Fees:</strong> ShieldNest charges no additional fees - only ChangeNOW's rates apply</p>
+          </div>
+
+          {/* Guest Notice */}
+          {isGuest && (
+            <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                💡 <strong>Guest Mode:</strong> Save your transaction ID from ChangeNOW! You'll need it to track your purchase or get support.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -157,10 +157,8 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/changenow/user-transactions?filter=pending');
-        // If we get 200, user is authenticated
-        // If we get 401, user is not authenticated
-        setIsAuthenticated(response.status !== 401);
+        const response = await fetch('/api/auth/session');
+        setIsAuthenticated(response.ok);
       } catch (error) {
         setIsAuthenticated(false);
       }
@@ -169,25 +167,27 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
     checkAuth();
   }, []);
 
-  // Fetch pending buy transactions
+  // Fetch pending buy transactions from localStorage
   useEffect(() => {
-    const fetchPendingTransactions = async () => {
+    const fetchPendingTransactions = () => {
       try {
-        const response = await fetch('/api/changenow/user-transactions?filter=pending');
-        
-        // Skip if not authenticated (401 error)
-        if (response.status === 401) {
+        const stored = localStorage.getItem('changenow_pending_transactions');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          // Filter out transactions older than 24 hours
+          const recent = parsed.filter((tx: any) => Date.now() - tx.timestamp < 24 * 60 * 60 * 1000);
+          setPendingBuyTransactions(recent.length);
+          
+          // Update localStorage if we filtered any out
+          if (recent.length !== parsed.length) {
+            localStorage.setItem('changenow_pending_transactions', JSON.stringify(recent));
+          }
+        } else {
           setPendingBuyTransactions(0);
-          return;
-        }
-
-        const data = await response.json();
-        
-        if (data.success) {
-          setPendingBuyTransactions(data.data?.length || 0);
         }
       } catch (error) {
         console.error('Failed to fetch pending transactions:', error);
+        setPendingBuyTransactions(0);
       }
     };
 
