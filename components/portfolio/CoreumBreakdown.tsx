@@ -11,6 +11,7 @@ import { ThreeArrowSpinner } from "@/components/ui/ThreeArrowSpinner";
 import { sendTokens, isValidCoreumAddress } from "@/utils/coreum/send-tokens";
 import { getTokenInfo } from "@/utils/coreum/rpc";
 import BuyCoreumModal from "@/components/modals/BuyCoreumModal";
+import CheckoutChoiceModal from "@/components/modals/CheckoutChoiceModal";
 
 interface CoreumToken {
   address: string;
@@ -128,6 +129,9 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [pendingBuyTransactions, setPendingBuyTransactions] = useState<number>(0);
   const [buyModalWallet, setBuyModalWallet] = useState<{ address: string; label: string } | null>(null);
+  const [showCheckoutChoice, setShowCheckoutChoice] = useState(false);
+  const [checkoutAsGuest, setCheckoutAsGuest] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // NOTE: we intentionally avoid early returns before hooks; render loading skeleton later
 
@@ -148,6 +152,22 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   );
 
   const hasMultipleWallets = displayTokens.length > 1;
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/changenow/user-transactions?filter=pending');
+        // If we get 200, user is authenticated
+        // If we get 401, user is not authenticated
+        setIsAuthenticated(response.status !== 401);
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   // Fetch pending buy transactions
   useEffect(() => {
@@ -186,12 +206,38 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
       return;
     }
 
-    // Use first wallet as default
+    // If user is already signed in, go directly to buy modal
+    if (isAuthenticated) {
+      setCheckoutAsGuest(false);
+      setBuyModalWallet({
+        address: displayTokens[0].address,
+        label: displayTokens[0].label,
+      });
+      setShowBuyModal(true);
+    } else {
+      // Show checkout choice modal for non-authenticated users
+      setShowCheckoutChoice(true);
+    }
+  };
+
+  // Handle guest checkout choice
+  const handleGuestCheckout = () => {
+    setCheckoutAsGuest(true);
+    setShowCheckoutChoice(false);
+    
+    // Open buy modal in guest mode
     setBuyModalWallet({
       address: displayTokens[0].address,
       label: displayTokens[0].label,
     });
     setShowBuyModal(true);
+  };
+
+  // Handle sign in choice
+  const handleSignInChoice = () => {
+    setShowCheckoutChoice(false);
+    // Redirect to sign in page with return URL
+    window.location.href = '/sign-in?redirect=' + encodeURIComponent(window.location.pathname);
   };
 
   // Close Buy Modal handler
@@ -2085,6 +2131,16 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         </div>
       )}
 
+      {/* Checkout Choice Modal */}
+      {showCheckoutChoice && (
+        <CheckoutChoiceModal
+          isOpen={showCheckoutChoice}
+          onGuestCheckout={handleGuestCheckout}
+          onSignIn={handleSignInChoice}
+          onClose={() => setShowCheckoutChoice(false)}
+        />
+      )}
+
       {/* Buy COREUM Modal */}
       {showBuyModal && buyModalWallet && (
         <BuyCoreumModal
@@ -2093,6 +2149,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           walletAddress={buyModalWallet.address}
           walletLabel={buyModalWallet.label}
           onTransactionComplete={handleTransactionComplete}
+          isGuest={checkoutAsGuest}
         />
       )}
     </div>

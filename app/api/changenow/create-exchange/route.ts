@@ -17,18 +17,6 @@ export async function POST(request: NextRequest) {
   try {
     console.log('📡 [ChangeNOW API] Creating exchange...');
 
-    // Authenticate user
-    const supabase = await createSupabaseClient();
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      console.error('❌ [ChangeNOW API] Authentication failed:', userError);
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
     // Parse request body
     const body = await request.json();
     const {
@@ -37,7 +25,29 @@ export async function POST(request: NextRequest) {
       payoutAddress,
       contactEmail,
       walletLabel,
+      isGuest = false,
+      guestSessionId,
     } = body;
+
+    // For guest users, require email
+    if (isGuest && !contactEmail) {
+      return NextResponse.json(
+        { error: 'Email required for guest checkout' },
+        { status: 400 }
+      );
+    }
+
+    // Get user if authenticated (optional for guests)
+    const supabase = await createSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // For authenticated users, require auth
+    if (!isGuest && !user) {
+      return NextResponse.json(
+        { error: 'Authentication required for non-guest checkout' },
+        { status: 401 }
+      );
+    }
 
     // Validate inputs
     if (!fromCurrency || !fromAmount || !payoutAddress) {
@@ -66,6 +76,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`📝 [ChangeNOW API] Creating exchange: ${fromAmount} ${fromCurrency} → COREUM`);
     console.log(`📝 [ChangeNOW API] Payout address: ${payoutAddress}`);
+    console.log(`📝 [ChangeNOW API] Mode: ${isGuest ? 'Guest' : 'Authenticated'}`);
 
     // Create exchange with ChangeNOW
     const exchange = await createExchange({
@@ -73,8 +84,8 @@ export async function POST(request: NextRequest) {
       toCurrency: 'coreum',
       fromAmount,
       address: payoutAddress,
-      userId: user.id,
-      contactEmail: contactEmail || user.email || undefined,
+      userId: user?.id || guestSessionId,
+      contactEmail: contactEmail || user?.email || undefined,
     });
 
     if (!exchange) {
@@ -91,7 +102,9 @@ export async function POST(request: NextRequest) {
     const { error: dbError } = await supabase
       .from('changenow_transactions')
       .insert({
-        user_id: user.id,
+        user_id: user?.id || null,
+        is_guest: isGuest,
+        guest_session_id: isGuest ? guestSessionId : null,
         changenow_id: exchange.id,
         payin_address: exchange.payinAddress,
         payout_address: exchange.payoutAddress,
@@ -101,7 +114,7 @@ export async function POST(request: NextRequest) {
         to_amount: exchange.toAmount,
         expected_amount: exchange.toAmount,
         status: 'new',
-        user_email: contactEmail || user.email || null,
+        user_email: contactEmail || user?.email || null,
         user_wallet_label: walletLabel || null,
         raw_response: exchange as any,
       });

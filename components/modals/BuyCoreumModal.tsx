@@ -36,6 +36,7 @@ interface BuyCoreumModalProps {
   walletAddress: string;
   walletLabel?: string;
   onTransactionComplete?: () => void;
+  isGuest?: boolean;
 }
 
 export default function BuyCoreumModal({
@@ -44,6 +45,7 @@ export default function BuyCoreumModal({
   walletAddress,
   walletLabel,
   onTransactionComplete,
+  isGuest = false,
 }: BuyCoreumModalProps) {
   // Form state
   const [fromCurrency, setFromCurrency] = useState('usd');
@@ -57,6 +59,11 @@ export default function BuyCoreumModal({
   const [minAmount, setMinAmount] = useState<number | null>(null);
   const [pendingTransactions, setPendingTransactions] = useState<PendingTransaction[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Generate guest session ID if in guest mode
+  const [guestSessionId] = useState(() => 
+    isGuest ? `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` : null
+  );
 
   // Fetch pending transactions
   const fetchPendingTransactions = useCallback(async () => {
@@ -139,6 +146,8 @@ export default function BuyCoreumModal({
           payoutAddress: walletAddress,
           contactEmail,
           walletLabel,
+          isGuest,
+          guestSessionId,
         }),
       });
 
@@ -358,22 +367,28 @@ export default function BuyCoreumModal({
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Contact Email (Optional)
+                Contact Email {isGuest && <span className="text-red-500">*</span>}
               </label>
               <input
                 type="email"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
                 placeholder="your@email.com"
+                required={isGuest}
                 disabled={loading}
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               />
+              {isGuest && (
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                  <strong>Required for guest checkout</strong> - We'll send your transaction details here
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading || !fromAmount || !walletAddress}
+              disabled={loading || !fromAmount || !walletAddress || (isGuest && !contactEmail)}
               className="w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
@@ -385,6 +400,15 @@ export default function BuyCoreumModal({
                 'Continue to Payment'
               )}
             </button>
+
+            {/* Guest Mode Notice */}
+            {isGuest && (
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <p className="text-xs text-yellow-800 dark:text-yellow-200">
+                  💡 <strong>Guest Checkout</strong> - Save your transaction ID! You'll need it to check status or get support.
+                </p>
+              </div>
+            )}
           </form>
 
           {/* Info */}
