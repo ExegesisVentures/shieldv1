@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose, IoMoon, IoSunny } from "react-icons/io5";
+import { IoWallet as WalletIcon, IoMenu, IoSettings, IoLogOut, IoShieldCheckmark as ShieldIcon, IoPerson, IoClose, IoMoon, IoSunny, IoNotifications } from "react-icons/io5";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { isUserAdmin, isAdminWallet } from "@/utils/admin";
 import WalletConnectModal from "@/components/wallet/WalletConnectModal";
 import { useTheme } from "next-themes";
+import { useNotifications } from "@/contexts/NotificationContext";
 
 interface SimplifiedHeaderUserMenuProps {
   user?: {
@@ -20,6 +21,7 @@ interface SimplifiedHeaderUserMenuProps {
 export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserMenuProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const { unreadCount } = useNotifications();
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -187,6 +189,24 @@ export default function SimplifiedHeaderUserMenu({ user }: SimplifiedHeaderUserM
               <WalletIcon className="w-4 h-4" />
               <span className="text-sm">Portfolio</span>
             </Link>
+
+            {/* Notifications Link - NEW */}
+            {(user || isVisitor) && (
+              <Link
+                href="/notifications"
+                className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-gray-300 hover:text-white relative"
+              >
+                <div className="flex items-center gap-3">
+                  <IoNotifications className="w-4 h-4" />
+                  <span className="text-sm">Notifications</span>
+                </div>
+                {unreadCount > 0 && (
+                  <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-[#25d695] text-white text-xs font-bold">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
 
             {/* Settings Link - THIRD */}
             <Link

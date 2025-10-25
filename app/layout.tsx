@@ -4,6 +4,7 @@ import SimplifiedHeader from "@/components/simplified-header";
 import WiseOwlChat from "@/components/WiseOwlChat";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +27,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <SimplifiedHeader />
-          {children}
-          <WiseOwlChat />
+          <NotificationProvider>
+            <SimplifiedHeader />
+            {children}
+            <WiseOwlChat />
+          </NotificationProvider>
         </ThemeProvider>
       </body>
     </html>

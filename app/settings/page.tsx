@@ -25,6 +25,12 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   
+  // Section-specific feedback messages for inline display
+  const [profileMessage, setProfileMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [emailMessage, setEmailMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [notificationMessage, setNotificationMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  
   // Form states
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -139,7 +145,7 @@ export default function SettingsPage() {
 
   const handleProfileUpdate = async () => {
     setSaving(true);
-    setMessage(null);
+    setProfileMessage(null);
     
     try {
       if (profile) {
@@ -158,17 +164,17 @@ export default function SettingsPage() {
 
         if (error) throw error;
 
-        setMessage({ type: 'success', text: 'Profile updated successfully!' });
+        setProfileMessage({ type: 'success', text: 'Profile updated successfully!' });
       } else {
         // Visitor - save to localStorage
         localStorage.setItem('visitor_display_name', displayName);
-        setMessage({ type: 'success', text: 'Profile updated locally! Sign up to save permanently.' });
+        setProfileMessage({ type: 'success', text: 'Profile updated locally! Sign up to save permanently.' });
       }
       
-      setTimeout(() => setMessage(null), 3000);
+      setTimeout(() => setProfileMessage(null), 3000);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      setMessage({ type: 'error', text: errorMessage || 'Failed to update profile' });
+      setProfileMessage({ type: 'error', text: errorMessage || 'Failed to update profile' });
     } finally {
       setSaving(false);
     }
@@ -178,20 +184,20 @@ export default function SettingsPage() {
     if (!email || email === user?.email) return;
     
     setSaving(true);
-    setMessage(null);
+    setEmailMessage(null);
     
     try {
       const { error } = await supabase.auth.updateUser({ email });
       
       if (error) throw error;
 
-      setMessage({ 
+      setEmailMessage({ 
         type: 'success', 
         text: 'Check your new email to confirm the change!' 
       });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      setMessage({ type: 'error', text: errorMessage || 'Failed to update email' });
+      setEmailMessage({ type: 'error', text: errorMessage || 'Failed to update email' });
     } finally {
       setSaving(false);
     }
@@ -199,22 +205,22 @@ export default function SettingsPage() {
 
   const handlePasswordChange = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setMessage({ type: 'error', text: 'Please fill in all password fields' });
+      setPasswordMessage({ type: 'error', text: 'Please fill in all password fields' });
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setMessage({ type: 'error', text: 'New passwords do not match' });
+      setPasswordMessage({ type: 'error', text: 'New passwords do not match' });
       return;
     }
 
     if (newPassword.length < 8) {
-      setMessage({ type: 'error', text: 'Password must be at least 8 characters' });
+      setPasswordMessage({ type: 'error', text: 'Password must be at least 8 characters' });
       return;
     }
 
     setSaving(true);
-    setMessage(null);
+    setPasswordMessage(null);
     
     try {
       const { error } = await supabase.auth.updateUser({ 
@@ -223,13 +229,14 @@ export default function SettingsPage() {
       
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Password changed successfully!' });
+      setPasswordMessage({ type: 'success', text: 'Password changed successfully!' });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+      setTimeout(() => setPasswordMessage(null), 3000);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      setMessage({ type: 'error', text: errorMessage || 'Failed to change password' });
+      setPasswordMessage({ type: 'error', text: errorMessage || 'Failed to change password' });
     } finally {
       setSaving(false);
     }
@@ -354,14 +361,14 @@ export default function SettingsPage() {
     const key = user ? `notification_prefs_${user.id}` : 'notification_prefs_visitor';
     localStorage.setItem(key, JSON.stringify(prefs));
     
-    setMessage({ 
+    setNotificationMessage({ 
       type: 'success', 
       text: user 
         ? 'Notification preferences saved! We\'ll send you email updates based on your selections.' 
         : 'Notification preferences saved locally! Sign up to receive email notifications.' 
     });
     
-    setTimeout(() => setMessage(null), 4000);
+    setTimeout(() => setNotificationMessage(null), 4000);
   };
 
   if (loading) {
@@ -501,11 +508,23 @@ export default function SettingsPage() {
                 onChange={(e) => setDisplayName(e.target.value)}
               />
             </div>
+            
+            {/* Inline feedback message */}
+            {profileMessage && (
+              <div className={`p-3 rounded-lg text-sm transition-all ${
+                profileMessage.type === 'success' 
+                  ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800' 
+                  : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+              }`}>
+                {profileMessage.text}
+              </div>
+            )}
+            
             <Button 
               onClick={handleProfileUpdate}
               disabled={saving || !displayName}
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? 'Saving...' : profileMessage?.type === 'success' ? '✓ Saved' : 'Save Changes'}
             </Button>
           </div>
         </Card>
@@ -540,11 +559,23 @@ export default function SettingsPage() {
                   Current: {user?.email}
                 </p>
               </div>
+              
+              {/* Inline feedback message */}
+              {emailMessage && (
+                <div className={`p-3 rounded-lg text-sm transition-all ${
+                  emailMessage.type === 'success' 
+                    ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800' 
+                    : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                }`}>
+                  {emailMessage.text}
+                </div>
+              )}
+              
               <Button 
                 onClick={handleEmailUpdate}
                 disabled={saving || !email || email === user?.email}
               >
-                {saving ? 'Updating...' : 'Update Email'}
+                {saving ? 'Updating...' : emailMessage?.type === 'success' ? '✓ Sent' : 'Update Email'}
               </Button>
             </div>
           </Card>
@@ -651,11 +682,22 @@ export default function SettingsPage() {
             </label>
           </div>
           
+          {/* Inline feedback message */}
+          {notificationMessage && (
+            <div className={`p-3 rounded-lg text-sm transition-all ${
+              notificationMessage.type === 'success' 
+                ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800' 
+                : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+            }`}>
+              {notificationMessage.text}
+            </div>
+          )}
+          
           <Button 
             onClick={handleNotificationUpdate}
             className="w-full bg-[#25d695] hover:bg-[#1fb881] text-white"
           >
-            Save Notification Preferences
+            {notificationMessage?.type === 'success' ? '✓ Preferences Saved' : 'Save Notification Preferences'}
           </Button>
           
           {!user && (
@@ -718,11 +760,23 @@ export default function SettingsPage() {
                   autoComplete="new-password"
                 />
               </div>
+              
+              {/* Inline feedback message */}
+              {passwordMessage && (
+                <div className={`p-3 rounded-lg text-sm transition-all ${
+                  passwordMessage.type === 'success' 
+                    ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800' 
+                    : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                }`}>
+                  {passwordMessage.text}
+                </div>
+              )}
+              
               <Button 
                 onClick={handlePasswordChange}
                 disabled={saving || !currentPassword || !newPassword || !confirmPassword}
               >
-                {saving ? 'Changing...' : 'Change Password'}
+                {saving ? 'Changing...' : passwordMessage?.type === 'success' ? '✓ Password Changed' : 'Change Password'}
               </Button>
             </div>
           </Card>

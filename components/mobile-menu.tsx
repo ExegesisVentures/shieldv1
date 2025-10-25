@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { IoMenu, IoClose, IoWallet, IoPerson, IoSettings, IoLogOut, IoLogIn, IoShieldCheckmark as ShieldIcon, IoGitBranch, IoStatsChart, IoCalculator } from "react-icons/io5";
+import { IoMenu, IoClose, IoWallet, IoPerson, IoSettings, IoLogOut, IoLogIn, IoShieldCheckmark as ShieldIcon, IoGitBranch, IoStatsChart, IoCalculator, IoNotifications } from "react-icons/io5";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOutAction } from "@/app/actions";
@@ -9,6 +9,7 @@ import { createSupabaseClient } from "@/utils/supabase/client";
 import { isUserAdmin, isAdminWallet } from "@/utils/admin";
 import SignInModal from "@/components/auth/SignInModal";
 import { ProposalsButtonMobile } from "@/components/proposals-button";
+import { useNotifications } from "@/contexts/NotificationContext";
 
 interface MobileMenuProps {
   isAuthenticated: boolean;
@@ -20,6 +21,7 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [hasVisitorWallets, setHasVisitorWallets] = useState(false);
   const [walletCount, setWalletCount] = useState(0);
+  const { unreadCount } = useNotifications();
   const router = useRouter();
 
   useEffect(() => {
@@ -154,6 +156,24 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Portfolio</span>
                   </Link>
+                  
+                  {/* Notifications Link */}
+                  <Link
+                    href="/notifications"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <IoNotifications className="w-5 h-5 text-[#25d695]" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Notifications</span>
+                    </div>
+                    {unreadCount > 0 && (
+                      <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-[#25d695] text-white text-xs font-bold">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
+                  </Link>
+                  
                   <Link
                     href="/analytics"
                     onClick={() => setIsOpen(false)}
@@ -198,6 +218,24 @@ export default function MobileMenu({ isAuthenticated }: MobileMenuProps) {
                     <IoWallet className="w-5 h-5 text-gray-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">Portfolio</span>
                   </Link>
+                  
+                  {/* Notifications Link for Visitors */}
+                  <Link
+                    href="/notifications"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <IoNotifications className="w-5 h-5 text-[#25d695]" />
+                      <span className="text-sm text-gray-700 dark:text-gray-300">Notifications</span>
+                    </div>
+                    {unreadCount > 0 && (
+                      <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-[#25d695] text-white text-xs font-bold">
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
+                  </Link>
+                  
                   <Link
                     href="/analytics"
                     onClick={() => setIsOpen(false)}
