@@ -799,7 +799,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="col-start-1 flex flex-row gap-2">
           <button
             onClick={handleOpenBuyModal}
-            className={`relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-500 hover:border-blue-400 bg-gradient-to-br from-blue-500/25 via-blue-600/15 to-blue-700/10 hover:from-blue-500/35 hover:via-blue-600/25 hover:to-blue-700/15 text-blue-700 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden ${
+            className={`relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-500 hover:border-blue-400 bg-gradient-to-br from-blue-500/25 via-blue-600/15 to-blue-700/10 hover:from-blue-500/35 hover:via-blue-600/25 hover:to-blue-700/15 text-blue-700 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden ${
               pendingBuyTransactions > 0 ? '' : ''
             }`}
             style={{
@@ -831,7 +831,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           </button>
           <a
             href="/swap"
-            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden"
             style={{
               boxShadow: '0 4px 12px rgba(77, 156, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
@@ -846,7 +846,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           {canStake && (
             <button
               onClick={openStake}
-              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-500 hover:border-purple-400 bg-gradient-to-br from-purple-500/25 via-purple-600/15 to-purple-700/10 hover:from-purple-500/35 hover:via-purple-600/25 hover:to-purple-700/15 text-purple-700 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-500 hover:border-purple-400 bg-gradient-to-br from-purple-500/25 via-purple-600/15 to-purple-700/10 hover:from-purple-500/35 hover:via-purple-600/25 hover:to-purple-700/15 text-purple-700 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden"
               style={{
                 boxShadow: '0 4px 12px rgba(168, 85, 247, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
@@ -859,14 +859,14 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           {canUnstake && (
             <button
               onClick={openUnstake}
-              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-orange-500 hover:border-orange-400 bg-gradient-to-br from-orange-500/25 via-orange-600/15 to-orange-700/10 hover:from-orange-500/35 hover:via-orange-600/25 hover:to-orange-700/15 text-orange-700 dark:text-orange-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(255,140,66,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-400 hover:border-purple-300 bg-gradient-to-br from-purple-400/25 via-purple-500/15 to-purple-600/10 hover:from-purple-400/35 hover:via-purple-500/25 hover:to-purple-600/15 text-purple-600 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden"
               style={{
-                boxShadow: '0 4px 12px rgba(255, 140, 66, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
               }}
             >
               <span className="relative z-10">Unstake</span>
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-orange-400/10 to-orange-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-400/10 to-purple-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
             </button>
           )}
         </div>
@@ -877,7 +877,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
               <button
                 onClick={openClaimRewards}
                 disabled={!!claiming}
-                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-500 hover:border-green-400 bg-gradient-to-br from-green-500/25 via-green-600/15 to-green-700/10 hover:from-green-500/35 hover:via-green-600/25 hover:to-green-700/15 text-green-700 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
+                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-500 hover:border-green-400 bg-gradient-to-br from-green-500/25 via-green-600/15 to-green-700/10 hover:from-green-500/35 hover:via-green-600/25 hover:to-green-700/15 text-green-700 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
                 style={{
                   boxShadow: '0 4px 12px rgba(37, 214, 149, 0.35), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                   textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
@@ -892,7 +892,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                   openClaimRewards();
                 }}
                 disabled={!!claiming}
-                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-400 hover:border-green-300 bg-gradient-to-br from-green-400/25 via-green-500/15 to-green-600/10 hover:from-green-400/35 hover:via-green-500/25 hover:to-green-600/15 text-green-600 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
+                className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-green-400 hover:border-green-300 bg-gradient-to-br from-green-400/25 via-green-500/15 to-green-600/10 hover:from-green-400/35 hover:via-green-500/25 hover:to-green-600/15 text-green-600 dark:text-green-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(37,214,149,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden"
                 style={{
                   boxShadow: '0 4px 12px rgba(37, 214, 149, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                   textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
@@ -909,26 +909,26 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           {canRedelegate && (
             <button
               onClick={openRedelegate}
-              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-purple-400 hover:border-purple-300 bg-gradient-to-br from-purple-400/25 via-purple-500/15 to-purple-600/10 hover:from-purple-400/35 hover:via-purple-500/25 hover:to-purple-600/15 text-purple-600 dark:text-purple-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(168,85,247,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+              className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-orange-400 hover:border-orange-300 bg-gradient-to-br from-orange-400/25 via-orange-500/15 to-orange-600/10 hover:from-orange-400/35 hover:via-orange-500/25 hover:to-orange-600/15 text-orange-600 dark:text-orange-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(255,140,66,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden"
               style={{
-                boxShadow: '0 4px 12px rgba(168, 85, 247, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+                boxShadow: '0 4px 12px rgba(255, 140, 66, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
               }}
             >
               <span className="relative z-10">Redelegate</span>
-              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-400/10 to-purple-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-orange-400/10 to-orange-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
             </button>
           )}
           <button
             onClick={handleSendCore}
-            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-orange-400 hover:border-orange-300 bg-gradient-to-br from-orange-400/25 via-orange-500/15 to-orange-600/10 hover:from-orange-400/35 hover:via-orange-500/25 hover:to-orange-600/15 text-orange-600 dark:text-orange-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(255,140,66,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.08] hover:-translate-y-1.5 active:scale-100 active:translate-y-0 overflow-hidden"
+            className="relative flex-1 flex items-center justify-center gap-1 px-3 py-3.5 border-2 border-blue-400 hover:border-blue-300 bg-gradient-to-br from-blue-400/25 via-blue-500/15 to-blue-600/10 hover:from-blue-400/35 hover:via-blue-500/25 hover:to-blue-600/15 text-blue-600 dark:text-blue-200 rounded-xl backdrop-blur-sm transition-all duration-300 text-sm font-extrabold shadow-lg hover:shadow-[0_10px_30px_rgba(77,156,255,0.5),0_5px_10px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.25),inset_0_-4px_15px_rgba(0,0,0,0.3)] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0 overflow-hidden"
             style={{
-              boxShadow: '0 4px 12px rgba(255, 140, 66, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
+              boxShadow: '0 4px 12px rgba(77, 156, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 3px rgba(255, 255, 255, 0.2), inset 0 -2px 8px rgba(0, 0, 0, 0.15)',
               textShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
             }}
           >
             <span className="relative z-10">Send</span>
-            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-orange-400/10 to-orange-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-blue-400/10 to-blue-300/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
           </button>
         </div>
       </div>
@@ -937,7 +937,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Blue Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 via-blue-500/20 to-blue-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-blue-500/5 to-blue-600/10 dark:from-blue-500/10 dark:to-blue-600/5 backdrop-blur border-2 border-blue-200/40 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(77,156,255,0.3),0_0_40px_rgba(77,156,255,0.4),inset_0_0_30px_rgba(77,156,255,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-blue-500/5 to-blue-600/10 dark:from-blue-500/10 dark:to-blue-600/5 backdrop-blur border-2 border-blue-200/40 dark:border-blue-500/30 hover:border-blue-400 dark:hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(77,156,255,0.3),0_0_40px_rgba(77,156,255,0.4),inset_0_0_30px_rgba(77,156,255,0.05)] hover:-translate-y-0.5 hover:scale-[1.005] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-blue neo-transition">
                 <IoCash className="w-7 h-7 sm:w-8 sm:h-8" />
@@ -962,7 +962,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Purple Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-400/30 via-purple-500/20 to-purple-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-purple-500/5 to-purple-600/10 dark:from-purple-500/10 dark:to-purple-600/5 backdrop-blur border-2 border-purple-200/40 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(168,85,247,0.3),0_0_40px_rgba(168,85,247,0.4),inset_0_0_30px_rgba(168,85,247,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-purple-500/5 to-purple-600/10 dark:from-purple-500/10 dark:to-purple-600/5 backdrop-blur border-2 border-purple-200/40 dark:border-purple-500/30 hover:border-purple-400 dark:hover:border-purple-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(168,85,247,0.3),0_0_40px_rgba(168,85,247,0.4),inset_0_0_30px_rgba(168,85,247,0.05)] hover:-translate-y-0.5 hover:scale-[1.005] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div 
                 className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
@@ -993,7 +993,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Green Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-green-400/30 via-green-500/20 to-green-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-green-500/5 to-green-600/10 dark:from-green-500/10 dark:to-green-600/5 backdrop-blur border-2 border-green-200/40 dark:border-green-500/30 hover:border-green-400 dark:hover:border-green-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(37,214,149,0.3),0_0_40px_rgba(37,214,149,0.4),inset_0_0_30px_rgba(37,214,149,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-green-500/5 to-green-600/10 dark:from-green-500/10 dark:to-green-600/5 backdrop-blur border-2 border-green-200/40 dark:border-green-500/30 hover:border-green-400 dark:hover:border-green-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(37,214,149,0.3),0_0_40px_rgba(37,214,149,0.4),inset_0_0_30px_rgba(37,214,149,0.05)] hover:-translate-y-0.5 hover:scale-[1.005] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-green neo-transition">
                 <IoGift className="w-7 h-7 sm:w-8 sm:h-8" />
@@ -1018,7 +1018,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
         <div className="relative group/tooltip">
           {/* Orange Gradient Background on Hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-orange-400/30 via-orange-500/20 to-orange-600/30 rounded-2xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-orange-500/5 to-orange-600/10 dark:from-orange-500/10 dark:to-orange-600/5 backdrop-blur border-2 border-orange-200/40 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,140,66,0.3),0_0_40px_rgba(255,140,66,0.4),inset_0_0_30px_rgba(255,140,66,0.05)] hover:-translate-y-0.5 hover:scale-[1.01] cursor-pointer">
+          <Card className="group p-6 sm:p-7 transition-all duration-300 bg-gradient-to-br from-orange-500/5 to-orange-600/10 dark:from-orange-500/10 dark:to-orange-600/5 backdrop-blur border-2 border-orange-200/40 dark:border-orange-500/30 hover:border-orange-400 dark:hover:border-orange-400 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,140,66,0.3),0_0_40px_rgba(255,140,66,0.4),inset_0_0_30px_rgba(255,140,66,0.05)] hover:-translate-y-0.5 hover:scale-[1.005] cursor-pointer">
             <div className="flex items-center gap-3 mb-4">
               <div className="neo-icon-glow-orange neo-transition">
                 <IoTime className="w-7 h-7 sm:w-8 sm:h-8" />

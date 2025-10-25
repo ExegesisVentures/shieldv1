@@ -334,6 +334,22 @@ export function useSimplifiedWalletConnect(): UseSimplifiedWalletConnectReturn {
 
     } catch (error) {
       console.error("Keplr connection error:", error);
+      
+      // Handle user rejection gracefully
+      const errorMessage = error instanceof Error ? error.message : '';
+      const errorName = (error as any)?.name || '';
+      
+      if (errorName === 'USER_REJECTED' || errorMessage.includes('rejected') || errorMessage.includes('User denied')) {
+        return {
+          success: false,
+          error: {
+            code: 'USER_REJECTED',
+            message: 'Connection cancelled',
+            hint: 'You cancelled the wallet connection request'
+          }
+        };
+      }
+      
       return {
         success: false,
         error: {
@@ -429,6 +445,22 @@ export function useSimplifiedWalletConnect(): UseSimplifiedWalletConnectReturn {
 
     } catch (error) {
       console.error("Leap connection error:", error);
+      
+      // Handle user rejection gracefully
+      const errorMessage = error instanceof Error ? error.message : '';
+      const errorName = (error as any)?.name || '';
+      
+      if (errorName === 'USER_REJECTED' || errorMessage.includes('rejected') || errorMessage.includes('User denied')) {
+        return {
+          success: false,
+          error: {
+            code: 'USER_REJECTED',
+            message: 'Connection cancelled',
+            hint: 'You cancelled the wallet connection request'
+          }
+        };
+      }
+      
       return {
         success: false,
         error: {
@@ -528,6 +560,22 @@ export function useSimplifiedWalletConnect(): UseSimplifiedWalletConnectReturn {
 
     } catch (error) {
       console.error("Cosmostation connection error:", error);
+      
+      // Handle user rejection gracefully
+      const errorMessage = error instanceof Error ? error.message : '';
+      const errorName = (error as any)?.name || '';
+      
+      if (errorName === 'USER_REJECTED' || errorMessage.includes('rejected') || errorMessage.includes('User denied')) {
+        return {
+          success: false,
+          error: {
+            code: 'USER_REJECTED',
+            message: 'Connection cancelled',
+            hint: 'You cancelled the wallet connection request'
+          }
+        };
+      }
+      
       return {
         success: false,
         error: {

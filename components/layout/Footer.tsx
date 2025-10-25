@@ -24,22 +24,22 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="https://twitter.com/shieldnest"
+                href="https://x.com/shieldnest_org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                aria-label="IoLogoTwitter"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group"
+                aria-label="X (Twitter)"
               >
-                <IoLogoTwitter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <IoLogoTwitter className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-[#25d695] transition-colors" />
               </a>
               <a
-                href="https://github.com/shieldnest"
+                href="https://github.com/ShieldNEST-org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors group"
                 aria-label="GitHub"
               >
-                <IoLogoGithub className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <IoLogoGithub className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-[#25d695] transition-colors" />
               </a>
             </div>
           </div>

@@ -13,9 +13,19 @@ export async function leapGetAddress(): Promise<string> {
 }
 
 export async function leapSignArbitrary(address: string, message: string) {
-  await leapEnable();
-  const signer = window.leap.getOfflineSignerOnlyAmino(COREUM_CHAIN_ID);
-  const res = await window.leap.signArbitrary(COREUM_CHAIN_ID, address, message);
-  return res; // {signature, pub_key}
+  try {
+    await leapEnable();
+    const signer = window.leap.getOfflineSignerOnlyAmino(COREUM_CHAIN_ID);
+    const res = await window.leap.signArbitrary(COREUM_CHAIN_ID, address, message);
+    return res; // {signature, pub_key}
+  } catch (error: any) {
+    // Normalize Leap rejection errors
+    if (error?.message?.includes("rejected") || error?.message?.includes("Request rejected") || error?.message?.includes("User denied")) {
+      const rejectionError = new Error("User rejected the signature request");
+      rejectionError.name = "USER_REJECTED";
+      throw rejectionError;
+    }
+    throw error;
+  }
 }
 

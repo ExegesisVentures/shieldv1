@@ -102,7 +102,15 @@ export default function WalletConnectModal({
         console.log("Modal close initiated");
       } else if (result.error) {
         console.error(`❌ ${walletProvider} connection failed:`, result.error);
-        setError(result.error.hint || result.error.message);
+        
+        // Don't show error message for user rejections - it's expected behavior
+        if (result.error.code === 'USER_REJECTED') {
+          console.log("User cancelled the connection - no error displayed");
+          // Optionally show a subtle info message instead
+          // setError(null); // Clear any previous errors
+        } else {
+          setError(result.error.hint || result.error.message);
+        }
       }
     } catch (error) {
       console.error(`💥 ${walletProvider} connection error:`, error);
