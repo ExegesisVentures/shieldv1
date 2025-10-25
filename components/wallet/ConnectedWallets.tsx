@@ -438,7 +438,7 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
                     </span>
                     <button
                       onClick={() => handleEditClick(wallet.id, wallet.label)}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-opacity"
+                      className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                       title="Edit wallet name"
                     >
                       <IoPencil className="w-4 h-4" />
