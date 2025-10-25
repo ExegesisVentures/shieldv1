@@ -185,8 +185,8 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 overflow-y-auto">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden my-8 relative">
         {/* Progress bar */}
         <div className="h-1.5 bg-gray-200 dark:bg-gray-700">
           <div
@@ -198,41 +198,41 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors bg-white/10 hover:bg-white/20 dark:bg-gray-800/50 dark:hover:bg-gray-800/70 rounded-full p-2"
           disabled={loading}
         >
-          <IoClose className="w-6 h-6" />
+          <IoClose className="w-5 h-5" />
         </button>
 
-        <div className="p-8">
+        <div className="p-6 sm:p-8">
           {/* Icon */}
-          <div className="text-6xl text-center mb-6">{currentStepData.icon}</div>
+          <div className="text-5xl sm:text-6xl text-center mb-4 sm:mb-6">{currentStepData.icon}</div>
 
           {/* Title */}
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-3">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white text-center mb-2 sm:mb-3 px-4">
             {currentStepData.title}
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-center mb-8">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 text-center mb-6 sm:mb-8 px-2">
             {currentStepData.subtitle}
           </p>
 
           {/* Step Content */}
-          <div className="min-h-[120px]">
+          <div className="min-h-[100px] sm:min-h-[120px]">
             {currentStep === 1 && (
               <div className="text-center text-gray-600 dark:text-gray-400">
-                <p className="mb-4">Create a free account to:</p>
-                <ul className="text-left inline-block space-y-2">
-                  <li className="flex items-center gap-2">
-                    <IoCheckmark className="w-5 h-5 text-green-500" />
-                    Save your portfolio across devices
+                <p className="mb-4 text-sm sm:text-base">Create a free account to:</p>
+                <ul className="text-left inline-block space-y-3 text-sm sm:text-base">
+                  <li className="flex items-start gap-3">
+                    <IoCheckmark className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Save your portfolio across devices</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <IoCheckmark className="w-5 h-5 text-green-500" />
-                    Track your assets permanently
+                  <li className="flex items-start gap-3">
+                    <IoCheckmark className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Track your assets permanently</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <IoCheckmark className="w-5 h-5 text-green-500" />
-                    Unlock advanced features
+                  <li className="flex items-start gap-3">
+                    <IoCheckmark className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span>Unlock advanced features</span>
                   </li>
                 </ul>
               </div>
@@ -335,13 +335,13 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
 
           {/* Action Buttons */}
           {!isLastStep && (
-            <div className="flex gap-3 mt-8">
+            <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
               {!isFirstStep && (
                 <Button
                   variant="outline"
                   onClick={handleBack}
                   disabled={loading}
-                  className="flex-1"
+                  className="flex-1 w-full"
                 >
                   <IoArrowBack className="w-4 h-4 mr-2" />
                   Back
@@ -350,7 +350,7 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
               <Button
                 onClick={handleNext}
                 disabled={loading}
-                className="flex-1"
+                className={`flex-1 w-full ${isFirstStep ? '' : ''}`}
               >
                 {loading ? (
                   "Creating Account..."
@@ -365,7 +365,7 @@ export default function GuidedOnboarding({ isOpen, onClose }: GuidedOnboardingPr
           )}
 
           {/* Step indicator */}
-          <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             Step {currentStep} of {STEPS.length}
           </div>
         </div>
