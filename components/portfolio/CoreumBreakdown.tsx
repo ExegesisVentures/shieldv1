@@ -12,6 +12,7 @@ import { sendTokens, isValidCoreumAddress } from "@/utils/coreum/send-tokens";
 import { getTokenInfo } from "@/utils/coreum/rpc";
 import BuyCoreumModal from "@/components/modals/BuyCoreumModal";
 import CheckoutChoiceModal from "@/components/modals/CheckoutChoiceModal";
+import StakeSuccessModal from "@/components/portfolio/StakeSuccessModal";
 
 interface CoreumToken {
   address: string;
@@ -100,6 +101,10 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const [showAllValidators, setShowAllValidators] = useState(false);
   const [showAdvancedConfirm, setShowAdvancedConfirm] = useState(false);
   const [walletJustSelected, setWalletJustSelected] = useState(false); // Track if wallet was just selected
+  const [showStakeSuccessModal, setShowStakeSuccessModal] = useState(false);
+  const [stakeTransactionHash, setStakeTransactionHash] = useState<string | undefined>();
+  const [stakedAmount, setStakedAmount] = useState<string>("");
+  const [stakedValidatorName, setStakedValidatorName] = useState<string>("");
 
   // Unstake modal state
   const [unstakeOpen, setUnstakeOpen] = useState(false);
@@ -453,8 +458,22 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           }
           return t;
         }));
-        showToast("Staked successfully", "success");
+        
+        // Get validator name
+        const validator = validators.find(v => v.operator_address === selectedValidator);
+        const validatorName = validator?.description?.moniker || "Validator";
+        
+        // Set success modal data
+        setStakedAmount(amount.toString());
+        setStakedValidatorName(validatorName);
+        setStakeTransactionHash(res.txHash);
+        
+        // Show pulsing toast
+        showToast("🎉 Staked successfully!", "success", true);
+        
+        // Close stake modal and show success modal
         setStakeOpen(false);
+        setShowStakeSuccessModal(true);
       } else {
         showToast(res.error || "Stake failed", "error");
       }
@@ -2280,6 +2299,20 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
           isGuest={checkoutAsGuest}
         />
       )}
+
+      {/* Stake Success Modal with Fireworks */}
+      <StakeSuccessModal
+        isOpen={showStakeSuccessModal}
+        onClose={() => {
+          setShowStakeSuccessModal(false);
+          setStakeTransactionHash(undefined);
+          setStakedAmount("");
+          setStakedValidatorName("");
+        }}
+        transactionHash={stakeTransactionHash}
+        amount={stakedAmount}
+        validatorName={stakedValidatorName}
+      />
     </div>
   );
 }

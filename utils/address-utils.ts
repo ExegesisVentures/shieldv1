@@ -69,20 +69,49 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 }
 
 /**
- * Show a temporary toast notification
+ * Show a temporary toast notification with optional pulse animation
  * This is a simple implementation - you might want to use a proper toast library
  */
-export function showToast(message: string, type: 'success' | 'error' = 'success') {
+export function showToast(message: string, type: 'success' | 'error' = 'success', pulse: boolean = false) {
   // Create a simple toast element
   const toast = document.createElement('div');
-  toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${
+  const baseClasses = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white text-sm font-medium transition-all duration-300 ${
     type === 'success' ? 'bg-green-500' : 'bg-red-500'
   }`;
+  
+  // Add pulse animation for success messages
+  if (pulse && type === 'success') {
+    toast.className = baseClasses;
+    toast.style.animation = 'toastPulse 1s ease-in-out 3'; // Pulse 3 times
+  } else {
+    toast.className = baseClasses;
+  }
+  
   toast.textContent = message;
+  
+  // Add keyframes if not already present
+  if (!document.getElementById('toast-pulse-keyframes')) {
+    const style = document.createElement('style');
+    style.id = 'toast-pulse-keyframes';
+    style.textContent = `
+      @keyframes toastPulse {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 8px 16px rgba(34, 197, 94, 0.4);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
   
   document.body.appendChild(toast);
   
-  // Auto remove after 3 seconds
+  // Auto remove after 4 seconds (longer for pulsing toasts)
+  const removeDelay = pulse ? 4000 : 3000;
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateX(100%)';
@@ -91,5 +120,5 @@ export function showToast(message: string, type: 'success' | 'error' = 'success'
         document.body.removeChild(toast);
       }
     }, 300);
-  }, 3000);
+  }, removeDelay);
 }

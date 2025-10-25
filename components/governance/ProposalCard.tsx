@@ -218,15 +218,15 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
           {/* You Voted Badge - Moved to right side */}
           {userVoted && voteColors && (
             <div className="flex-shrink-0">
-              <div className={`flex flex-col items-center gap-2 px-4 py-3 rounded-lg border-2 ${voteColors.border} ${voteColors.bg}`}>
-                <IoCheckmark className={`w-6 h-6 ${voteColors.text}`} />
-                <div className="text-center">
-                  <div className={`text-xs font-semibold ${voteColors.text}`}>You Voted</div>
-                  <div className={`text-sm font-bold ${voteColors.text}`}>
+              <div className={`flex flex-col items-center gap-3 px-4 py-4 rounded-lg border-2 ${voteColors.border} ${voteColors.bg}`}>
+                <IoCheckmark className={`w-7 h-7 ${voteColors.text}`} />
+                <div className="text-center space-y-1.5">
+                  <div className="text-xs font-semibold text-green-400">You Voted</div>
+                  <div className="text-sm font-bold text-green-400">
                     {getVoteOptionLabel(userVoteOption || '')}
                   </div>
                   {voterAddress && (
-                    <div className={`text-xs font-mono ${voteColors.text} opacity-70 mt-1`}>
+                    <div className="text-xs font-mono text-cyan-400 font-medium pt-1">
                       ...{voterAddress.slice(-4)}
                     </div>
                   )}
