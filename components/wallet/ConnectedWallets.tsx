@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { createSupabaseClient } from "@/utils/supabase/client";
 import { getAllWallets } from "@/utils/wallet/simplified-operations";
-import { IoWallet, IoTrash, IoStar, IoOpenOutline, IoCopy, IoCheckmark } from "react-icons/io5";
+import { IoWallet, IoTrash, IoStar, IoOpenOutline, IoCopy, IoCheckmark, IoPencil, IoClose, IoCheckmarkCircle } from "react-icons/io5";
 import VerificationBadge from "@/components/wallet/VerificationBadge";
 import ConfirmPopover from "@/components/ui/ConfirmPopover";
 
@@ -37,6 +37,9 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
     position: { x: number; y: number };
   } | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [editingWallet, setEditingWallet] = useState<string | null>(null);
+  const [editLabel, setEditLabel] = useState("");
+  const [savingLabel, setSavingLabel] = useState(false);
 
   // Track if component is mounted (for portal)
   useEffect(() => {
@@ -276,6 +279,78 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
     }
   };
 
+  const handleEditClick = (walletId: string, currentLabel: string) => {
+    setEditingWallet(walletId);
+    setEditLabel(currentLabel);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingWallet(null);
+    setEditLabel("");
+  };
+
+  const handleSaveLabel = async (walletId: string, walletAddress: string) => {
+    if (!editLabel.trim()) {
+      alert("Label cannot be empty");
+      return;
+    }
+
+    setSavingLabel(true);
+
+    try {
+      // Check if it's a visitor wallet
+      if (walletId.startsWith('visitor-')) {
+        // Update in localStorage
+        const anonymousWallets = JSON.parse(localStorage.getItem('anonymous_wallets') || '[]');
+        const index = parseInt(walletId.replace('visitor-', ''));
+        
+        if (anonymousWallets[index]) {
+          anonymousWallets[index].label = editLabel.trim();
+          localStorage.setItem('anonymous_wallets', JSON.stringify(anonymousWallets));
+          
+          // Trigger wallet storage change event for anonymous users
+          window.dispatchEvent(new CustomEvent('walletStorageChange', {
+            detail: { action: 'updated', address: walletAddress }
+          }));
+          
+          await loadWallets();
+        }
+      } else {
+        // Update in database for authenticated users
+        const response = await fetch('/api/wallets/update-label', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            walletId,
+            label: editLabel.trim(),
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update wallet label');
+        }
+
+        // Trigger wallet database change event for authenticated users
+        window.dispatchEvent(new CustomEvent('walletDatabaseChange', {
+          detail: { action: 'updated', walletId }
+        }));
+
+        await loadWallets();
+      }
+
+      setEditingWallet(null);
+      setEditLabel("");
+    } catch (error) {
+      console.error("Error updating wallet label:", error);
+      alert("Failed to update wallet name. Please try again.");
+    } finally {
+      setSavingLabel(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="animate-pulse space-y-3">
@@ -301,6 +376,7 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
     <div className="space-y-3">
       {wallets.map((wallet) => {
         const isConnected = connectedWallet === wallet.address;
+        const isEditing = editingWallet === wallet.id;
         return (
         <div
           key={wallet.id}
@@ -311,13 +387,65 @@ export default function ConnectedWallets({ onRefresh }: ConnectedWalletsProps) {
           }`}
         >
           <div className="flex items-start justify-between gap-4">
-            {/* IoWallet Info */}
+            {/* Wallet Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <IoWallet className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <span className="font-semibold text-gray-900 dark:text-gray-100">
-                  {wallet.label}
-                </span>
+                
+                {/* Editable Label */}
+                {isEditing ? (
+                  <div className="flex items-center gap-2 flex-1">
+                    <input
+                      type="text"
+                      value={editLabel}
+                      onChange={(e) => setEditLabel(e.target.value)}
+                      maxLength={50}
+                      className="px-2 py-1 text-sm font-semibold border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleSaveLabel(wallet.id, wallet.address);
+                        } else if (e.key === 'Escape') {
+                          handleCancelEdit();
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={() => handleSaveLabel(wallet.id, wallet.address)}
+                      disabled={savingLabel}
+                      className="p-1 text-green-600 hover:text-green-700 disabled:opacity-50"
+                      title="Save"
+                    >
+                      {savingLabel ? (
+                        <div className="w-4 h-4 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin"></div>
+                      ) : (
+                        <IoCheckmarkCircle className="w-5 h-5" />
+                      )}
+                    </button>
+                    <button
+                      onClick={handleCancelEdit}
+                      disabled={savingLabel}
+                      className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-50"
+                      title="Cancel"
+                    >
+                      <IoClose className="w-5 h-5" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">
+                      {wallet.label}
+                    </span>
+                    <button
+                      onClick={() => handleEditClick(wallet.id, wallet.label)}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-opacity"
+                      title="Edit wallet name"
+                    >
+                      <IoPencil className="w-4 h-4" />
+                    </button>
+                  </>
+                )}
+                
                 {wallet.is_primary && (
                   <IoStar className="w-4 h-4 text-yellow-500 fill-yellow-500 flex-shrink-0" />
                 )}
