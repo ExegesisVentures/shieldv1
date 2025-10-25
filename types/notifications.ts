@@ -74,7 +74,7 @@ export const NotificationConfig: Record<NotificationType, { icon: string; color:
     label: 'Liquidity Pool'
   },
   trading_feature: {
-    icon: 'IoSwap',
+    icon: 'IoSwapHorizontal',
     color: 'green',
     label: 'Trading'
   },
