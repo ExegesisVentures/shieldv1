@@ -99,6 +99,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const [selectedValidator, setSelectedValidator] = useState<string>("");
   const [showAllValidators, setShowAllValidators] = useState(false);
   const [showAdvancedConfirm, setShowAdvancedConfirm] = useState(false);
+  const [walletJustSelected, setWalletJustSelected] = useState(false); // Track if wallet was just selected
 
   // Unstake modal state
   const [unstakeOpen, setUnstakeOpen] = useState(false);
@@ -407,6 +408,7 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
   const openStake = () => {
     if (!primaryWallet) return;
     setStakeSelectedWallet(primaryWallet.address); // Default to primary wallet
+    setWalletJustSelected(false); // Reset state - start with wallet selection flash
     // prefill amount with max available from primary wallet only
     const maxAvail = Math.max(0, parseFloat(primaryWallet.available || "0"));
     setStakeAmount(maxAvail.toString());
@@ -1132,11 +1134,34 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
               {/* Wallet Selector */}
               {hasMultipleWallets && (
                 <div>
-                  <label className="block text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">Select Wallet</label>
+                  <label className="flex items-center gap-2 text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    <span>Select Wallet</span>
+                    <ThreeArrowSpinner 
+                      size="sm" 
+                      variant="success"
+                      className="w-6 h-6"
+                    />
+                  </label>
                   <select
                     value={stakeSelectedWallet}
-                    onChange={(e) => setStakeSelectedWallet(e.target.value)}
-                    className="w-full rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    onChange={(e) => {
+                      setStakeSelectedWallet(e.target.value);
+                      setWalletJustSelected(true); // Trigger amount flash
+                      // Update available amount
+                      const selectedToken = displayTokens.find(t => t.address === e.target.value);
+                      if (selectedToken) {
+                        const maxAvail = Math.max(0, parseFloat(selectedToken.available || "0"));
+                        setStakeAmount(maxAvail.toString());
+                      }
+                    }}
+                    className={`w-full rounded-lg border-2 bg-white dark:bg-gray-950 px-4 py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all ${
+                      !walletJustSelected 
+                        ? 'border-green-500 dark:border-green-500' 
+                        : 'border-gray-300 dark:border-gray-700'
+                    }`}
+                    style={{
+                      animation: !walletJustSelected ? 'greenBlink 3s ease-in-out infinite' : 'none'
+                    }}
                   >
                     {displayTokens.map(token => (
                       <option key={token.address} value={token.address}>
@@ -1157,7 +1182,14 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                   inputMode="decimal"
                   value={stakeAmount}
                   onChange={(e) => setStakeAmount(e.target.value)}
-                  className="w-full rounded-lg border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 px-4 py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className={`w-full rounded-lg border-2 bg-white dark:bg-gray-950 px-4 py-3 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+                    walletJustSelected 
+                      ? 'border-blue-500 dark:border-blue-500' 
+                      : 'border-gray-300 dark:border-gray-700'
+                  }`}
+                  style={{
+                    animation: walletJustSelected ? 'subtlePulse 3s ease-in-out infinite' : 'none'
+                  }}
                   placeholder="0.00"
                 />
                 <div className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
@@ -1221,52 +1253,92 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                         const isSelected = v.operator_address === selectedValidator;
                         const avatarUrl = getValidatorAvatar(v);
                         
+                        // Determine validator highlighting based on voting power
+                        let borderColor = 'border-gray-200 dark:border-gray-700';
+                        let borderStyle = 'border-2';
+                        let decentralizationMessage = '';
+                        
+                        if (votingPowerPercent > 10) {
+                          // High voting power - red outline
+                          borderColor = 'border-red-500 dark:border-red-500';
+                          borderStyle = 'border-[3px]';
+                          decentralizationMessage = '⚠️ High voting power - consider smaller validators for better decentralization';
+                        } else if (votingPowerPercent > 5) {
+                          // Medium voting power - yellow outline
+                          borderColor = 'border-yellow-500 dark:border-yellow-500';
+                          borderStyle = 'border-[3px]';
+                          decentralizationMessage = '💛 Medium voting power - helping decentralization!';
+                        } else if (!isRoll) {
+                          // Low voting power - green hint
+                          decentralizationMessage = '💚 Perfect choice! Help grow network decentralization!';
+                        }
+                        
                         return (
-                          <div
-                            key={v.operator_address}
-                            onClick={() => setSelectedValidator(v.operator_address)}
-                            className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${
-                              isSelected 
-                                ? 'bg-purple-100 dark:bg-purple-900/30 ring-2 ring-purple-500' 
-                                : 'bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750'
-                            }`}
-                          >
-                            {/* Avatar */}
-                            <div className="relative flex-shrink-0">
-                              <img
-                                src={avatarUrl}
-                                alt={v.description?.moniker || "Validator"}
-                                className="w-14 h-14 rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(v.description?.moniker || "V")}&size=128&background=6366f1&color=fff&bold=true`;
-                                }}
-                              />
-                              {isRoll && (
-                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">
-                                  ⭐
+                          <div key={v.operator_address} className="space-y-2">
+                            <div
+                              onClick={() => setSelectedValidator(v.operator_address)}
+                              className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${borderStyle} ${
+                                isSelected 
+                                  ? 'bg-purple-100/80 dark:bg-purple-900/40 ring-2 ring-purple-500 backdrop-blur-sm' 
+                                  : `bg-gray-50/80 dark:bg-gray-800/80 hover:bg-gray-100/90 dark:hover:bg-gray-750/90 backdrop-blur-sm ${borderColor}`
+                              }`}
+                              style={{
+                                boxShadow: isSelected 
+                                  ? 'inset 2px 2px 8px rgba(0, 0, 0, 0.12), inset -2px -2px 8px rgba(255, 255, 255, 0.12), 0 6px 18px rgba(168, 85, 247, 0.35)'
+                                  : 'inset 2px 2px 6px rgba(0, 0, 0, 0.08), inset -2px -2px 6px rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1)',
+                                animation: isSelected ? 'neomorphGlow 2s ease-in-out infinite' : 'none'
+                              }}
+                            >
+                              {/* Avatar */}
+                              <div className="relative flex-shrink-0">
+                                <img
+                                  src={avatarUrl}
+                                  alt={v.description?.moniker || "Validator"}
+                                  className="w-14 h-14 rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(v.description?.moniker || "V")}&size=128&background=6366f1&color=fff&bold=true`;
+                                  }}
+                                />
+                                {isRoll && (
+                                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">
+                                    ⭐
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Validator Info */}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-white truncate">
+                                  {v.description?.moniker || v.operator_address.slice(0, 20)}
+                                </div>
+                                <div className="text-base sm:text-lg text-orange-600 dark:text-orange-400 font-medium">
+                                  {votingPowerPercent.toFixed(2)}% voting power
+                                </div>
+                              </div>
+                              
+                              {/* Selection Indicator */}
+                              {isSelected && (
+                                <div className="flex-shrink-0">
+                                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                  </div>
                                 </div>
                               )}
                             </div>
                             
-                            {/* Validator Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-white truncate">
-                                {v.description?.moniker || v.operator_address.slice(0, 20)}
-                              </div>
-                              <div className="text-base sm:text-lg text-orange-600 dark:text-orange-400 font-medium">
-                                {votingPowerPercent.toFixed(2)}% voting power
-                              </div>
-                            </div>
-                            
-                            {/* Selection Indicator */}
-                            {isSelected && (
-                              <div className="flex-shrink-0">
-                                <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                  </svg>
-                                </div>
+                            {/* Decentralization Message */}
+                            {decentralizationMessage && (
+                              <div className={`text-xs sm:text-sm px-4 py-2 rounded-lg ${
+                                votingPowerPercent > 10 
+                                  ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                                  : votingPowerPercent > 5
+                                  ? 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300'
+                                  : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+                              }`}>
+                                {decentralizationMessage}
                               </div>
                             )}
                           </div>
@@ -1550,57 +1622,92 @@ export default function CoreumBreakdown({ tokens, loading, walletProvider, coreu
                         const isSelected = v.operator_address === redelegateDstValidator;
                         const avatarUrl = getValidatorAvatar(v);
                         
+                        // Determine validator highlighting based on voting power
+                        let borderColor = 'border-gray-200 dark:border-gray-700';
+                        let borderStyle = 'border-2';
+                        let decentralizationMessage = '';
+                        
+                        if (votingPowerPercent > 10) {
+                          // High voting power - red outline
+                          borderColor = 'border-red-500 dark:border-red-500';
+                          borderStyle = 'border-[3px]';
+                          decentralizationMessage = '⚠️ High voting power - consider smaller validators for better decentralization';
+                        } else if (votingPowerPercent > 5) {
+                          // Medium voting power - yellow outline
+                          borderColor = 'border-yellow-500 dark:border-yellow-500';
+                          borderStyle = 'border-[3px]';
+                          decentralizationMessage = '💛 Medium voting power - helping decentralization!';
+                        } else if (!isRoll) {
+                          // Low voting power - green hint
+                          decentralizationMessage = '💚 Perfect choice! Help grow network decentralization!';
+                        }
+                        
                         return (
-                          <div
-                            key={v.operator_address}
-                            onClick={() => setRedelegateDstValidator(v.operator_address)}
-                            className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${
-                              isSelected 
-                                ? 'bg-orange-100 dark:bg-orange-900/30 ring-2 ring-orange-500' 
-                                : 'bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750'
-                            }`}
-                          >
-                            {/* Avatar */}
-                            <div className="relative flex-shrink-0">
-                              <img
-                                src={avatarUrl}
-                                alt={v.description?.moniker || "Validator"}
-                                className="w-14 h-14 rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(v.description?.moniker || "V")}&size=128&background=ea580c&color=fff&bold=true`;
-                                }}
-                              />
-                              {isRoll && (
-                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">
-                                  ⭐
+                          <div key={v.operator_address} className="space-y-2">
+                            <div
+                              onClick={() => setRedelegateDstValidator(v.operator_address)}
+                              className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all ${borderStyle} ${
+                                isSelected 
+                                  ? 'bg-orange-100/80 dark:bg-orange-900/40 ring-2 ring-orange-500 backdrop-blur-sm' 
+                                  : `bg-gray-50/80 dark:bg-gray-800/80 hover:bg-gray-100/90 dark:hover:bg-gray-750/90 backdrop-blur-sm ${borderColor}`
+                              }`}
+                              style={{
+                                boxShadow: isSelected 
+                                  ? 'inset 2px 2px 8px rgba(0, 0, 0, 0.12), inset -2px -2px 8px rgba(255, 255, 255, 0.12), 0 6px 18px rgba(234, 88, 12, 0.35)'
+                                  : 'inset 2px 2px 6px rgba(0, 0, 0, 0.08), inset -2px -2px 6px rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1)',
+                                animation: isSelected ? 'neomorphGlow 2s ease-in-out infinite' : 'none'
+                              }}
+                            >
+                              {/* Avatar */}
+                              <div className="relative flex-shrink-0">
+                                <img
+                                  src={avatarUrl}
+                                  alt={v.description?.moniker || "Validator"}
+                                  className="w-14 h-14 rounded-full ring-2 ring-gray-200 dark:ring-gray-700"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(v.description?.moniker || "V")}&size=128&background=ea580c&color=fff&bold=true`;
+                                  }}
+                                />
+                                {isRoll && (
+                                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">
+                                    ⭐
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Validator Info */}
+                              <div className="flex-1 min-w-0">
+                                <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-white truncate">
+                                  {v.description?.moniker || v.operator_address.slice(0, 20)}
+                                </div>
+                                <div className="text-base sm:text-lg text-orange-600 dark:text-orange-400 font-medium">
+                                  {votingPowerPercent.toFixed(2)}% voting power
+                                </div>
+                              </div>
+                              
+                              {/* Selection Indicator */}
+                              {isSelected && (
+                                <div className="flex-shrink-0">
+                                  <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                  </div>
                                 </div>
                               )}
                             </div>
                             
-                            {/* Validator Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-lg sm:text-xl text-gray-900 dark:text-white truncate">
-                                {v.description?.moniker || v.operator_address.slice(0, 20)}
-                              </div>
-                              <div className="text-base sm:text-lg text-orange-600 dark:text-orange-400 font-medium">
-                                {votingPowerPercent.toFixed(2)}% voting power
-                              </div>
-                              {!isRoll && votingPowerPercent < 5 && (
-                                <div className="text-sm text-green-600 dark:text-green-400 mt-1 font-semibold">
-                                  🚀 Help them grow!
-                                </div>
-                              )}
-                            </div>
-                            
-                            {/* Selection Indicator */}
-                            {isSelected && (
-                              <div className="flex-shrink-0">
-                                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                  </svg>
-                                </div>
+                            {/* Decentralization Message */}
+                            {decentralizationMessage && (
+                              <div className={`text-xs sm:text-sm px-4 py-2 rounded-lg ${
+                                votingPowerPercent > 10 
+                                  ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                                  : votingPowerPercent > 5
+                                  ? 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300'
+                                  : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300'
+                              }`}>
+                                {decentralizationMessage}
                               </div>
                             )}
                           </div>

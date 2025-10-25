@@ -189,6 +189,17 @@ export default function VoteButton({ proposalId, userAddress, onVoteSuccess, dis
       <div className="text-center text-xs text-gray-400">
         Voting requires Keplr, Leap, or Cosmostation wallet
       </div>
+      
+      {/* Informational Note about Multiple Wallets */}
+      <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
+        <div className="flex items-start gap-2">
+          <IoWallet className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-gray-400">
+            <span className="text-blue-400 font-medium">Note:</span> Votes are tied to individual wallet addresses. 
+            If you have multiple wallets, you can vote with each one separately.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

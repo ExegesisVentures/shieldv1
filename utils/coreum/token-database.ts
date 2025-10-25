@@ -23,6 +23,12 @@ export interface TokenInfo {
   contract_address?: string;
   decimals: number;
   pair_count?: number;
+  logo_url?: string;
+  is_lp_token?: boolean;
+  lp_token0_symbol?: string;
+  lp_token1_symbol?: string;
+  lp_token0_denom?: string;
+  lp_token1_denom?: string;
 }
 
 export interface PairInfo {
@@ -87,7 +93,13 @@ export async function getTokenByDenom(denom: string): Promise<TokenInfo | null> 
       name: data.name,
       type: data.type,
       contract_address: data.contract_address,
-      decimals: data.decimals
+      decimals: data.decimals,
+      logo_url: data.logo_url,
+      is_lp_token: data.is_lp_token,
+      lp_token0_symbol: data.lp_token0_symbol,
+      lp_token1_symbol: data.lp_token1_symbol,
+      lp_token0_denom: data.lp_token0_denom,
+      lp_token1_denom: data.lp_token1_denom
     };
   } catch (error) {
     console.error('Error fetching token by denom:', error);
@@ -122,7 +134,13 @@ export async function getTokenBySymbol(symbol: string): Promise<TokenInfo | null
       name: data.name,
       type: data.type,
       contract_address: data.contract_address,
-      decimals: data.decimals
+      decimals: data.decimals,
+      logo_url: data.logo_url,
+      is_lp_token: data.is_lp_token,
+      lp_token0_symbol: data.lp_token0_symbol,
+      lp_token1_symbol: data.lp_token1_symbol,
+      lp_token0_denom: data.lp_token0_denom,
+      lp_token1_denom: data.lp_token1_denom
     };
   } catch (error) {
     console.error('Error fetching token by symbol:', error);
@@ -154,7 +172,13 @@ export async function searchTokens(query: string, limit: number = 20): Promise<T
       name: token.name,
       type: token.type,
       contract_address: token.contract_address,
-      decimals: token.decimals
+      decimals: token.decimals,
+      logo_url: token.logo_url,
+      is_lp_token: token.is_lp_token,
+      lp_token0_symbol: token.lp_token0_symbol,
+      lp_token1_symbol: token.lp_token1_symbol,
+      lp_token0_denom: token.lp_token0_denom,
+      lp_token1_denom: token.lp_token1_denom
     }));
   } catch (error) {
     console.error('Error searching tokens:', error);
@@ -185,7 +209,13 @@ export async function getAllTokensWithPairs(): Promise<TokenInfo[]> {
       type: token.type,
       contract_address: token.contract_address,
       decimals: token.decimals,
-      pair_count: token.pair_count
+      pair_count: token.pair_count,
+      logo_url: token.logo_url,
+      is_lp_token: token.is_lp_token,
+      lp_token0_symbol: token.lp_token0_symbol,
+      lp_token1_symbol: token.lp_token1_symbol,
+      lp_token0_denom: token.lp_token0_denom,
+      lp_token1_denom: token.lp_token1_denom
     }));
   } catch (error) {
     console.error('Error fetching tokens with pairs:', error);

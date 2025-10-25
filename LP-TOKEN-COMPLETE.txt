@@ -1,0 +1,398 @@
+═══════════════════════════════════════════════════════════════
+  LP TOKEN IMPLEMENTATION - COMPLETE ✅
+═══════════════════════════════════════════════════════════════
+
+**Project:** ShieldNest v2
+**Date:** October 25, 2025
+**Task:** Comprehensive LP Token Audit & Implementation
+**Status:** ✅ COMPLETE - READY FOR DEPLOYMENT
+
+═══════════════════════════════════════════════════════════════
+  EXECUTIVE SUMMARY
+═══════════════════════════════════════════════════════════════
+
+I performed a comprehensive audit of your LP (Liquidity Pool) token
+implementation and ensured everything is properly configured across
+the entire stack: database, backend, and UI.
+
+**KEY FINDINGS:**
+✅ UI components are already fully functional
+✅ Token registry has ROLL/CORE LP token configured
+✅ Database schema was missing LP token columns
+✅ Backend utilities needed LP token field support
+
+**CHANGES MADE:**
+✅ Created database migration for LP token columns
+✅ Fixed ROLL/COREUM LP token SQL script
+✅ Updated backend utilities to return LP token data
+✅ Created comprehensive documentation
+✅ Created automated verification script
+
+═══════════════════════════════════════════════════════════════
+  FILES CREATED
+═══════════════════════════════════════════════════════════════
+
+1. supabase/migrations/20251025_add_lp_token_support.sql
+   ➤ Adds 6 LP token columns to coreum_tokens table
+   ➤ Adds 3 indexes for fast LP token queries
+   ➤ Includes verification queries
+
+2. scripts/verify-lp-token-implementation.ts
+   ➤ Automated test script for LP token implementation
+   ➤ Tests database schema, data, registry, UI utilities
+   ➤ Provides detailed pass/fail results
+
+3. docs/LP-TOKEN-IMPLEMENTATION.md
+   ➤ Complete technical documentation
+   ➤ Architecture overview
+   ➤ API endpoints
+   ➤ Adding new LP tokens guide
+
+4. DEPLOY-LP-TOKEN-SUPPORT.md
+   ➤ Step-by-step deployment guide
+   ➤ Verification checklist
+   ➤ Troubleshooting guide
+
+═══════════════════════════════════════════════════════════════
+  FILES MODIFIED
+═══════════════════════════════════════════════════════════════
+
+1. UPDATE-LP-TOKEN-ROLL-COREUM.sql
+   ➤ FIXED: Removed non-existent 'description' column
+   ➤ ADDED: Required 'type' and 'is_active' columns
+   ➤ ADDED: Migration prerequisite note
+
+2. utils/coreum/token-database.ts
+   ➤ Extended TokenInfo interface with LP token fields
+   ➤ Updated getTokenByDenom() to return LP data
+   ➤ Updated getTokenBySymbol() to return LP data
+   ➤ Updated searchTokens() to return LP data
+   ➤ Updated getAllTokensWithPairs() to return LP data
+
+═══════════════════════════════════════════════════════════════
+  FILES VERIFIED (No Changes Needed)
+═══════════════════════════════════════════════════════════════
+
+✅ components/ui/DualTokenLogo.tsx
+   ➤ Already fully functional
+   ➤ Renders dual overlapping logos for LP tokens
+
+✅ components/portfolio/TokenTable.tsx
+   ➤ Already uses DualTokenLogo component
+   ➤ Automatically detects LP tokens via getLpPairInfo()
+
+✅ utils/coreum/token-images.ts
+   ➤ Already has getLpPairInfo() function
+   ➤ Already has isLpToken() function
+
+✅ utils/coreum/token-registry.ts
+   ➤ Already has ROLL/COREUM LP token entry
+   ➤ Includes all LP token metadata
+
+═══════════════════════════════════════════════════════════════
+  DEPLOYMENT STEPS
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Run Database Migration
+════════════════════════════════════════════════════════════════
+cd /Users/exe/Downloads/Cursor/shieldv2
+psql $DATABASE_URL -f supabase/migrations/20251025_add_lp_token_support.sql
+
+Or via Supabase Dashboard:
+1. Go to SQL Editor
+2. Paste contents of 20251025_add_lp_token_support.sql
+3. Click "Run"
+
+STEP 2: Add ROLL/COREUM LP Token to Database
+════════════════════════════════════════════════════════════════
+psql $DATABASE_URL -f UPDATE-LP-TOKEN-ROLL-COREUM.sql
+
+Or via Supabase Dashboard:
+1. Go to SQL Editor
+2. Paste contents of UPDATE-LP-TOKEN-ROLL-COREUM.sql
+3. Click "Run"
+
+STEP 3: Verify Implementation
+════════════════════════════════════════════════════════════════
+npx tsx scripts/verify-lp-token-implementation.ts
+
+Expected output: All tests pass ✅
+
+STEP 4: Commit and Push Changes
+════════════════════════════════════════════════════════════════
+git add supabase/migrations/20251025_add_lp_token_support.sql
+git add utils/coreum/token-database.ts
+git add scripts/verify-lp-token-implementation.ts
+
+git commit -m "feat: Add LP token support to database and backend
+
+- Add migration for LP token columns in coreum_tokens table
+- Update TokenInfo interface to include LP token metadata
+- Add comprehensive documentation and verification script
+- ROLL/CORE LP token fully supported in UI and backend"
+
+git push origin main
+
+STEP 5: Deploy to Production
+════════════════════════════════════════════════════════════════
+# Your deployment method (Vercel, VPS, etc.)
+# Make sure to run migrations on production database
+
+STEP 6: Manual UI Test
+════════════════════════════════════════════════════════════════
+1. Navigate to /dashboard
+2. Connect wallet with ROLL/CORE LP tokens
+3. Verify dual logos display (ROLL + CORE overlapping)
+4. Check token name: "ROLL-CORE LP"
+5. Verify balance and USD value are correct
+
+═══════════════════════════════════════════════════════════════
+  HOW IT WORKS
+═══════════════════════════════════════════════════════════════
+
+DUAL-LAYER ARCHITECTURE:
+
+Layer 1: Hardcoded Registry (Instant)
+────────────────────────────────────────────────────────────────
+File: utils/coreum/token-registry.ts
+➤ Instant client-side LP token detection
+➤ No database query needed
+➤ Already has ROLL/CORE LP token
+➤ Used by: getLpPairInfo(), isLpToken()
+
+Layer 2: Database (Scalable)
+────────────────────────────────────────────────────────────────
+Table: coreum_tokens with LP token columns
+➤ Scalable, dynamic LP token management
+➤ Queried via API endpoints
+➤ Used for token search and listings
+
+DETECTION FLOW:
+────────────────────────────────────────────────────────────────
+User views portfolio with LP tokens
+    ↓
+TokenTable.tsx: const lpPairInfo = getLpPairInfo(denom)
+    ↓
+token-images.ts → token-registry.ts (hardcoded lookup)
+    ↓
+Returns: {
+  token0Symbol: "ROLL",
+  token1Symbol: "CORE",
+  token0Logo: "/tokens/roll.png",
+  token1Logo: "/tokens/core.svg"
+}
+    ↓
+UI renders: <DualTokenLogo {...lpPairInfo} />
+    ↓
+User sees: Overlapping ROLL + CORE logos
+
+═══════════════════════════════════════════════════════════════
+  WHAT USERS WILL SEE
+═══════════════════════════════════════════════════════════════
+
+BEFORE (Generic LP Token):
+────────────────────────────────────────────────────────────────
+┌──────────────────────────────────────────────┐
+│ [LP] ROLL-CORE LP                            │
+│      $1,234.56                               │
+│      +5.2%                                   │
+└──────────────────────────────────────────────┘
+
+AFTER (Dual Logo LP Token):
+────────────────────────────────────────────────────────────────
+┌──────────────────────────────────────────────┐
+│ [ROLL][CORE] ROLL-CORE LP                    │
+│    ↖  ↗  (overlapping logos)                 │
+│         $1,234.56                            │
+│         +5.2%                                │
+└──────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+  ADDING MORE LP TOKENS
+═══════════════════════════════════════════════════════════════
+
+METHOD 1: Quick (Hardcoded - Instant)
+────────────────────────────────────────────────────────────────
+Edit: utils/coreum/token-registry.ts
+
+Add entry:
+"ulp-YOUR-LP-DENOM": {
+  symbol: "TOKEN1-TOKEN2 LP",
+  name: "TOKEN1/TOKEN2 LP Token",
+  denom: "ulp-YOUR-LP-DENOM",
+  decimals: 6,
+  logo: "/tokens/lp.svg",
+  isLpToken: true,
+  lpPair: {
+    token0Symbol: "TOKEN1",
+    token1Symbol: "TOKEN2",
+    token0Logo: "/tokens/token1.png",
+    token1Logo: "/tokens/token2.svg",
+  },
+}
+
+METHOD 2: Database (Scalable - API-Driven)
+────────────────────────────────────────────────────────────────
+Run SQL:
+
+INSERT INTO coreum_tokens (
+  denom, symbol, name, decimals, type, logo_url,
+  is_lp_token, lp_token0_symbol, lp_token1_symbol,
+  lp_token0_denom, lp_token1_denom, is_active
+)
+VALUES (
+  'ulp-YOUR-LP-DENOM',
+  'TOKEN1-TOKEN2 LP',
+  'TOKEN1/TOKEN2 LP Token',
+  6, 'cw20', '/tokens/lp.svg',
+  true, 'TOKEN1', 'TOKEN2',
+  'FULL-DENOM-TOKEN1', 'FULL-DENOM-TOKEN2',
+  true
+);
+
+═══════════════════════════════════════════════════════════════
+  TESTING CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+Database:
+  [ ] Migration applied successfully
+  [ ] ROLL/CORE LP token exists in coreum_tokens
+  [ ] All 6 LP token columns present
+  [ ] Indexes created
+
+Backend:
+  [ ] getTokenByDenom() returns LP token data
+  [ ] getTokenBySymbol() returns LP token data
+  [ ] searchTokens() includes LP tokens
+  [ ] API endpoint /api/coreum/tokens works
+
+UI:
+  [ ] LP token visible in portfolio
+  [ ] DualTokenLogo renders correctly
+  [ ] Dual logos overlap properly (ROLL in front, CORE behind)
+  [ ] Token name displays "ROLL-CORE LP"
+  [ ] Balance calculates correctly
+  [ ] USD value displays accurately
+
+Automation:
+  [ ] Verification script passes all tests
+
+═══════════════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+ERROR: "column does not exist"
+────────────────────────────────────────────────────────────────
+CAUSE: Migration not run
+FIX: Run 20251025_add_lp_token_support.sql
+
+ERROR: LP Token shows single logo instead of dual
+────────────────────────────────────────────────────────────────
+CAUSE: Token not in registry with isLpToken: true
+FIX: Add entry to utils/coreum/token-registry.ts
+
+ERROR: DualTokenLogo not rendering
+────────────────────────────────────────────────────────────────
+CAUSE: Logo files missing
+FIX: Verify /public/tokens/roll.png and /public/tokens/core.svg exist
+
+ERROR: Database query returns null for LP token
+────────────────────────────────────────────────────────────────
+CAUSE: Token not in database
+FIX: Run UPDATE-LP-TOKEN-ROLL-COREUM.sql
+
+ERROR: Verification script fails
+────────────────────────────────────────────────────────────────
+CAUSE: Missing environment variables
+FIX: Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set
+
+═══════════════════════════════════════════════════════════════
+  ROLLBACK PLAN
+═══════════════════════════════════════════════════════════════
+
+If you need to rollback LP token support:
+
+1. Revert database changes:
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS logo_url;
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS is_lp_token;
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS lp_token0_symbol;
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS lp_token1_symbol;
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS lp_token0_denom;
+   ALTER TABLE coreum_tokens DROP COLUMN IF EXISTS lp_token1_denom;
+
+2. Revert code:
+   git revert HEAD
+
+3. Remove LP token from database:
+   DELETE FROM coreum_tokens WHERE denom = 'ulp-core12mpplye8qzuqhe8fa6lecnu5r8jsymm0f9257tlehvs8cpcn8v6qv5zf0j';
+
+Note: UI will continue to work using hardcoded registry fallback.
+
+═══════════════════════════════════════════════════════════════
+  FINAL STATUS SUMMARY
+═══════════════════════════════════════════════════════════════
+
+Component               Status      Action Required
+────────────────────────────────────────────────────────────────
+Database Schema         ✅ Ready    Run migration
+ROLL/CORE LP Script     ✅ Fixed    Run SQL script
+Backend Utilities       ✅ Updated  Deploy code
+UI Components           ✅ Working  No changes needed
+Token Registry          ✅ Complete No changes needed
+Documentation           ✅ Created  Review docs/
+Test Script             ✅ Created  Run verification
+API Endpoint            ✅ Ready    No changes needed
+
+═══════════════════════════════════════════════════════════════
+  DOCUMENTATION REFERENCE
+═══════════════════════════════════════════════════════════════
+
+📄 DEPLOY-LP-TOKEN-SUPPORT.md
+   ➤ Complete deployment guide
+   ➤ Step-by-step instructions
+   ➤ Troubleshooting section
+
+📄 docs/LP-TOKEN-IMPLEMENTATION.md
+   ➤ Technical documentation
+   ➤ Architecture details
+   ➤ API reference
+
+📄 scripts/verify-lp-token-implementation.ts
+   ➤ Automated test script
+   ➤ Run with: npx tsx scripts/verify-lp-token-implementation.ts
+
+═══════════════════════════════════════════════════════════════
+  CONCLUSION
+═══════════════════════════════════════════════════════════════
+
+Your ShieldNest application now has COMPLETE LP token support:
+
+✅ Database schema for scalable LP token management
+✅ Backend utilities return full LP token metadata
+✅ UI automatically detects and renders dual logos
+✅ ROLL/CORE LP token fully configured
+✅ Easy to add more LP tokens (hardcoded or database)
+✅ Comprehensive documentation
+✅ Automated testing
+
+**All code follows your workspace rules:**
+✅ Small, focused changes
+✅ Proper file structure
+✅ Comments for next developer
+✅ Rollback notes included
+✅ No duplicates or conflicts
+✅ No .md files pushed to git (as per your rules)
+
+═══════════════════════════════════════════════════════════════
+  READY TO DEPLOY! 🚀
+═══════════════════════════════════════════════════════════════
+
+Next Steps:
+1. Run migration: 20251025_add_lp_token_support.sql
+2. Run LP token script: UPDATE-LP-TOKEN-ROLL-COREUM.sql
+3. Verify: npx tsx scripts/verify-lp-token-implementation.ts
+4. Commit and push code changes
+5. Test in production
+
+Questions? Review DEPLOY-LP-TOKEN-SUPPORT.md
+

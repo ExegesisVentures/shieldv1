@@ -23,6 +23,7 @@ export default function ProposalDetailModal({
   const [mounted, setMounted] = useState(false);
   const [userHasVoted, setUserHasVoted] = useState(false);
   const [userVoteOption, setUserVoteOption] = useState<string | null>(null);
+  const [voterAddress, setVoterAddress] = useState<string | null>(null);
   const [loadingVoteStatus, setLoadingVoteStatus] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [scrollHintFading, setScrollHintFading] = useState(false);
@@ -68,6 +69,7 @@ export default function ProposalDetailModal({
       if (data.success && data.data.hasVoted) {
         setUserHasVoted(true);
         setUserVoteOption(data.data.vote?.option || null);
+        setVoterAddress(data.data.vote?.voter || userAddress);
       }
     } catch (error) {
       console.error('Failed to check vote status:', error);
@@ -427,11 +429,18 @@ export default function ProposalDetailModal({
           {/* User Vote Status */}
           {userHasVoted && (
             <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-              <div className="flex items-center gap-2">
-                <IoCheckmarkCircle className="w-5 h-5 text-purple-400" />
-                <span className="text-purple-400 font-medium">
-                  You voted: {getVoteOptionLabel(userVoteOption || '')}
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <IoCheckmarkCircle className="w-5 h-5 text-purple-400" />
+                  <span className="text-purple-400 font-medium">
+                    You voted: {getVoteOptionLabel(userVoteOption || '')}
+                  </span>
+                </div>
+                {voterAddress && (
+                  <span className="text-purple-400 font-mono text-sm opacity-70">
+                    ...{voterAddress.slice(-4)}
+                  </span>
+                )}
               </div>
             </div>
           )}

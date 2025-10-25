@@ -13,6 +13,7 @@ interface ProposalCardProps {
 export default function ProposalCard({ proposal, userAddress, onClick }: ProposalCardProps) {
   const [userVoted, setUserVoted] = useState(false);
   const [userVoteOption, setUserVoteOption] = useState<string | null>(null);
+  const [voterAddress, setVoterAddress] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,18 +38,22 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
       if (data.success && data.data.hasVoted) {
         // Handle both formats: vote.option OR vote.options[0].option
         const voteOption = data.data.vote?.options?.[0]?.option || data.data.vote?.option || null;
-        console.log(`✅ [ProposalCard] User HAS voted! Option:`, voteOption);
+        const votedWallet = data.data.vote?.voter || userAddress;
+        console.log(`✅ [ProposalCard] User HAS voted! Option:`, voteOption, 'Wallet:', votedWallet);
         setUserVoted(true);
         setUserVoteOption(voteOption);
+        setVoterAddress(votedWallet);
       } else {
         console.log(`ℹ️ [ProposalCard] User has NOT voted yet`);
         setUserVoted(false);
         setUserVoteOption(null);
+        setVoterAddress(null);
       }
     } catch (error) {
       console.error('❌ [ProposalCard] Failed to check user vote:', error);
       setUserVoted(false);
       setUserVoteOption(null);
+      setVoterAddress(null);
     } finally {
       setLoading(false);
     }
@@ -220,6 +225,11 @@ export default function ProposalCard({ proposal, userAddress, onClick }: Proposa
                   <div className={`text-sm font-bold ${voteColors.text}`}>
                     {getVoteOptionLabel(userVoteOption || '')}
                   </div>
+                  {voterAddress && (
+                    <div className={`text-xs font-mono ${voteColors.text} opacity-70 mt-1`}>
+                      ...{voterAddress.slice(-4)}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
